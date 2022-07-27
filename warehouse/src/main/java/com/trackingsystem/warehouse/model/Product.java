@@ -16,13 +16,16 @@ public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    Long idproduct;
+    private Long id;
 
     @NotNull
-    Genre productgenre;
+    @Enumerated(EnumType.STRING)
+    private Genre productgenre;
     @NotBlank
-    String productname;
-    Integer productprice = 0;
-    Integer productweight = 0;
+    private String productname;
+    private Integer productprice = 0;
+    private Integer productweight = 0;
+    @ManyToOne
+    private Warehouse warehouse;
 
 }

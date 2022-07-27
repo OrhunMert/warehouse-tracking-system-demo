@@ -1,6 +1,7 @@
 package com.trackingsystem.warehouse.dto;
 
 import com.trackingsystem.warehouse.model.Genre;
+import com.trackingsystem.warehouse.model.Warehouse;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
@@ -10,9 +11,10 @@ import javax.validation.constraints.NotNull;
 public class ProductDTO {
 
     @NotNull
-    Genre productgenre;
+    private Genre productgenre;
     @NotBlank
-    String productname;
-    Integer productprice = 0;
-    Integer productweight = 0;
+    private String productname;
+    private Integer productprice = 0;
+    private Integer productweight = 0;
+    private Warehouse warehouse;
 }

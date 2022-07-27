@@ -2,7 +2,11 @@ package com.trackingsystem.warehouse.service;
 
 import com.trackingsystem.warehouse.dto.UpdateWarehouseDTO;
 import com.trackingsystem.warehouse.dto.WarehouseDTO;
+import com.trackingsystem.warehouse.model.Product;
 import com.trackingsystem.warehouse.model.Warehouse;
+
+import java.util.List;
+import java.util.Set;
 
 public interface WarehouseService {
     Warehouse createWarehouse(WarehouseDTO warehouseDTO);
@@ -10,6 +14,7 @@ public interface WarehouseService {
     Warehouse updateWarehouse(Long id, UpdateWarehouseDTO updateWarehouseDTO);
     void deleteWarehouse(Long id);
     //it will be Set of Product for return type.
-    void buyProductForWarehouse(Long id,String productName);
+    List<Product> buyProductForWarehouse(Long id, String productName);
+
 
 }

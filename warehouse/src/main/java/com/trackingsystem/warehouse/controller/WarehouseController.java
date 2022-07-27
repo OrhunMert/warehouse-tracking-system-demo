@@ -2,6 +2,7 @@ package com.trackingsystem.warehouse.controller;
 
 import com.trackingsystem.warehouse.dto.UpdateWarehouseDTO;
 import com.trackingsystem.warehouse.dto.WarehouseDTO;
+import com.trackingsystem.warehouse.model.Product;
 import com.trackingsystem.warehouse.model.Warehouse;
 import com.trackingsystem.warehouse.service.WarehouseService;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.Set;
 
 @Controller
 @RequiredArgsConstructor
@@ -23,11 +26,13 @@ public class WarehouseController {
     ResponseEntity<Warehouse> createWarehouse(@Valid @RequestBody WarehouseDTO warehouseDTO){
         return ResponseEntity.ok().body(warehouseService.createWarehouse(warehouseDTO));
     }
+
     @PostMapping("/buy")
-    ResponseEntity<?> buyProductForWarehouse(@RequestParam Long id,
-                                            @RequestParam String productName){
-        return ResponseEntity.ok().build();
+    ResponseEntity<List<Product>> buyProductForWarehouse(@RequestParam Long id,
+                                                         @RequestParam String productName){
+        return ResponseEntity.ok().body(warehouseService.buyProductForWarehouse(id,productName));
     }
+
     @GetMapping("/{id}")
     ResponseEntity<Warehouse> getWarehouse(@PathVariable Long id){
         return ResponseEntity.ok().body(warehouseService.getWarehouse(id));

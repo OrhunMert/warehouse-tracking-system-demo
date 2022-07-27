@@ -4,7 +4,9 @@ import com.trackingsystem.warehouse.dto.UpdateWarehouseDTO;
 import com.trackingsystem.warehouse.dto.WarehouseDTO;
 import com.trackingsystem.warehouse.exception.UserNotFoundforWarehouseException;
 import com.trackingsystem.warehouse.exception.WarehouseNotFoundException;
+import com.trackingsystem.warehouse.model.Product;
 import com.trackingsystem.warehouse.model.Warehouse;
+import com.trackingsystem.warehouse.repository.ProductRepository;
 import com.trackingsystem.warehouse.repository.WarehouseRepository;
 import com.trackingsystem.warehouse.service.WarehouseService;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +17,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -22,6 +28,7 @@ public class WarehouseServiceImp implements WarehouseService {
 
     private final ModelMapper modelMapper;
     private final WarehouseRepository warehouseRepository;
+    private final ProductRepository productRepository;
     private final RestTemplate restTemplate;
 
     @Override
@@ -61,8 +68,6 @@ public class WarehouseServiceImp implements WarehouseService {
                 .findById(id)
                 .orElseThrow(() -> new WarehouseNotFoundException("Warehouse not found by id to update"));
 
-        //we will make with mapstruct so we need to change it
-        //warehouse.setOwnerid(warehouseDTO.getOwnerid());
         warehouse.setWarehouseName(updateWarehouseDTO.getWarehouseName());
         warehouse.setWarehouseCapacity(updateWarehouseDTO.getWarehouseCapacity());
         warehouse.setCurrentStock(updateWarehouseDTO.getCurrentStock());
@@ -82,7 +87,17 @@ public class WarehouseServiceImp implements WarehouseService {
     }
 
     @Override
-    public void buyProductForWarehouse(Long id, String productName) {
+    public List<Product> buyProductForWarehouse(Long id, String productName) {
+        Warehouse warehouse = warehouseRepository
+                .findById(id)
+                .orElseThrow(()->new WarehouseNotFoundException("Warehouse not found to buy product"));
+
+        //we will add to exception handling for not found exception
+        List<Product> productSet = productRepository.findByproductname(productName);
+        log.info("productSet:{}",productSet);
+
+
+        return productSet;
 
     }
 }
