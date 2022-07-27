@@ -9,4 +9,7 @@ public interface WarehouseService {
     Warehouse getWarehouse(Long id);
     Warehouse updateWarehouse(Long id, UpdateWarehouseDTO updateWarehouseDTO);
     void deleteWarehouse(Long id);
+    //it will be Set of Product for return type.
+    void buyProductForWarehouse(Long id,String productName);
+
 }

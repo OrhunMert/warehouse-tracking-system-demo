@@ -39,7 +39,7 @@ public class WarehouseServiceImp implements WarehouseService {
       if(httpStatus.getReasonPhrase() == HttpStatus.NOT_FOUND.getReasonPhrase())
       {
           log.info("User not found");
-          throw new UserNotFoundforWarehouseException("Ownerid not found by id to create Warehouse");
+          throw new UserNotFoundforWarehouseException("Ownerid not found by id in user table to create Warehouse");
       }
 
       else log.info("User is found");
@@ -79,5 +79,10 @@ public class WarehouseServiceImp implements WarehouseService {
                 .findById(id)
                 .orElseThrow(() -> new WarehouseNotFoundException("Warehouse not found by id to delete"));
         warehouseRepository.deleteById(id);
+    }
+
+    @Override
+    public void buyProductForWarehouse(Long id, String productName) {
+
     }
 }
