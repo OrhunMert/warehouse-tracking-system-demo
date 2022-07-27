@@ -22,7 +22,6 @@ public class UserServiceImp implements UserService {
     @Override
     public User createUser(UserDTO userDTO) {
         User user = modelMapper.map(userDTO, User.class);
-        log.info("User Data:{}",user);
         userRepository.save(user);
         return user;
     }
