@@ -1,4 +1,4 @@
-package com.trackingsystem.user.service.imp;
+package com.trackingsystem.user.service.impl;
 
 import com.trackingsystem.user.dto.UserDTO;
 import com.trackingsystem.user.exception.UserNotFoundException;
@@ -16,7 +16,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class UserServiceImp implements UserService {
+public class UserServiceImpl implements UserService {
 
     private final ModelMapper modelMapper;
     private final UserRepository userRepository;

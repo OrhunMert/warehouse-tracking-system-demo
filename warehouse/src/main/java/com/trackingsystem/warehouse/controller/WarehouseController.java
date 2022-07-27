@@ -30,7 +30,6 @@ public class WarehouseController {
                                                          @RequestParam String productName){
         return ResponseEntity.ok().body(warehouseService.buyProductForWarehouse(id,productName));
     }
-
     @GetMapping("/{id}")
     ResponseEntity<Warehouse> getWarehouse(@PathVariable Long id){
         return ResponseEntity.ok().body(warehouseService.getWarehouse(id));

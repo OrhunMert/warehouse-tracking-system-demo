@@ -1,4 +1,4 @@
-package com.trackingsystem.warehouse.service.imp;
+package com.trackingsystem.warehouse.service.impl;
 
 import com.trackingsystem.warehouse.dto.UpdateWarehouseDTO;
 import com.trackingsystem.warehouse.dto.WarehouseDTO;
@@ -22,7 +22,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class WarehouseServiceImp implements WarehouseService {
+public class WarehouseServiceImpl implements WarehouseService {
 
     private final ModelMapper modelMapper;
     private final RestTemplate restTemplate;
@@ -48,9 +48,16 @@ public class WarehouseServiceImp implements WarehouseService {
           throw new UserNotFoundforWarehouseException("Ownerid not found by id in user table to create Warehouse");
       }
 
-      else log.info("User is found");
-
+      log.info("User is found");
+      /*
+      if(!(warehouse.getWarehouseGenre().name().equals(Genre.FRUIT.name())) &&
+              !(warehouse.getWarehouseGenre().name().equals(Genre.VEGATABLE.name())) &&
+              !(warehouse.getWarehouseGenre().name().equals(Genre.ANIMAL.name()))){
+          throw new WarehouseBusinessException("There is not any genre in the Warehouse!!!");
+      }
+      */
       warehouseRepository.save(warehouse);
+
       return warehouse;
     }
 
@@ -71,7 +78,6 @@ public class WarehouseServiceImp implements WarehouseService {
         warehouse.setWarehouseCapacity(updateWarehouseDTO.getWarehouseCapacity());
         warehouse.setCurrentStock(updateWarehouseDTO.getCurrentStock());
         warehouse.setWarehouseGenre(updateWarehouseDTO.getWarehouseGenre());
-
         warehouseRepository.save(warehouse);
 
         return warehouse;
@@ -81,7 +87,8 @@ public class WarehouseServiceImp implements WarehouseService {
     public void deleteWarehouse(Long id) {
         warehouseRepository
                 .findById(id)
-                .orElseThrow(() -> new WarehouseNotFoundException("Warehouse not found by id to delete"));
+                .orElseThrow(
+                        () -> new WarehouseNotFoundException("Warehouse not found by id to delete"));
         warehouseRepository.deleteById(id);
     }
 
@@ -89,11 +96,13 @@ public class WarehouseServiceImp implements WarehouseService {
     public List<String> buyProductForWarehouse(Long id, String productName) {
         Warehouse warehouse = warehouseRepository
                 .findById(id)
-                .orElseThrow(()->new WarehouseNotFoundException("Warehouse not found to buy product"));
+                .orElseThrow(
+                        ()->new WarehouseNotFoundException("Warehouse not found to buy product"));
 
         List<Product> productSet = productRepository.findByproductname(productName);
 
-        if(productSet.isEmpty()) throw new UserNotFoundforWarehouseException("Product not found to add to Warehouse");
+        if(productSet.isEmpty())
+            throw new UserNotFoundforWarehouseException("Product not found to add to Warehouse");
 
         log.info("productName:"+productSet.get(0).getProductname());
 
@@ -102,7 +111,6 @@ public class WarehouseServiceImp implements WarehouseService {
         warehouse.setCurrentStock(warehouse.getCurrentStock()
                 + productSet.get(0).getProductweight());
         warehouse.setProductList(warehouse.getProductList());
-
         warehouseRepository.save(warehouse);
 
         return warehouse.getProductList();
