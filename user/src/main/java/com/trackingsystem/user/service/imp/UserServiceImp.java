@@ -8,7 +8,10 @@ import com.trackingsystem.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -60,5 +63,14 @@ public class UserServiceImp implements UserService {
                 .orElseThrow(() -> new UserNotFoundException("User not found by id to delete operation!!!"));
 
         userRepository.deleteById(id);
+    }
+
+    @Override
+    public HttpStatus checkUserResponse(Long id) {
+        Optional<User> user = userRepository.findById(id);
+        log.info("check user:"+user);
+        if(user.equals(Optional.empty()))
+            return HttpStatus.NOT_FOUND;
+        return HttpStatus.OK;
     }
 }

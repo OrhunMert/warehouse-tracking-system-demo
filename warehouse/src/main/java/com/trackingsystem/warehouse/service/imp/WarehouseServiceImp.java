@@ -9,6 +9,7 @@ import com.trackingsystem.warehouse.service.WarehouseService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 @Service
 @RequiredArgsConstructor
@@ -16,10 +17,14 @@ public class WarehouseServiceImp implements WarehouseService {
 
     private final ModelMapper modelMapper;
     private final WarehouseRepository warehouseRepository;
+    private final RestTemplate restTemplate;
 
     @Override
     public Warehouse createWarehouse(WarehouseDTO warehouseDTO) {
       Warehouse warehouse = modelMapper.map(warehouseDTO,Warehouse.class);
+
+      //using restTemple to connect with other service
+
       warehouseRepository.save(warehouse);
       return warehouse;
     }
