@@ -13,13 +13,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -27,9 +25,9 @@ import java.util.Set;
 public class WarehouseServiceImp implements WarehouseService {
 
     private final ModelMapper modelMapper;
+    private final RestTemplate restTemplate;
     private final WarehouseRepository warehouseRepository;
     private final ProductRepository productRepository;
-    private final RestTemplate restTemplate;
 
     @Override
     public Warehouse createWarehouse(WarehouseDTO warehouseDTO) {
@@ -43,7 +41,8 @@ public class WarehouseServiceImp implements WarehouseService {
 
       log.info("Httpstatus Result:"+httpStatus);
 
-      if(httpStatus.getReasonPhrase() == HttpStatus.NOT_FOUND.getReasonPhrase())
+      assert httpStatus != null;
+      if(httpStatus.getReasonPhrase().equals(HttpStatus.NOT_FOUND.getReasonPhrase()))
       {
           log.info("User not found");
           throw new UserNotFoundforWarehouseException("Ownerid not found by id in user table to create Warehouse");
@@ -87,17 +86,22 @@ public class WarehouseServiceImp implements WarehouseService {
     }
 
     @Override
-    public List<Product> buyProductForWarehouse(Long id, String productName) {
+    public List<String> buyProductForWarehouse(Long id, String productName) {
         Warehouse warehouse = warehouseRepository
                 .findById(id)
                 .orElseThrow(()->new WarehouseNotFoundException("Warehouse not found to buy product"));
 
-        //we will add to exception handling for not found exception
         List<Product> productSet = productRepository.findByproductname(productName);
-        log.info("productSet:{}",productSet);
 
+        if(productSet.isEmpty()) throw new UserNotFoundforWarehouseException("Product not found to add to Warehouse");
 
-        return productSet;
+        log.info("productName:"+productSet.get(0).getProductname());
+
+        warehouse.getProductList().add(productSet.get(0).getProductname());
+        warehouse.setProductList(warehouse.getProductList());
+        warehouseRepository.save(warehouse);
+
+        return warehouse.getProductList();
 
     }
 }

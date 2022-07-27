@@ -2,7 +2,6 @@ package com.trackingsystem.warehouse.controller;
 
 import com.trackingsystem.warehouse.dto.UpdateWarehouseDTO;
 import com.trackingsystem.warehouse.dto.WarehouseDTO;
-import com.trackingsystem.warehouse.model.Product;
 import com.trackingsystem.warehouse.model.Warehouse;
 import com.trackingsystem.warehouse.service.WarehouseService;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Set;
 
 @Controller
 @RequiredArgsConstructor
@@ -28,7 +26,7 @@ public class WarehouseController {
     }
 
     @PostMapping("/buy")
-    ResponseEntity<List<Product>> buyProductForWarehouse(@RequestParam Long id,
+    ResponseEntity<List<String>> buyProductForWarehouse(@RequestParam Long id,
                                                          @RequestParam String productName){
         return ResponseEntity.ok().body(warehouseService.buyProductForWarehouse(id,productName));
     }

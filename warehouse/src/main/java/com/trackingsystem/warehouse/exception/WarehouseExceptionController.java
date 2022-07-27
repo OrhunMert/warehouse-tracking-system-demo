@@ -38,5 +38,9 @@ public class WarehouseExceptionController extends ResponseEntityExceptionHandler
     public ResponseEntity<String> userNotFoundForWarehouse(UserNotFoundforWarehouseException userNotFoundforWarehouseException){
         return new ResponseEntity<>(userNotFoundforWarehouseException.getMessage(),HttpStatus.NOT_FOUND);
     }
+    @ExceptionHandler(value = {ProductNotFoundforWarehouseException.class})
+    public ResponseEntity<String>  productNotFoundforWarehouseException(ProductNotFoundforWarehouseException productNotFoundforWarehouseException){
+        return new ResponseEntity<>(productNotFoundforWarehouseException.getMessage(),HttpStatus.NOT_FOUND);
+    }
 
 }

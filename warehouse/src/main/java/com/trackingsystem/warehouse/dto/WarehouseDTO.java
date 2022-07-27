@@ -1,7 +1,6 @@
 package com.trackingsystem.warehouse.dto;
 
 import com.trackingsystem.warehouse.model.Genre;
-import com.trackingsystem.warehouse.model.Product;
 import lombok.Data;
 
 import javax.persistence.EnumType;
@@ -22,7 +21,9 @@ public class WarehouseDTO {
     private Integer currentStock;
     @Enumerated(EnumType.STRING)
     private Genre warehouseGenre;
-    private List<Product> productSet = new ArrayList<>();
+
+    //private List<Product> productSet = new ArrayList<>();
+    private List<String> productList = new ArrayList<>();
 
 
 }

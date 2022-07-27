@@ -27,8 +27,14 @@ public class Warehouse {
     @Enumerated(EnumType.STRING)
     private Genre warehouseGenre;
 
+    @ElementCollection
+    private List<String> productList = new ArrayList<>();
+
     //we will change from set to list
+    /*
     @OneToMany(cascade = CascadeType.PERSIST)
     private List<Product> productSet = new ArrayList<>();
+
+     */
 
 }

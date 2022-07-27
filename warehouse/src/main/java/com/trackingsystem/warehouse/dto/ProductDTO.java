@@ -16,5 +16,5 @@ public class ProductDTO {
     private String productname;
     private Integer productprice = 0;
     private Integer productweight = 0;
-    private Warehouse warehouse;
+    //private Warehouse warehouse;
 }

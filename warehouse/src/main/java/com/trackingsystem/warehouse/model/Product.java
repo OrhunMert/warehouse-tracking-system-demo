@@ -25,7 +25,10 @@ public class Product {
     private String productname;
     private Integer productprice = 0;
     private Integer productweight = 0;
+    /*
     @ManyToOne
     private Warehouse warehouse;
+
+     */
 
 }

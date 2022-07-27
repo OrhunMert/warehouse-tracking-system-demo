@@ -14,7 +14,8 @@ public interface WarehouseService {
     Warehouse updateWarehouse(Long id, UpdateWarehouseDTO updateWarehouseDTO);
     void deleteWarehouse(Long id);
     //it will be Set of Product for return type.
-    List<Product> buyProductForWarehouse(Long id, String productName);
+    //List<Product> buyProductForWarehouse(Long id, String productName);
+    List<String>buyProductForWarehouse(Long id,String productName);
 
 
 }
