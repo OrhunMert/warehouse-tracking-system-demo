@@ -26,7 +26,7 @@ public class WarehouseController {
     @PostMapping("/buy")
     ResponseEntity<?> buyProductForWarehouse(@RequestParam Long id,
                                             @RequestParam String productName){
-        return ResponseEntity.ok().body(warehouseService.buyProductForWarehouse(id,productName));
+        return ResponseEntity.ok().build();
     }
     @GetMapping("/{id}")
     ResponseEntity<Warehouse> getWarehouse(@PathVariable Long id){
