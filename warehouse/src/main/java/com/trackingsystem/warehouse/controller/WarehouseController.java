@@ -29,7 +29,7 @@ public class WarehouseController {
     }
     @PutMapping("/{id}")
     ResponseEntity<Warehouse> updateWarehouse(@PathVariable Long id,
-                                              @ Valid @RequestBody UpdateWarehouseDTO updateWarehouseDTO){
+                                              @Valid @RequestBody UpdateWarehouseDTO updateWarehouseDTO){
         return ResponseEntity.ok().body(warehouseService.updateWarehouse(id,updateWarehouseDTO));
     }
     @DeleteMapping("/{id}")

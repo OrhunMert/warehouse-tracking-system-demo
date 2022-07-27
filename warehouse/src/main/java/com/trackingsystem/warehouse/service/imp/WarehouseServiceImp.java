@@ -2,6 +2,7 @@ package com.trackingsystem.warehouse.service.imp;
 
 import com.trackingsystem.warehouse.dto.UpdateWarehouseDTO;
 import com.trackingsystem.warehouse.dto.WarehouseDTO;
+import com.trackingsystem.warehouse.exception.WarehouseNotFoundException;
 import com.trackingsystem.warehouse.model.Warehouse;
 import com.trackingsystem.warehouse.repository.WarehouseRepository;
 import com.trackingsystem.warehouse.service.WarehouseService;
@@ -25,12 +26,16 @@ public class WarehouseServiceImp implements WarehouseService {
 
     @Override
     public Warehouse getWarehouse(Long id) {
-        return warehouseRepository.findById(id).orElseThrow();
+        return warehouseRepository
+                .findById(id)
+                .orElseThrow(() -> new WarehouseNotFoundException("Warehouse not found by id to get"));
     }
 
     @Override
     public Warehouse updateWarehouse(Long id, UpdateWarehouseDTO updateWarehouseDTO) {
-        Warehouse warehouse = warehouseRepository.findById(id).orElseThrow();
+        Warehouse warehouse = warehouseRepository
+                .findById(id)
+                .orElseThrow(() -> new WarehouseNotFoundException("Warehouse not found by id to update"));
 
         //we will make with mapstruct so we need to change it
         //warehouse.setOwnerid(warehouseDTO.getOwnerid());
@@ -46,7 +51,9 @@ public class WarehouseServiceImp implements WarehouseService {
 
     @Override
     public void deleteWarehouse(Long id) {
-        warehouseRepository.findById(id).orElseThrow();
+        warehouseRepository
+                .findById(id)
+                .orElseThrow(() -> new WarehouseNotFoundException("Warehouse not found by id to delete"));
         warehouseRepository.deleteById(id);
     }
 }
