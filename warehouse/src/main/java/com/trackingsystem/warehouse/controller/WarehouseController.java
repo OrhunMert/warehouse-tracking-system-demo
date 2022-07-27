@@ -1,5 +1,6 @@
 package com.trackingsystem.warehouse.controller;
 
+import com.trackingsystem.warehouse.dto.UpdateWarehouseDTO;
 import com.trackingsystem.warehouse.dto.WarehouseDTO;
 import com.trackingsystem.warehouse.model.Warehouse;
 import com.trackingsystem.warehouse.service.WarehouseService;
@@ -27,8 +28,9 @@ public class WarehouseController {
         return ResponseEntity.ok().body(warehouseService.getWarehouse(id));
     }
     @PutMapping("/{id}")
-    ResponseEntity<Warehouse> updateWarehouse(@PathVariable Long id,@RequestBody WarehouseDTO warehouseDTO){
-        return ResponseEntity.ok().body(warehouseService.updateWarehouse(id,warehouseDTO));
+    ResponseEntity<Warehouse> updateWarehouse(@PathVariable Long id,
+                                              @ Valid @RequestBody UpdateWarehouseDTO updateWarehouseDTO){
+        return ResponseEntity.ok().body(warehouseService.updateWarehouse(id,updateWarehouseDTO));
     }
     @DeleteMapping("/{id}")
     ResponseEntity<HttpStatus> deleteWarehouse(@PathVariable Long id){

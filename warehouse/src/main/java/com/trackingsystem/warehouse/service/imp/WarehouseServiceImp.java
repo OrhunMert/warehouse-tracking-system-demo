@@ -1,5 +1,6 @@
 package com.trackingsystem.warehouse.service.imp;
 
+import com.trackingsystem.warehouse.dto.UpdateWarehouseDTO;
 import com.trackingsystem.warehouse.dto.WarehouseDTO;
 import com.trackingsystem.warehouse.model.Warehouse;
 import com.trackingsystem.warehouse.repository.WarehouseRepository;
@@ -28,13 +29,15 @@ public class WarehouseServiceImp implements WarehouseService {
     }
 
     @Override
-    public Warehouse updateWarehouse(Long id, WarehouseDTO warehouseDTO) {
+    public Warehouse updateWarehouse(Long id, UpdateWarehouseDTO updateWarehouseDTO) {
         Warehouse warehouse = warehouseRepository.findById(id).orElseThrow();
 
-        warehouse.setWarehouseName(warehouseDTO.getWarehouseName());
-        warehouse.setWarehouseCapacity(warehouseDTO.getWarehouseCapacity());
-        warehouse.setCurrentStock(warehouseDTO.getCurrentStock());
-        warehouse.setWarehouseGenre(warehouseDTO.getWarehouseGenre());
+        //we will make with mapstruct so we need to change it
+        //warehouse.setOwnerid(warehouseDTO.getOwnerid());
+        warehouse.setWarehouseName(updateWarehouseDTO.getWarehouseName());
+        warehouse.setWarehouseCapacity(updateWarehouseDTO.getWarehouseCapacity());
+        warehouse.setCurrentStock(updateWarehouseDTO.getCurrentStock());
+        warehouse.setWarehouseGenre(updateWarehouseDTO.getWarehouseGenre());
 
         warehouseRepository.save(warehouse);
 
