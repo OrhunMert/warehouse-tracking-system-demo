@@ -2,17 +2,22 @@ package com.trackingsystem.warehouse.service.imp;
 
 import com.trackingsystem.warehouse.dto.UpdateWarehouseDTO;
 import com.trackingsystem.warehouse.dto.WarehouseDTO;
+import com.trackingsystem.warehouse.exception.UserNotFoundforWarehouseException;
 import com.trackingsystem.warehouse.exception.WarehouseNotFoundException;
 import com.trackingsystem.warehouse.model.Warehouse;
 import com.trackingsystem.warehouse.repository.WarehouseRepository;
 import com.trackingsystem.warehouse.service.WarehouseService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class WarehouseServiceImp implements WarehouseService {
 
     private final ModelMapper modelMapper;
@@ -23,7 +28,21 @@ public class WarehouseServiceImp implements WarehouseService {
     public Warehouse createWarehouse(WarehouseDTO warehouseDTO) {
       Warehouse warehouse = modelMapper.map(warehouseDTO,Warehouse.class);
 
-      //using restTemple to connect with other service
+      HttpStatus httpStatus = restTemplate.getForObject(
+              "http://localhost:8080/users/check/{id}"
+              ,HttpStatus.class
+              ,warehouse.getOwnerid());
+
+
+      log.info("Httpstatus Result:"+httpStatus);
+
+      if(httpStatus.getReasonPhrase() == HttpStatus.NOT_FOUND.getReasonPhrase())
+      {
+          log.info("User not found");
+          throw new UserNotFoundforWarehouseException("Ownerid not found by id to create Warehouse");
+      }
+
+      else log.info("User is found");
 
       warehouseRepository.save(warehouse);
       return warehouse;
