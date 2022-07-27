@@ -3,6 +3,7 @@ package com.trackingsystem.warehouse.service.imp;
 import com.trackingsystem.warehouse.dto.UpdateWarehouseDTO;
 import com.trackingsystem.warehouse.dto.WarehouseDTO;
 import com.trackingsystem.warehouse.exception.UserNotFoundforWarehouseException;
+import com.trackingsystem.warehouse.exception.WarehouseBusinessException;
 import com.trackingsystem.warehouse.exception.WarehouseNotFoundException;
 import com.trackingsystem.warehouse.model.Product;
 import com.trackingsystem.warehouse.model.Warehouse;
@@ -16,7 +17,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -97,11 +97,26 @@ public class WarehouseServiceImp implements WarehouseService {
 
         log.info("productName:"+productSet.get(0).getProductname());
 
+        this.checkConditionToBuy(warehouse,productSet);
         warehouse.getProductList().add(productSet.get(0).getProductname());
+        warehouse.setCurrentStock(warehouse.getCurrentStock()
+                + productSet.get(0).getProductweight());
         warehouse.setProductList(warehouse.getProductList());
+
         warehouseRepository.save(warehouse);
 
         return warehouse.getProductList();
+
+    }
+
+    @Override
+    public void checkConditionToBuy(Warehouse warehouse,List<Product> productList) {
+        if(!(productList.get(0).getProductgenre().equals(warehouse.getWarehouseGenre())))
+            // you can setup the communication with notification service.(maybe)
+            throw new WarehouseBusinessException("Warehouse's genre is not valid to add the Product!!!");
+        else if(!(productList.get(0).getProductweight()
+                + warehouse.getCurrentStock()<=warehouse.getWarehouseCapacity()))
+            throw new WarehouseBusinessException("Warehouse's weight is not valid to add the Product!!!");
 
     }
 }

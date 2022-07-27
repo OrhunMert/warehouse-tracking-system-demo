@@ -16,6 +16,7 @@ public interface WarehouseService {
     //it will be Set of Product for return type.
     //List<Product> buyProductForWarehouse(Long id, String productName);
     List<String>buyProductForWarehouse(Long id,String productName);
+    void checkConditionToBuy(Warehouse warehouse , List<Product> productList);
 
 
 }
