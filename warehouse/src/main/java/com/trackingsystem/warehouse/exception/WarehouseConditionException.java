@@ -10,7 +10,7 @@ import java.util.List;
 @Slf4j
 public class  WarehouseConditionException {
 
-    public static void checkConditionToBuy(Warehouse warehouse, List<Product> productList) {
+    public static boolean checkConditionToBuy(Warehouse warehouse, List<Product> productList) {
         if(productList.isEmpty())
             throw new UserNotFoundforWarehouseException("Product not found to add to Warehouse");
         else if(!(productList.get(0).getProductgenre().equals(warehouse.getWarehouseGenre())))
@@ -19,14 +19,15 @@ public class  WarehouseConditionException {
         else if(!(productList.get(0).getProductweight()
                 + warehouse.getCurrentStock()<=warehouse.getWarehouseCapacity()))
             throw new WarehouseBusinessException("Warehouse's weight is not valid to add the Product!!!");
-
+        return true;
     }
-    public static void checkConditionToSell(Warehouse warehouse, List<Product> productList) {
+    public static boolean checkConditionToSell(Warehouse warehouse, List<Product> productList) {
         if(productList.isEmpty())
             throw new UserNotFoundforWarehouseException("Product not found to add to Warehouse");
         else if(!(productList.get(0).getProductgenre().equals(warehouse.getWarehouseGenre())))
             // you can setup the communication with notification service.(maybe)
             throw new WarehouseBusinessException("Warehouse's genre is not valid to add the Product!!!");
+        return true;
     }
 
     public static boolean checkHaveOwnerid(HttpStatus httpStatus){
