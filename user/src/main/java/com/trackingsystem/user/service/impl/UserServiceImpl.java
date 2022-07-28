@@ -51,7 +51,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User not found by id to update operation!!!"));
 
-        // how can i use the builder to change this code part.
+        // you will use map struct.
         user.setMail(userDTO.getMail());
         user.setPassword((userDTO.getPassword()));
         user.setPhoneNumber(userDTO.getPhoneNumber());
