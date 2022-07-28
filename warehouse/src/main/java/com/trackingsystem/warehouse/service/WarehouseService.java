@@ -15,9 +15,7 @@ public interface WarehouseService {
     Warehouse updateWarehouse(Long id,UpdateWarehouseDTO updateWarehouseDTO);
     void deleteWarehouse(Long id);
     List<String> buyProductForWarehouse(Long id,String productName);
-    void checkConditionToBuy(Warehouse warehouse,List<Product> productList);
     HttpStatus sellProductForWarehouse(Long id,String productName);
-    void checkConditionToSell(Warehouse warehouse,List<Product> productList);
 
 
 }
