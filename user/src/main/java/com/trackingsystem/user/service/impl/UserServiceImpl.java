@@ -1,4 +1,4 @@
-package com.trackingsystem.user.service.imp;
+package com.trackingsystem.user.service.impl;
 
 import com.trackingsystem.user.dto.UserDTO;
 import com.trackingsystem.user.exception.UserNotFoundException;
@@ -8,12 +8,15 @@ import com.trackingsystem.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class UserServiceImp implements UserService {
+public class UserServiceImpl implements UserService {
 
     private final ModelMapper modelMapper;
     private final UserRepository userRepository;
@@ -22,7 +25,6 @@ public class UserServiceImp implements UserService {
     @Override
     public User createUser(UserDTO userDTO) {
         User user = modelMapper.map(userDTO, User.class);
-        log.info("User Data:{}",user);
         userRepository.save(user);
         return user;
     }
@@ -61,5 +63,14 @@ public class UserServiceImp implements UserService {
                 .orElseThrow(() -> new UserNotFoundException("User not found by id to delete operation!!!"));
 
         userRepository.deleteById(id);
+    }
+
+    @Override
+    public HttpStatus checkUserResponse(Long id) {
+        Optional<User> user = userRepository.findById(id);
+        log.info("check user:"+user);
+        if(user.equals(Optional.empty()))
+            return HttpStatus.NOT_FOUND;
+        return HttpStatus.OK;
     }
 }

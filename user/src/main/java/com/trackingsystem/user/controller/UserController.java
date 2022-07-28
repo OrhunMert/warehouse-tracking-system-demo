@@ -25,6 +25,10 @@ public class UserController {
     public ResponseEntity<User> getUser(@PathVariable Long id){
         return ResponseEntity.ok().body(userService.getUser(id));
     }
+    @GetMapping("/check/{id}")
+    public ResponseEntity<HttpStatus> checkUserResponse(@PathVariable Long id){
+        return ResponseEntity.ok().body(userService.checkUserResponse(id));
+    }
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable Long id , @RequestBody UserDTO userDTO){
         return ResponseEntity.ok().body(userService.updateUser(id,userDTO));
