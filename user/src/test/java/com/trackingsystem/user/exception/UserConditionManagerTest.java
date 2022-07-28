@@ -1,7 +1,6 @@
 package com.trackingsystem.user.exception;
 
 import org.junit.Test;
-import org.junit.jupiter.api.AfterAll;
 
 import static org.junit.Assert.assertTrue;
 

@@ -2,7 +2,6 @@ package com.trackingsystem.warehouse.service.impl;
 
 import com.trackingsystem.warehouse.dto.UpdateWarehouseDTO;
 import com.trackingsystem.warehouse.dto.WarehouseDTO;
-import com.trackingsystem.warehouse.exception.UserNotFoundforWarehouseException;
 import com.trackingsystem.warehouse.exception.WarehouseConditionException;
 import com.trackingsystem.warehouse.exception.WarehouseNotFoundException;
 import com.trackingsystem.warehouse.model.Product;
@@ -38,17 +37,10 @@ public class WarehouseServiceImpl implements WarehouseService {
               ,HttpStatus.class
               ,warehouse.getOwnerid());
 
-
-      log.info("Httpstatus Result:"+httpStatus);
-
       assert httpStatus != null;
-      if(httpStatus.getReasonPhrase().equals(HttpStatus.NOT_FOUND.getReasonPhrase()))
-      {
-          log.info("User not found");
-          throw new UserNotFoundforWarehouseException("Ownerid not found by id in user table to create Warehouse");
-      }
-
-      log.info("User is found");
+      WarehouseConditionException.checkHaveOwnerid(httpStatus);
+      WarehouseConditionException.checkCapacityOfWarehouse(warehouse.getWarehouseCapacity(),
+              warehouse.getCurrentStock());
 
       warehouseRepository.save(warehouse);
 
