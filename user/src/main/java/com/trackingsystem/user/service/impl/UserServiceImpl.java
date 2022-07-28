@@ -1,6 +1,7 @@
 package com.trackingsystem.user.service.impl;
 
 import com.trackingsystem.user.dto.UserDTO;
+import com.trackingsystem.user.exception.UserConditionManager;
 import com.trackingsystem.user.exception.UserNotFoundException;
 import com.trackingsystem.user.model.User;
 import com.trackingsystem.user.repository.UserRepository;
@@ -25,6 +26,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public User createUser(UserDTO userDTO) {
         User user = modelMapper.map(userDTO, User.class);
+
+        UserConditionManager.checkUsernameCondition(user.getUsername(),user.getPassword());
+        UserConditionManager.checkEmailCondition(user.getMail());
+        UserConditionManager.checkPhoneNumber(user.getPhoneNumber());
+
         userRepository.save(user);
         return user;
     }

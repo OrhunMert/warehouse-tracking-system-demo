@@ -18,6 +18,6 @@ public class User {
     private String username;
     private Integer password;
     private String mail;
-    private Long phoneNumber;
+    private String phoneNumber;
 
 }
