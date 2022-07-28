@@ -49,13 +49,7 @@ public class WarehouseServiceImpl implements WarehouseService {
       }
 
       log.info("User is found");
-      /*
-      if(!(warehouse.getWarehouseGenre().name().equals(Genre.FRUIT.name())) &&
-              !(warehouse.getWarehouseGenre().name().equals(Genre.VEGATABLE.name())) &&
-              !(warehouse.getWarehouseGenre().name().equals(Genre.ANIMAL.name()))){
-          throw new WarehouseBusinessException("There is not any genre in the Warehouse!!!");
-      }
-      */
+
       warehouseRepository.save(warehouse);
 
       return warehouse;
@@ -101,12 +95,8 @@ public class WarehouseServiceImpl implements WarehouseService {
 
         List<Product> productSet = productRepository.findByproductname(productName);
 
-        if(productSet.isEmpty())
-            throw new UserNotFoundforWarehouseException("Product not found to add to Warehouse");
-
-        log.info("productName:"+productSet.get(0).getProductname());
-
         this.checkConditionToBuy(warehouse,productSet);
+        log.info("productName:"+productSet.get(0).getProductname());
         warehouse.getProductList().add(productSet.get(0).getProductname());
         warehouse.setCurrentStock(warehouse.getCurrentStock()
                 + productSet.get(0).getProductweight());
@@ -119,12 +109,44 @@ public class WarehouseServiceImpl implements WarehouseService {
 
     @Override
     public void checkConditionToBuy(Warehouse warehouse,List<Product> productList) {
-        if(!(productList.get(0).getProductgenre().equals(warehouse.getWarehouseGenre())))
+        if(productList.isEmpty())
+            throw new UserNotFoundforWarehouseException("Product not found to add to Warehouse");
+        else if(!(productList.get(0).getProductgenre().equals(warehouse.getWarehouseGenre())))
             // you can setup the communication with notification service.(maybe)
             throw new WarehouseBusinessException("Warehouse's genre is not valid to add the Product!!!");
         else if(!(productList.get(0).getProductweight()
                 + warehouse.getCurrentStock()<=warehouse.getWarehouseCapacity()))
             throw new WarehouseBusinessException("Warehouse's weight is not valid to add the Product!!!");
 
+    }
+
+    @Override
+    public HttpStatus sellProductForWarehouse(Long id, String productName) {
+        Warehouse warehouse = warehouseRepository
+                .findById(id)
+                .orElseThrow(
+                        ()->new WarehouseNotFoundException("Warehouse not found to buy product"));
+
+        List<Product> productSet = productRepository.findByproductname(productName);
+
+        this.checkConditionToSell(warehouse,productSet);
+        int productIndex = warehouse.getProductList().indexOf(productName);
+        log.info("Number of input product:"+productIndex);
+        warehouse.getProductList().remove(productIndex);
+        warehouse.setCurrentStock(warehouse.getCurrentStock()-
+                productSet.get(0).getProductweight());
+        warehouse.setProductList(warehouse.getProductList());
+        warehouseRepository.save(warehouse);
+
+        return HttpStatus.OK;
+    }
+
+    @Override
+    public void checkConditionToSell(Warehouse warehouse, List<Product> productList) {
+        if(productList.isEmpty())
+            throw new UserNotFoundforWarehouseException("Product not found to add to Warehouse");
+        else if(!(productList.get(0).getProductgenre().equals(warehouse.getWarehouseGenre())))
+            // you can setup the communication with notification service.(maybe)
+            throw new WarehouseBusinessException("Warehouse's genre is not valid to add the Product!!!");
     }
 }

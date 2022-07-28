@@ -17,12 +17,11 @@ public class WarehouseDTO {
     private Long ownerid;
     @NotBlank
     private String warehouseName;
-    private Integer warehouseCapacity;
-    private Integer currentStock;
+    private Integer warehouseCapacity=100;
+    private Integer currentStock=0;
     @Enumerated(EnumType.STRING)
     private Genre warehouseGenre;
 
-    //private List<Product> productSet = new ArrayList<>();
     private List<String> productList = new ArrayList<>();
 
 

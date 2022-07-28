@@ -21,8 +21,8 @@ public class Warehouse {
 
     private Long ownerid;
     private String warehouseName;
-    private Integer warehouseCapacity;
-    private Integer currentStock;
+    private Integer warehouseCapacity=100;
+    private Integer currentStock=0;
 
     @Enumerated(EnumType.STRING)
     private Genre warehouseGenre;
