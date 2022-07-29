@@ -6,7 +6,6 @@ import com.trackingsystem.warehouse.model.Warehouse;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.http.HttpStatus;
-;
 
 import java.util.ArrayList;
 import java.util.List;
