@@ -1,10 +1,10 @@
 package com.trackingsystem.warehouse.exception;
 
-public class ProductNotFoundforWarehouseException extends RuntimeException{
+public class ProductNotFoundException extends RuntimeException{
 
     private final String message;
 
-    public ProductNotFoundforWarehouseException(String message){
+    public ProductNotFoundException(String message){
         this.message = message;
     }
 

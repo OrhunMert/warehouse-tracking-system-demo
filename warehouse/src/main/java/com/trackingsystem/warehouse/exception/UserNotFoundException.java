@@ -1,10 +1,10 @@
 package com.trackingsystem.warehouse.exception;
 
-public class UserNotFoundforWarehouseException extends RuntimeException{
+public class UserNotFoundException extends RuntimeException{
 
     private final String message;
 
-    public UserNotFoundforWarehouseException(String message){
+    public UserNotFoundException(String message){
         this.message = message;
     }
 
