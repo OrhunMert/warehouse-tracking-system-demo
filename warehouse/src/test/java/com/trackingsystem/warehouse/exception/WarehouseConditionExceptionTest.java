@@ -30,72 +30,69 @@ public class WarehouseConditionExceptionTest {
 
 
         //given
-
         // they will do with map struct
         product.setProductgenre(Genre.FRUIT);
         product.setProductweight(10);
-
         productList.add(product);
-
         warehouse.setWarehouseGenre(Genre.FRUIT);
         warehouse.setWarehouseCapacity(100);
         warehouse.setCurrentStock(0);
 
         //when
-        boolean haveBuy = WarehouseConditionException.checkConditionToBuy(warehouse,productList);
+        boolean actual = WarehouseConditionException.checkConditionToBuy(warehouse,productList);
 
         //then
-        assertTrue(haveBuy);
+        assertTrue(actual);
 
     }
     @Test
     public void when_sellProduct_except_checkConditionToSell(){
 
         //given
-
         // they will do with map struct
-        product.setProductgenre(Genre.FRUIT);
-        product.setProductweight(10);
-
+        product.setProductgenre(Genre.VEGATABLE);
+        product.setProductweight(20);
         productList.add(product);
-
-        warehouse.setWarehouseGenre(Genre.FRUIT);
+        warehouse.setWarehouseGenre(Genre.VEGATABLE);
         warehouse.setWarehouseCapacity(100);
-        warehouse.setCurrentStock(0);
+        warehouse.setCurrentStock(80);
 
         //when
-        boolean haveSell = WarehouseConditionException.checkConditionToSell(warehouse,productList);
+        boolean actual = WarehouseConditionException.checkConditionToSell(warehouse,productList);
+
         //then
-        assertTrue(haveSell);
+        assertTrue(actual);
 
     }
 
     @Test
     public void when_createWarehouse_except_checkOwnerId(){
+
         //given
-        HttpStatus httpStatus1 = HttpStatus.ACCEPTED;
-        HttpStatus httpStatus2 = HttpStatus.OK;
+        HttpStatus acceptedHttpStatus = HttpStatus.ACCEPTED;
+        HttpStatus okHttpStatus = HttpStatus.OK;
 
         //when
-        boolean haveOwnerid1 = WarehouseConditionException.checkHaveOwnerid(httpStatus1);
-        boolean haveOwnerid2 = WarehouseConditionException.checkHaveOwnerid(httpStatus2);
+        boolean acceptedActual = WarehouseConditionException.checkHaveOwnerid(acceptedHttpStatus);
+        boolean okActual = WarehouseConditionException.checkHaveOwnerid(okHttpStatus);
 
         //then
-        assertTrue(haveOwnerid1);
-        assertTrue(haveOwnerid2);
+        assertTrue(acceptedActual);
+        assertTrue(okActual);
 
     }
     @Test
     public void when_createWarehouse_except_checkCapacity(){
+
         //given
+        Integer warehouseCapacity = 100;
+        Integer currentStock = 0;
 
         //when
-        boolean validCapacity1 = WarehouseConditionException.checkCapacityOfWarehouse(100,0);
-        boolean validCapacity2 = WarehouseConditionException.checkCapacityOfWarehouse(200,0);
+        boolean actual = WarehouseConditionException.checkCapacityOfWarehouse(warehouseCapacity,currentStock);
 
         //then
-        assertTrue(validCapacity1);
-        assertTrue(validCapacity2);
+        assertTrue(actual);
 
     }
 

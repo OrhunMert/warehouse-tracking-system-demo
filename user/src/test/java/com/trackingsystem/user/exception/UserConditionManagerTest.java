@@ -7,30 +7,43 @@ import static org.junit.Assert.assertTrue;
 public class UserConditionManagerTest {
 
     @Test
-    public void when_loginUsernameandPassword_expect_checkUsernameCondition(){
+    public void when_loginUsernameAndPassword_expect_checkUsernameCondition(){
+
         //given
+        String username= "orhunmert77";
+        Integer password = 446123;
+
         //when
-        boolean isTrue = UserConditionManager.checkUsernameCondition("orhunmert77",446123);
+        boolean actual = UserConditionManager.checkUsernameCondition(username,password);
+
         //then
-        assertTrue(isTrue);
+        assertTrue(actual);
     }
 
     @Test
     public void when_loginEmail_expect_checkEmailCondition(){
+
         //given
+        String email = "orhun.bozkurt@huawei.com";
+
         //when
-        boolean isTrue = UserConditionManager.checkEmailCondition("orhun.bozkurt@huawei.com");
+        boolean actual = UserConditionManager.checkEmailCondition(email);
+
         //then
-        assertTrue(isTrue);
+        assertTrue(actual);
     }
 
     @Test
     public void when_loginPhoneNumber_expect_checkPhoneNumberCondition(){
+
         //given
+        String phoneNumber = "05459780876";
+
         //when
-        boolean isTrue = UserConditionManager.checkPhoneNumber("05459780876");
+        boolean actual = UserConditionManager.checkPhoneNumber(phoneNumber);
+
         //then
-        assertTrue(isTrue);
+        assertTrue(actual);
     }
 
 }
