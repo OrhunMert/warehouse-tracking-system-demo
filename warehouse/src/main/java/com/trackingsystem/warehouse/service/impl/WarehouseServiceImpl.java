@@ -79,7 +79,7 @@ public class WarehouseServiceImpl implements WarehouseService {
     }
 
     @Override
-    public List<String> buyProductForWarehouse(Long id, String productName) {
+    public List<String> buyProduct(Long id, String productName) {
         Warehouse warehouse = warehouseRepository
                 .findById(id)
                 .orElseThrow(
@@ -91,9 +91,11 @@ public class WarehouseServiceImpl implements WarehouseService {
         WarehouseConditionException.checkConditionToBuy(warehouse,productSet);
         log.info("productName:"+productSet.get(0).getProductname());
         warehouse.getProductList().add(productSet.get(0).getProductname());
-        warehouse.setCurrentStock(warehouse.getCurrentStock()
-                + productSet.get(0).getProductweight());
+        log.info("productList in Warehouse:{}",warehouse.getProductList());
         warehouse.setProductList(warehouse.getProductList());
+        warehouse.setCurrentStock(warehouse.getCurrentStock() +
+                productSet.get(0).getProductweight());
+
         warehouseRepository.save(warehouse);
 
         return warehouse.getProductList();
@@ -101,7 +103,7 @@ public class WarehouseServiceImpl implements WarehouseService {
     }
 
     @Override
-    public HttpStatus sellProductForWarehouse(Long id, String productName) {
+    public HttpStatus sellProduct(Long id, String productName) {
         Warehouse warehouse = warehouseRepository
                 .findById(id)
                 .orElseThrow(
@@ -109,14 +111,14 @@ public class WarehouseServiceImpl implements WarehouseService {
 
         List<Product> productSet = productRepository.findByproductname(productName);
 
-        //this.checkConditionToSell(warehouse,productSet);
         WarehouseConditionException.checkConditionToSell(warehouse,productSet);
         int productIndex = warehouse.getProductList().indexOf(productName);
         log.info("Number of input product:"+productIndex);
         warehouse.getProductList().remove(productIndex);
-        warehouse.setCurrentStock(warehouse.getCurrentStock()-
-                productSet.get(0).getProductweight());
         warehouse.setProductList(warehouse.getProductList());
+        warehouse.setCurrentStock(warehouse.getCurrentStock() -
+                productSet.get(0).getProductweight());
+
         warehouseRepository.save(warehouse);
 
         return HttpStatus.OK;

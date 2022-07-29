@@ -1,7 +1,5 @@
 package com.trackingsystem.warehouse.exception;
 
-import java.io.Serializable;
-
 public class WarehouseBusinessException extends RuntimeException {
     private final String message;
 

@@ -37,7 +37,7 @@ public class WarehouseController {
     @PostMapping("/buy")
     ResponseEntity<List<String>> buyProductForWarehouse(@RequestParam Long id,
                                                          @RequestParam String productName){
-        return ResponseEntity.ok().body(warehouseService.buyProductForWarehouse(id,productName));
+        return ResponseEntity.ok().body(warehouseService.buyProduct(id,productName));
     }
     @GetMapping("/{id}")
     ResponseEntity<Warehouse> getWarehouse(@PathVariable Long id){
@@ -56,7 +56,7 @@ public class WarehouseController {
     @DeleteMapping("/sell")
     ResponseEntity<HttpStatus> sellProductForWarehouse(@RequestParam Long id,
                                                        @RequestParam String productName){
-        return ResponseEntity.ok().body(warehouseService.sellProductForWarehouse(id,productName));
+        return ResponseEntity.ok().body(warehouseService.sellProduct(id,productName));
     }
 
 }
