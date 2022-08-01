@@ -87,7 +87,6 @@ public class WarehouseServiceImpl implements WarehouseService {
 
         List<Product> productSet = productRepository.findByproductname(productName);
 
-        //this.checkConditionToBuy(warehouse,productSet);
         WarehouseConditionException.checkConditionToBuy(warehouse,productSet);
         log.info("productName:"+productSet.get(0).getProductname());
         warehouse.getProductList().add(productSet.get(0).getProductname());
