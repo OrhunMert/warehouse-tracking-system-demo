@@ -5,9 +5,15 @@ import com.trackingsystem.notification.service.EmailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+import java.io.File;
 
 @Service
 @RequiredArgsConstructor
@@ -24,28 +30,50 @@ public class EmailServiceImpl implements EmailService {
 
         try {
 
-            // Creating a simple mail message
             SimpleMailMessage mailMessage = new SimpleMailMessage();
 
             log.info("Sender:"+sender);
             log.info("Recipient:"+email.getRecipient());
 
-
-            // Setting up necessary details
             mailMessage.setFrom(sender);
             mailMessage.setTo(email.getRecipient());
             mailMessage.setText(email.getMessage());
             mailMessage.setSubject(email.getSubject());
 
-            // Sending the mail
             javaMailSender.send(mailMessage);
-            return "Mail Sent Successfully...";
+            return "Mail Sent Successfully!!!";
         }
 
-        // Catch block to handle the exceptions
         catch (Exception e) {
-            return "Error while Sending Mail";
+            return "Error while Sending Mail!!!";
         }
 
+    }
+    public String sendMailWithAttachment(Email email)
+    {
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        MimeMessageHelper mimeMessageHelper;
+
+        try {
+
+            mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
+            mimeMessageHelper.setFrom(sender);
+            mimeMessageHelper.setTo(email.getRecipient());
+            mimeMessageHelper.setText(email.getMessage());
+            mimeMessageHelper.setSubject(email.getSubject());
+
+            // you need to check the is there file? You will add to Exception Handling for line 66 and 69.
+            FileSystemResource file = new FileSystemResource(
+                    new File(email.getAttachment()));
+
+            mimeMessageHelper.addAttachment(
+                    file.getFilename(), file);
+
+            javaMailSender.send(mimeMessage);
+            return "Mail sent Successfully with Attachment!!!";
+        }
+        catch (MessagingException e) {
+            return "Error while sending mail!!!";
+        }
     }
 }

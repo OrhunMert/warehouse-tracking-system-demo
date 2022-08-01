@@ -6,5 +6,6 @@ public interface EmailService {
 
     // replace Email class with EmailDTO
     String sendEmail(Email email);
+    String sendMailWithAttachment(Email email);
 
 }

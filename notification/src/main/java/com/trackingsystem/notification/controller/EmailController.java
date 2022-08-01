@@ -18,7 +18,10 @@ public class EmailController {
 
     @PostMapping()
     public ResponseEntity<String> sendEmail(@RequestBody Email email){
-        return ResponseEntity.ok().body(emailService.sendEmail(email));
+        if(email.getAttachment().isBlank())
+             return ResponseEntity.ok().body(emailService.sendEmail(email));
+        else
+            return ResponseEntity.ok().body(emailService.sendMailWithAttachment(email));
     }
 
 }
