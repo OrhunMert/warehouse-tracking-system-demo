@@ -27,7 +27,6 @@ public class EmailServiceImpl implements EmailService {
 
     @Override
     public String sendEmail(Email email) {
-
         try {
 
             SimpleMailMessage mailMessage = new SimpleMailMessage();
@@ -75,5 +74,39 @@ public class EmailServiceImpl implements EmailService {
         catch (MessagingException e) {
             return "Error while sending mail!!!";
         }
+    }
+
+    @Override
+    public String sendEmailForEmptyWarehouse(String recipient,
+                                             String message,
+                                             String subject) {
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+
+        mailMessage.setFrom(sender);
+        mailMessage.setTo(recipient);
+        mailMessage.setText(message);
+        mailMessage.setSubject(subject);
+
+        javaMailSender.send(mailMessage);
+        return "Mail Sent Successfully for Empty Warehouse!!!";
+
+    }
+
+    @Override
+    public String sendEmailForInfo(String recipient,
+                                   String message,
+                                   String subject) {
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+
+        log.info("Recipient for Warehouse Information:"+recipient);
+
+        mailMessage.setFrom(sender);
+        mailMessage.setTo(recipient);
+        mailMessage.setText(message);
+        mailMessage.setSubject(subject);
+
+        javaMailSender.send(mailMessage);
+        return "Mail Sent Successfully about User's Warehouse!!!";
+
     }
 }

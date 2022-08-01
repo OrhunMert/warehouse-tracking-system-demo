@@ -27,12 +27,13 @@ public class WarehouseServiceImpl implements WarehouseService {
     private final RestTemplate restTemplate;
     private final WarehouseRepository warehouseRepository;
     private final ProductRepository productRepository;
+    private static HttpStatus httpStatus;
 
     @Override
     public Warehouse createWarehouse(WarehouseDTO warehouseDTO) {
       Warehouse warehouse = modelMapper.map(warehouseDTO,Warehouse.class);
 
-      HttpStatus httpStatus = restTemplate.getForObject(
+      httpStatus = restTemplate.getForObject(
               "http://localhost:8080/users/check/{id}"
               ,HttpStatus.class
               ,warehouse.getOwnerid());
@@ -48,10 +49,40 @@ public class WarehouseServiceImpl implements WarehouseService {
     }
 
     @Override
-    public Warehouse getWarehouse(Long id) {
-        return warehouseRepository
+    public String getWarehouse(Long id) {
+        Warehouse warehouse = warehouseRepository
                 .findById(id)
                 .orElseThrow(() -> new WarehouseNotFoundException("Warehouse not found by id to get"));
+
+        String recipient;
+        String message;
+        String subject = "About Warehouse Current State Information ";
+
+        httpStatus = restTemplate.getForObject(
+                "http://localhost:8080/users/check/{id}",
+                HttpStatus.class,
+                warehouse.getOwnerid());
+
+        assert httpStatus != null;
+        WarehouseConditionException.checkHaveOwnerid(httpStatus);
+
+        recipient = restTemplate.getForObject(
+                "http://localhost:8080/users/email/{id}",
+                String.class,
+                warehouse.getOwnerid());
+
+        message = "Your warehouse's capacity is "+warehouse.getWarehouseCapacity()+
+                "\nWarehouse's current stock is "+warehouse.getCurrentStock()+
+                "\nWarehouse's total empty area is "+(warehouse.getWarehouseCapacity()-warehouse.getCurrentStock())+
+                " and Product number is "+warehouse.getProductList().size()+" in Warehouse";
+
+        String mailResult = restTemplate.getForObject(
+                "http://localhost:8082/emails/sendemail/info/{recipient}/{message}/{subject}",
+                String.class,recipient,message,subject);
+
+        log.info("Mail result:"+mailResult);
+
+        return mailResult;
     }
 
     @Override

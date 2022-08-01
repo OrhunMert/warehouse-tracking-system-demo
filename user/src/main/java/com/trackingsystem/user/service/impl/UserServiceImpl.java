@@ -79,4 +79,11 @@ public class UserServiceImpl implements UserService {
             return HttpStatus.NOT_FOUND;
         return HttpStatus.OK;
     }
+
+    @Override
+    public String getUserEmailResponse(Long id) {
+        User user = userRepository.findById(id).
+                orElseThrow(()-> new UserNotFoundException("User not found for get message!!!"));
+        return user.getMail();
+    }
 }

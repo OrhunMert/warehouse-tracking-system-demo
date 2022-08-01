@@ -40,7 +40,7 @@ public class WarehouseController {
         return ResponseEntity.ok().body(warehouseService.buyProduct(id,productName));
     }
     @GetMapping("/{id}")
-    ResponseEntity<Warehouse> getWarehouse(@PathVariable Long id){
+    ResponseEntity<String> getWarehouse(@PathVariable Long id){
         return ResponseEntity.ok().body(warehouseService.getWarehouse(id));
     }
     @PutMapping("/{id}")

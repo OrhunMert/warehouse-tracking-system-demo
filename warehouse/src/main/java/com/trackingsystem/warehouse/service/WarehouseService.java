@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface WarehouseService {
     Warehouse createWarehouse(WarehouseDTO warehouseDTO);
-    Warehouse getWarehouse(Long id);
+    String getWarehouse(Long id);
     Warehouse updateWarehouse(Long id,UpdateWarehouseDTO updateWarehouseDTO);
     void deleteWarehouse(Long id);
     List<String> buyProduct(Long id,String productName);
