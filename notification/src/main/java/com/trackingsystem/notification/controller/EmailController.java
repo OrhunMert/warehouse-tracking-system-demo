@@ -21,15 +21,6 @@ public class EmailController {
         else
             return ResponseEntity.ok().body(emailService.sendMailWithAttachment(email));
     }
-    @GetMapping("/sendemail")
-    public ResponseEntity<String> sendEmailForEmptyWarehouse(String recipient,
-                                                    String message,
-                                                    String subject){
-
-        return ResponseEntity.ok().body(emailService.sendEmailForEmptyWarehouse(recipient,
-                message,
-                subject));
-    }
     @GetMapping("/sendemail/info/{recipient}/{message}/{subject}")
     public ResponseEntity<String> sendEmailForInfo(@PathVariable String recipient,
                                                    @PathVariable String message,

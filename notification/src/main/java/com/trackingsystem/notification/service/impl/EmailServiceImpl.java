@@ -75,23 +75,6 @@ public class EmailServiceImpl implements EmailService {
             return "Error while sending mail!!!";
         }
     }
-
-    @Override
-    public String sendEmailForEmptyWarehouse(String recipient,
-                                             String message,
-                                             String subject) {
-        SimpleMailMessage mailMessage = new SimpleMailMessage();
-
-        mailMessage.setFrom(sender);
-        mailMessage.setTo(recipient);
-        mailMessage.setText(message);
-        mailMessage.setSubject(subject);
-
-        javaMailSender.send(mailMessage);
-        return "Mail Sent Successfully for Empty Warehouse!!!";
-
-    }
-
     @Override
     public String sendEmailForInfo(String recipient,
                                    String message,

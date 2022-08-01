@@ -4,11 +4,11 @@ import java.util.List;
 
 public class CheckWarehouseState {
 
-    public boolean isEmptyWarehouse(Integer currentStock, List<String> productList){
+    public static boolean isEmptyWarehouse(Integer currentStock, List<String> productList){
         if(currentStock == 0 && productList.isEmpty()) return true;
         return false;
     }
-    public boolean isFullWarehouse(Integer currentStock, Integer warehouseCapacity){
+    public static boolean isFullWarehouse(Integer currentStock, Integer warehouseCapacity){
         if(currentStock == warehouseCapacity) return true;
         return false;
     }

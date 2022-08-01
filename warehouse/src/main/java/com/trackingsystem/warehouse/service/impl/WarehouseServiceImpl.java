@@ -9,6 +9,7 @@ import com.trackingsystem.warehouse.model.Warehouse;
 import com.trackingsystem.warehouse.repository.ProductRepository;
 import com.trackingsystem.warehouse.repository.WarehouseRepository;
 import com.trackingsystem.warehouse.service.WarehouseService;
+import com.trackingsystem.warehouse.validator.CheckWarehouseState;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -23,11 +24,18 @@ import java.util.List;
 @Slf4j
 public class WarehouseServiceImpl implements WarehouseService {
 
+    /*
+    getWarehouse, buy and sell operation metodlarina notification servicisini cagirirken
+    tek bir metot uzerinden bu islem yapilabilir
+     */
     private final ModelMapper modelMapper;
     private final RestTemplate restTemplate;
     private final WarehouseRepository warehouseRepository;
     private final ProductRepository productRepository;
     private static HttpStatus httpStatus;
+    private String recipient;
+    private String message;
+    private String subject;
 
     @Override
     public Warehouse createWarehouse(WarehouseDTO warehouseDTO) {
@@ -54,10 +62,6 @@ public class WarehouseServiceImpl implements WarehouseService {
                 .findById(id)
                 .orElseThrow(() -> new WarehouseNotFoundException("Warehouse not found by id to get"));
 
-        String recipient;
-        String message;
-        String subject = "About Warehouse Current State Information ";
-
         httpStatus = restTemplate.getForObject(
                 "http://localhost:8080/users/check/{id}",
                 HttpStatus.class,
@@ -72,17 +76,13 @@ public class WarehouseServiceImpl implements WarehouseService {
                 warehouse.getOwnerid());
 
         message = "Your warehouse's capacity is "+warehouse.getWarehouseCapacity()+
-                "\nWarehouse's current stock is "+warehouse.getCurrentStock()+
-                "\nWarehouse's total empty area is "+(warehouse.getWarehouseCapacity()-warehouse.getCurrentStock())+
-                " and Product number is "+warehouse.getProductList().size()+" in Warehouse";
+                    "\nWarehouse's current stock is "+warehouse.getCurrentStock()+
+                    "\nWarehouse's total empty area is "+(warehouse.getWarehouseCapacity()-warehouse.getCurrentStock())+
+                    " and Product number is "+warehouse.getProductList().size()+" in Warehouse";
 
-        String mailResult = restTemplate.getForObject(
-                "http://localhost:8082/emails/sendemail/info/{recipient}/{message}/{subject}",
-                String.class,recipient,message,subject);
+        subject = "About Warehouse Current State Information";
 
-        log.info("Mail result:"+mailResult);
-
-        return mailResult;
+        return sendEmailInfo(recipient,message,subject);
     }
 
     @Override
@@ -126,6 +126,20 @@ public class WarehouseServiceImpl implements WarehouseService {
         warehouse.setCurrentStock(warehouse.getCurrentStock() +
                 productSet.get(0).getProductweight());
 
+        // notification to buy product
+        if(CheckWarehouseState.isFullWarehouse(warehouse.getCurrentStock(),
+                warehouse.getWarehouseCapacity())){
+            // you can controling is there user of warehouse?
+            recipient = restTemplate.getForObject(
+                    "http://localhost:8080/users/email/{id}",
+                    String.class,
+                    warehouse.getOwnerid());
+
+            message = "Your warehouse is full!!!";
+            subject = "Reminder about Warehouse";
+            sendEmailInfo(recipient,message,subject);
+        }
+
         warehouseRepository.save(warehouse);
 
         return warehouse.getProductList();
@@ -149,9 +163,28 @@ public class WarehouseServiceImpl implements WarehouseService {
         warehouse.setCurrentStock(warehouse.getCurrentStock() -
                 productSet.get(0).getProductweight());
 
+        if(CheckWarehouseState.isEmptyWarehouse(warehouse.getCurrentStock(),
+                warehouse.getProductList())){
+
+            recipient = restTemplate.getForObject(
+                    "http://localhost:8080/users/email/{id}",
+                    String.class,
+                    warehouse.getOwnerid());
+            message = "Your warehouse is empty!!!";
+            subject = "Reminder about Warehouse";
+            sendEmailInfo(recipient,message,subject);
+        }
+
         warehouseRepository.save(warehouse);
 
         return HttpStatus.OK;
+    }
+
+    @Override
+    public String sendEmailInfo(String recipient, String message, String subject) {
+        return restTemplate.getForObject(
+                "http://localhost:8082/emails/sendemail/info/{recipient}/{message}/{subject}",
+                String.class,recipient,message,subject);
     }
 
 }

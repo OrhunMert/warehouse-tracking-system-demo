@@ -14,6 +14,8 @@ public interface WarehouseService {
     void deleteWarehouse(Long id);
     List<String> buyProduct(Long id,String productName);
     HttpStatus sellProduct(Long id,String productName);
-
+    String sendEmailInfo(String recipient,
+                         String message,
+                         String subject);
 
 }
