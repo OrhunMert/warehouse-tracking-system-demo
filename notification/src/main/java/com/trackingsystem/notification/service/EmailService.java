@@ -1,0 +1,10 @@
+package com.trackingsystem.notification.service;
+
+import com.trackingsystem.notification.model.Email;
+
+public interface EmailService {
+
+    // replace Email class with EmailDTO
+    String sendEmail(Email email);
+
+}
