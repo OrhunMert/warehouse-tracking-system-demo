@@ -1,6 +1,6 @@
 package com.trackingsystem.notification.controller;
 
-import com.trackingsystem.notification.model.Email;
+import com.trackingsystem.notification.dto.EmailDTO;
 import com.trackingsystem.notification.service.EmailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,11 +15,11 @@ public class EmailController {
     private final EmailService emailService;
 
     @PostMapping()
-    public ResponseEntity<String> sendEmail(@RequestBody Email email){
-        if(email.getAttachment().isBlank())
-             return ResponseEntity.ok().body(emailService.sendEmail(email));
+    public ResponseEntity<String> sendEmail(@RequestBody EmailDTO emailDTO){
+        if(emailDTO.getAttachment().isBlank())
+             return ResponseEntity.ok().body(emailService.sendEmail(emailDTO));
         else
-            return ResponseEntity.ok().body(emailService.sendMailWithAttachment(email));
+            return ResponseEntity.ok().body(emailService.sendMailWithAttachment(emailDTO));
     }
     @GetMapping("/sendemail/info/{recipient}/{message}/{subject}")
     public ResponseEntity<String> sendEmailForInfo(@PathVariable String recipient,

@@ -26,5 +26,4 @@ public class WarehouseDTO {
     @ElementCollection
     private List<String> productList = new ArrayList<>();
 
-
 }

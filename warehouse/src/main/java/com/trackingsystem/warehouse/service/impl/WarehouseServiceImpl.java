@@ -24,10 +24,6 @@ import java.util.List;
 @Slf4j
 public class WarehouseServiceImpl implements WarehouseService {
 
-    /*
-    getWarehouse, buy and sell operation metodlarina notification servicisini cagirirken
-    tek bir metot uzerinden bu islem yapilabilir
-     */
     private final ModelMapper modelMapper;
     private final RestTemplate restTemplate;
     private final WarehouseRepository warehouseRepository;
