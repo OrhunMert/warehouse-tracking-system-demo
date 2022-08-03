@@ -21,10 +21,10 @@ public class EmailController {
         else
             return ResponseEntity.ok().body(emailService.sendMailWithAttachment(emailDTO));
     }
-    @GetMapping("/sendemail/info/{recipient}/{message}/{subject}")
-    public ResponseEntity<String> sendEmailForInfo(@PathVariable String recipient,
-                                                   @PathVariable String message,
-                                                   @PathVariable String subject){
+    @GetMapping("/sendemail/info")
+    public ResponseEntity<String> sendEmailForInfo(@RequestParam String recipient,
+                                                   @RequestParam String message,
+                                                   @RequestParam String subject){
 
         return ResponseEntity.ok().body(emailService.sendEmailForInfo(recipient,
                 message,

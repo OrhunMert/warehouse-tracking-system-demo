@@ -205,14 +205,15 @@ public class WarehouseServiceImpl implements WarehouseService {
     @Override
     public String sendEmailInfo(String recipient, String message, String subject) {
         return restTemplate.getForObject(
-                "http://localhost:8082/emails/sendemail/info/{recipient}/{message}/{subject}",
+                "http://localhost:8082/emails/sendemail/info?recipient={recipient}" +
+                        "&message={message}&subject={subject}",
                 String.class,recipient,message,subject);
     }
 
     @Override
     public String sendSmsInfo(String message, String phoneNumber) {
         return restTemplate.getForObject(
-                "http://localhost:8082/sms/sendsms/{message}/{phoneNumber}",
+                "http://localhost:8082/sms/sendsms?message={message}&phoneNumber={phoneNumber}",
                 String.class,
                 message,phoneNumber);
     }
