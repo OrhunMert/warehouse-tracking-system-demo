@@ -20,7 +20,7 @@ public class SmsController {
     }
 
 
-    @GetMapping("/sendSMS/{message}/{phoneNumber}")
+    @GetMapping("/sendsms/{message}/{phoneNumber}")
     public ResponseEntity<String> sendSms(@PathVariable String message,
                                           @PathVariable String phoneNumber){
         return ResponseEntity.ok().body(smsService.sendSms(message,phoneNumber));

@@ -135,7 +135,8 @@ public class WarehouseServiceImpl implements WarehouseService {
         // notification to buy product
         if(CheckWarehouseState.isFullWarehouse(warehouse.getCurrentStock(),
                 warehouse.getWarehouseCapacity())){
-            // you can controling is there user of warehouse?
+
+            // send email to buy operation of Warehouse
             recipient = restTemplate.getForObject(
                     "http://localhost:8080/users/email/{id}",
                     String.class,
@@ -144,6 +145,13 @@ public class WarehouseServiceImpl implements WarehouseService {
             message = "Your warehouse is full!!!";
             subject = "Reminder about Warehouse";
             sendEmailInfo(recipient,message,subject);
+
+            // send sms to buy operation of Warehouse(without sms'json body)
+            String phoneNumber = restTemplate.getForObject(
+                    "http://localhost:8080/users/sms/{id}",
+                    String.class,
+                    warehouse.getOwnerid());
+            sendSmsInfo(message,phoneNumber);
         }
 
         warehouseRepository.save(warehouse);
@@ -172,6 +180,7 @@ public class WarehouseServiceImpl implements WarehouseService {
         if(CheckWarehouseState.isEmptyWarehouse(warehouse.getCurrentStock(),
                 warehouse.getProductList())){
 
+            // send email to sell operation of Warehouse
             recipient = restTemplate.getForObject(
                     "http://localhost:8080/users/email/{id}",
                     String.class,
@@ -179,6 +188,13 @@ public class WarehouseServiceImpl implements WarehouseService {
             message = "Your warehouse is empty!!!";
             subject = "Reminder about Warehouse";
             sendEmailInfo(recipient,message,subject);
+
+            // send sms to sell operation of Warehouse(without sms'json body)
+            String phoneNumber = restTemplate.getForObject(
+                    "http://localhost:8080/users/sms/{id}",
+                    String.class,
+                    warehouse.getOwnerid());
+            sendSmsInfo(message,phoneNumber);
         }
 
         warehouseRepository.save(warehouse);
@@ -196,7 +212,7 @@ public class WarehouseServiceImpl implements WarehouseService {
     @Override
     public String sendSmsInfo(String message, String phoneNumber) {
         return restTemplate.getForObject(
-                "http://localhost:8082/sms/sendSMS/{message}/{phoneNumber}",
+                "http://localhost:8082/sms/sendsms/{message}/{phoneNumber}",
                 String.class,
                 message,phoneNumber);
     }
