@@ -12,7 +12,7 @@ public class  WarehouseConditionException {
 
     public static boolean checkConditionToBuy(Warehouse warehouse, List<Product> productList) {
         if(productList.isEmpty())
-            throw new UserNotFoundException("Product not found to add to Warehouse");
+            throw new ProductNotFoundException("Product not found to add to Warehouse");
         else if(!(productList.get(0).getProductgenre().equals(warehouse.getWarehouseGenre())))
             // you can setup the communication with notification service.(maybe)
             throw new WarehouseBusinessException("Warehouse's genre is not valid to add the Product!!!");
@@ -23,25 +23,22 @@ public class  WarehouseConditionException {
     }
     public static boolean checkConditionToSell(Warehouse warehouse, List<Product> productList) {
         if(productList.isEmpty())
-            throw new UserNotFoundException("Product not found to add to Warehouse");
+            throw new ProductNotFoundException("Product not found to sell from Warehouse");
         else if(!(productList.get(0).getProductgenre().equals(warehouse.getWarehouseGenre())))
             // you can setup the communication with notification service.(maybe)
-            throw new WarehouseBusinessException("Warehouse's genre is not valid to add the Product!!!");
+            throw new WarehouseBusinessException("Warehouse's genre is not valid to sell the Product from Warehouse!!!");
         return true;
     }
 
     public static boolean checkHaveOwnerid(HttpStatus httpStatus){
-
         if(httpStatus.getReasonPhrase().equals(HttpStatus.NOT_FOUND.getReasonPhrase())){
             log.info("User not found");
             throw new UserNotFoundException("Ownerid not found by id in user table to create Warehouse");
         }
-
         log.info("User is found");
         return true;
     }
     public static boolean checkCapacityOfWarehouse(Integer warehouseCapacity,Integer currentStock){
-
         if(warehouseCapacity.equals(0))
             throw new WarehouseBusinessException("Warehouse' capacity shouldn't be equals 0");
         else if(warehouseCapacity < currentStock)

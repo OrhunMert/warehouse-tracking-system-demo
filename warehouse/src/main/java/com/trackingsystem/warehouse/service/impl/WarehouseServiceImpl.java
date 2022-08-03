@@ -2,6 +2,7 @@ package com.trackingsystem.warehouse.service.impl;
 
 import com.trackingsystem.warehouse.dto.UpdateWarehouseDTO;
 import com.trackingsystem.warehouse.dto.WarehouseDTO;
+import com.trackingsystem.warehouse.exception.ProductNotFoundException;
 import com.trackingsystem.warehouse.exception.WarehouseConditionException;
 import com.trackingsystem.warehouse.exception.WarehouseNotFoundException;
 import com.trackingsystem.warehouse.model.Product;
@@ -165,7 +166,7 @@ public class WarehouseServiceImpl implements WarehouseService {
         Warehouse warehouse = warehouseRepository
                 .findById(id)
                 .orElseThrow(
-                        ()->new WarehouseNotFoundException("Warehouse not found to buy product"));
+                        ()-> new WarehouseNotFoundException("Warehouse not found to buy product"));
 
         List<Product> productSet = productRepository.findByproductname(productName);
 
