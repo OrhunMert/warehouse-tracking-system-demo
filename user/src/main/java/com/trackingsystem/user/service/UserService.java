@@ -14,6 +14,7 @@ public interface UserService {
     void deleteUser(Long id);
     HttpStatus checkUserResponse(Long id);
     String getUserEmailResponse(Long id);
+    String getUserPhoneNumberResponse(Long id);
 
 
 }

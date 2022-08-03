@@ -24,6 +24,11 @@ public class NotificaitionExceptionController {
     public ResponseEntity<String> sendEmailForInfoException(FileNotFoundToSendMailException fileNotFoundToSendMailException){
         return new ResponseEntity<>(fileNotFoundToSendMailException.getMessage(), HttpStatus.NOT_FOUND);
     }
+    @ExceptionHandler(value = {SmsUrlConnectionException.class})
+    public ResponseEntity<String> sendEmailForInfoException(SmsUrlConnectionException smsUrlConnectionException){
+        return new ResponseEntity<>(smsUrlConnectionException.getMessage(), HttpStatus.BAD_GATEWAY);
+    }
+
 
 
 }

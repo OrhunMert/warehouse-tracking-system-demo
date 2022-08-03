@@ -18,4 +18,5 @@ public interface WarehouseService {
                          String message,
                          String subject);
 
+    String sendSmsInfo(String message,String phoneNumber); // it will can change with Json body this method's parameter
 }

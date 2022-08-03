@@ -66,6 +66,7 @@ public class WarehouseServiceImpl implements WarehouseService {
         assert httpStatus != null;
         WarehouseConditionException.checkHaveOwnerid(httpStatus);
 
+        // send email for information about Warehouse's state
         recipient = restTemplate.getForObject(
                 "http://localhost:8080/users/email/{id}",
                 String.class,
@@ -77,8 +78,17 @@ public class WarehouseServiceImpl implements WarehouseService {
                     " and Product number is "+warehouse.getProductList().size()+" in Warehouse";
 
         subject = "About Warehouse Current State Information";
+        sendEmailInfo(recipient,message,subject);
 
-        return sendEmailInfo(recipient,message,subject);
+        // send sms for information about Warehouse's state(without sms'json body)
+        String phoneNumber = restTemplate.getForObject(
+                "http://localhost:8080/users/sms/{id}",
+                String.class,
+                warehouse.getOwnerid());
+
+        sendSmsInfo(message,phoneNumber);
+
+        return "Mail and SMS sent to user successfully";
     }
 
     @Override
@@ -181,6 +191,14 @@ public class WarehouseServiceImpl implements WarehouseService {
         return restTemplate.getForObject(
                 "http://localhost:8082/emails/sendemail/info/{recipient}/{message}/{subject}",
                 String.class,recipient,message,subject);
+    }
+
+    @Override
+    public String sendSmsInfo(String message, String phoneNumber) {
+        return restTemplate.getForObject(
+                "http://localhost:8082/sms/sendSMS/{message}/{phoneNumber}",
+                String.class,
+                message,phoneNumber);
     }
 
 }

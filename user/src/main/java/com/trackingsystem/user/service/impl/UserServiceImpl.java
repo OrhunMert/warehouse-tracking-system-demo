@@ -86,4 +86,12 @@ public class UserServiceImpl implements UserService {
                 orElseThrow(()-> new UserNotFoundException("User not found for get message!!!"));
         return user.getMail();
     }
+
+    @Override
+    public String getUserPhoneNumberResponse(Long id) {
+
+        User user = userRepository.findById(id).
+                orElseThrow(()-> new UserNotFoundException("User not found for get message!!!"));
+        return user.getPhoneNumber();
+    }
 }

@@ -1,7 +1,13 @@
 package com.trackingsystem.notification.service.impl;
 
+import com.trackingsystem.notification.dto.SmsDTO;
+import com.trackingsystem.notification.exception.SmsUrlConnectionException;
+import com.trackingsystem.notification.model.Sms;
 import com.trackingsystem.notification.service.SmsService;
+import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -15,24 +21,58 @@ import java.net.URLEncoder;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class SmsServiceImpl implements SmsService {
+
+    private final ModelMapper modelMapper;
 
     @Override
     public String sendSms(String message, String phoneNumber) {
 
         // You need to download GSM Modem(SMS) and GSM Helper Tool on your android device.
 
-        String username = "orhunmert77";
-        String password = "446123";
+        String username = "orhun";
+        String password = "123";
         String address = "http://192.168.1.5";
         String port = "8090";
 
-        String responseSms = "";
+        return connectMobileDevice(message,phoneNumber,
+                username,password,
+                address,port);
+    }
+
+    @Override
+    public String sendAllSms(SmsDTO smsDTO) {
+
+        // You need to download GSM Modem(SMS) and GSM Helper Tool on your android device.
+
+        Sms sms = modelMapper.map(smsDTO, Sms.class);
+
+        String message = sms.getMessage();
+        String phoneNumber = sms.getPhoneNumber();
+        String username = sms.getUsername();
+        String password = sms.getPassword();
+        String address = sms.getAddress();
+        String port = sms.getPort();
+
+        return connectMobileDevice(message,phoneNumber,
+                username,password,
+                address,port);
+    }
+
+    @SneakyThrows
+    @Override
+    public String connectMobileDevice(String message,
+                                      String phoneNumber,
+                                      String username, String password,
+                                      String address, String port) {
+
+        String responseSms;
 
         try {
             URL url = new URL(
-                     address+":"+port+"/SendSMS?username="+username+"&password="+password+
-                             "&phone="+phoneNumber+"&message="+ URLEncoder.encode(message,"UTF-8"));
+                    address+":"+port+"/SendSMS?username="+username+"&password="+password+
+                            "&phone="+phoneNumber+"&message="+ URLEncoder.encode(message,"UTF-8"));
 
             URLConnection connection = url.openConnection();
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
@@ -42,11 +82,8 @@ public class SmsServiceImpl implements SmsService {
             bufferedReader.close();
 
         } catch (MalformedURLException | UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new SmsUrlConnectionException("Error while sending sms from url!!!");
         }
-
         return responseSms;
     }
 }
