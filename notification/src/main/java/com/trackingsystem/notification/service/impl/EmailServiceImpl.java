@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.io.File;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -48,11 +50,9 @@ public class EmailServiceImpl implements EmailService {
 
             javaMailSender.send(mailMessage);
             return "Mail Sent Successfully!!!";
-        }
-        catch (SendSimpleMailException sendSimpleMailException) {
+        } catch (MailException e) {
             throw new SendSimpleMailException("Exception while sending mail!!!");
         }
-
     }
     public String sendMailWithAttachment(EmailDTO emailDTO)
     {
@@ -76,22 +76,17 @@ public class EmailServiceImpl implements EmailService {
                 throw new FileNotFoundToSendMailException(
                         "File is not found while sending mail with Attachment!!!");
 
-            mimeMessageHelper.addAttachment(
-                    file.getFilename(), file);
+            mimeMessageHelper.addAttachment(Objects.requireNonNull(file.getFilename()), file);
 
             javaMailSender.send(mimeMessage);
             return "Mail sent Successfully with Attachment!!!";
         }
-        catch (SendMailWithAttachmentException sendMailWithAttachmentException) {
+        catch (MailException | MessagingException e) {
             throw new SendMailWithAttachmentException("Exception while sending mail with attachment!!!");
-        } catch (MessagingException e) {
-            return "Error while sending mail with attachment!!!";
         }
     }
     @Override
-    public String sendEmailForInfo(String recipient,
-                                   String message,
-                                   String subject) {
+    public String sendEmailForInfo(String recipient, String message, String subject) {
         SimpleMailMessage mailMessage = new SimpleMailMessage();
 
         log.info("Recipient for Warehouse Information:"+recipient);
