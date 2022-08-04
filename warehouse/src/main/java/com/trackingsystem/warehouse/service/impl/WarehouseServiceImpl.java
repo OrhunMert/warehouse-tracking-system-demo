@@ -31,19 +31,12 @@ public class WarehouseServiceImpl implements WarehouseService {
     private final WarehouseRepository warehouseRepository;
     private final ProductRepository productRepository;
     private final SendNotificationService sendNotificationService;
-    private static HttpStatus httpStatus; //it will be removed with the code sections below
 
     @Override
     public Warehouse createWarehouse(WarehouseDTO warehouseDTO) {
       Warehouse warehouse = modelMapper.map(warehouseDTO,Warehouse.class);
 
-      httpStatus = restTemplate.getForObject(
-              "http://localhost:8080/users/check/{id}"
-              ,HttpStatus.class
-              ,warehouse.getOwnerid());
-
-      assert httpStatus != null;
-      WarehouseConditionException.checkHaveOwnerid(httpStatus);
+      WarehouseConditionException.checkHaveOwnerid(warehouse, restTemplate);
       WarehouseConditionException.checkCapacityOfWarehouse(warehouse.getWarehouseCapacity(),
               warehouse.getCurrentStock());
 
@@ -58,13 +51,7 @@ public class WarehouseServiceImpl implements WarehouseService {
                 .findById(id)
                 .orElseThrow(() -> new WarehouseNotFoundException("Warehouse not found by id to get"));
 
-        httpStatus = restTemplate.getForObject(
-                "http://localhost:8080/users/check/{id}",
-                HttpStatus.class,
-                warehouse.getOwnerid());
-
-        assert httpStatus != null;
-        WarehouseConditionException.checkHaveOwnerid(httpStatus);
+        WarehouseConditionException.checkHaveOwnerid(warehouse, restTemplate);
 
         // send email for information about Warehouse's state
         sendNotificationService.sendEmailInfo(warehouse, STATES.COMMON);

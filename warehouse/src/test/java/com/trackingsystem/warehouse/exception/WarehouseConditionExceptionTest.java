@@ -5,7 +5,7 @@ import com.trackingsystem.warehouse.model.Product;
 import com.trackingsystem.warehouse.model.Warehouse;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.http.HttpStatus;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,16 +69,16 @@ public class WarehouseConditionExceptionTest {
     public void when_createWarehouse_except_checkOwnerId(){
 
         //given
-        HttpStatus acceptedHttpStatus = HttpStatus.ACCEPTED;
-        HttpStatus okHttpStatus = HttpStatus.OK;
+        Warehouse warehouse = new Warehouse();
+        RestTemplate restTemplate = new RestTemplate();
+        Long ownerId = Long.valueOf(1);
+        warehouse.setOwnerid(ownerId);
 
         //when
-        boolean acceptedActual = WarehouseConditionException.checkHaveOwnerid(acceptedHttpStatus);
-        boolean okActual = WarehouseConditionException.checkHaveOwnerid(okHttpStatus);
+        boolean actual = WarehouseConditionException.checkHaveOwnerid(warehouse,restTemplate);
 
         //then
-        assertTrue(acceptedActual);
-        assertTrue(okActual);
+        assertTrue(actual);
 
     }
     @Test

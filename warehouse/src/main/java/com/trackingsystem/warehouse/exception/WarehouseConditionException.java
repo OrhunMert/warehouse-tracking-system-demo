@@ -4,6 +4,7 @@ import com.trackingsystem.warehouse.model.Product;
 import com.trackingsystem.warehouse.model.Warehouse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
@@ -30,7 +31,13 @@ public class  WarehouseConditionException {
         return true;
     }
 
-    public static boolean checkHaveOwnerid(HttpStatus httpStatus){
+    public static boolean checkHaveOwnerid(Warehouse warehouse, RestTemplate restTemplate){
+
+        HttpStatus httpStatus = restTemplate.getForObject(
+                "http://localhost:8080/users/check/{id}"
+                ,HttpStatus.class
+                ,warehouse.getOwnerid());
+
         if(httpStatus.getReasonPhrase().equals(HttpStatus.NOT_FOUND.getReasonPhrase())){
             log.info("User not found");
             throw new UserNotFoundException("Ownerid not found by id in user table to create Warehouse");
