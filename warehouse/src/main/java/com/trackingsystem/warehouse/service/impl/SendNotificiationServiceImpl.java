@@ -12,8 +12,6 @@ import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.net.URL;
-
 @Service
 @RequiredArgsConstructor
 public class SendNotificiationServiceImpl implements SendNotificationService {

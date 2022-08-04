@@ -33,16 +33,16 @@ public class EmailServiceImpl implements EmailService {
     // it's annotation from factory so not lombok.
 
     @Override
-    public String sendEmail(EmailDTO emailDTO) {
+    public String sendEmail(EmailDTO emailDTO, String sender) {
         Email email = modelMapper.map(emailDTO,Email.class);
 
         try {
             SimpleMailMessage mailMessage = new SimpleMailMessage();
 
-            log.info("Sender:"+ SenderProperties.getMailSender());
+            log.info("Sender:"+ sender);
             log.info("Recipient:"+email.getRecipient());
 
-            mailMessage.setFrom(SenderProperties.getMailSender());
+            mailMessage.setFrom(sender);
             mailMessage.setTo(email.getRecipient());
             mailMessage.setText(email.getMessage());
             mailMessage.setSubject(email.getSubject());
@@ -53,7 +53,7 @@ public class EmailServiceImpl implements EmailService {
             throw new SendSimpleMailException("Exception while sending mail!!!");
         }
     }
-    public String sendMailWithAttachment(EmailDTO emailDTO)
+    public String sendMailWithAttachment(EmailDTO emailDTO,String sender)
     {
         Email email = modelMapper.map(emailDTO,Email.class);
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
@@ -62,7 +62,7 @@ public class EmailServiceImpl implements EmailService {
         try {
 
             mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
-            mimeMessageHelper.setFrom(SenderProperties.getMailSender());
+            mimeMessageHelper.setFrom(sender);
             mimeMessageHelper.setTo(email.getRecipient());
             mimeMessageHelper.setText(email.getMessage());
             mimeMessageHelper.setSubject(email.getSubject());
@@ -85,12 +85,12 @@ public class EmailServiceImpl implements EmailService {
         }
     }
     @Override
-    public String sendEmailForInfo(String recipient, String message, String subject) {
+    public String sendEmailForInfo(String recipient, String message, String subject,String sender) {
         SimpleMailMessage mailMessage = new SimpleMailMessage();
 
         log.info("Recipient for Warehouse Information:"+recipient);
 
-        mailMessage.setFrom(SenderProperties.getMailSender());
+        mailMessage.setFrom(sender);
         mailMessage.setTo(recipient);
         mailMessage.setText(message);
         mailMessage.setSubject(subject);

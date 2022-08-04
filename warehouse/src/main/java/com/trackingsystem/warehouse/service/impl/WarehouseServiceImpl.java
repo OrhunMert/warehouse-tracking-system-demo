@@ -58,7 +58,7 @@ public class WarehouseServiceImpl implements WarehouseService {
         sendNotificationService.sendEmailInfo(warehouse, STATES.COMMON);
 
         // send sms for information about Warehouse's state(without sms'json body)
-        //sendNotificationService.sendSmsInfo(warehouse,STATES.COMMON);
+        sendNotificationService.sendSmsInfo(warehouse,STATES.COMMON);
 
         return "Mail and SMS sent to user successfully";
     }
@@ -113,7 +113,7 @@ public class WarehouseServiceImpl implements WarehouseService {
             sendNotificationService.sendEmailInfo(warehouse,STATES.FULL);
 
             // send sms to buy operation of Warehouse(without sms'json body)
-            //sendNotificationService.sendSmsInfo(warehouse,STATES.FULL);
+            sendNotificationService.sendSmsInfo(warehouse,STATES.FULL);
         }
 
         warehouseRepository.save(warehouse);
@@ -146,7 +146,7 @@ public class WarehouseServiceImpl implements WarehouseService {
             sendNotificationService.sendEmailInfo(warehouse,STATES.EMPTY);
 
             // send sms to sell operation of Warehouse(without sms'json body)
-            //sendNotificationService.sendSmsInfo(warehouse,STATES.EMPTY);
+            sendNotificationService.sendSmsInfo(warehouse,STATES.EMPTY);
         }
 
         warehouseRepository.save(warehouse);
