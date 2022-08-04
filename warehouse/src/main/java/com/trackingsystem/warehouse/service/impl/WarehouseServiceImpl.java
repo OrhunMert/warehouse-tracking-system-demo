@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -57,7 +58,7 @@ public class WarehouseServiceImpl implements WarehouseService {
         sendNotificationService.sendEmailInfo(warehouse, STATES.COMMON);
 
         // send sms for information about Warehouse's state(without sms'json body)
-        sendNotificationService.sendSmsInfo(warehouse,STATES.COMMON);
+        //sendNotificationService.sendSmsInfo(warehouse,STATES.COMMON);
 
         return "Mail and SMS sent to user successfully";
     }
@@ -98,8 +99,9 @@ public class WarehouseServiceImpl implements WarehouseService {
         WarehouseConditionException.checkConditionToBuy(warehouse,productSet);
         log.info("productName:"+productSet.get(0).getProductname());
         warehouse.getProductList().add(productSet.get(0).getProductname());
+        warehouse.setProductList(warehouse.getProductList().stream()
+                .sorted().collect(Collectors.toList()));
         log.info("productList in Warehouse:{}",warehouse.getProductList());
-        warehouse.setProductList(warehouse.getProductList());
         warehouse.setCurrentStock(warehouse.getCurrentStock() +
                 productSet.get(0).getProductweight());
 
@@ -111,7 +113,7 @@ public class WarehouseServiceImpl implements WarehouseService {
             sendNotificationService.sendEmailInfo(warehouse,STATES.FULL);
 
             // send sms to buy operation of Warehouse(without sms'json body)
-            sendNotificationService.sendSmsInfo(warehouse,STATES.FULL);
+            //sendNotificationService.sendSmsInfo(warehouse,STATES.FULL);
         }
 
         warehouseRepository.save(warehouse);
@@ -129,11 +131,11 @@ public class WarehouseServiceImpl implements WarehouseService {
 
         List<Product> productSet = productRepository.findByproductname(productName);
 
-        WarehouseConditionException.checkConditionToSell(warehouse,productSet);
+        WarehouseConditionException.checkConditionToSell(warehouse,productSet,productName);
         int productIndex = warehouse.getProductList().indexOf(productName);
         log.info("Number of input product:"+productIndex);
         warehouse.getProductList().remove(productIndex);
-        warehouse.setProductList(warehouse.getProductList());
+        warehouse.setProductList(warehouse.getProductList().stream().sorted().collect(Collectors.toList()));
         warehouse.setCurrentStock(warehouse.getCurrentStock() -
                 productSet.get(0).getProductweight());
 
@@ -144,7 +146,7 @@ public class WarehouseServiceImpl implements WarehouseService {
             sendNotificationService.sendEmailInfo(warehouse,STATES.EMPTY);
 
             // send sms to sell operation of Warehouse(without sms'json body)
-            sendNotificationService.sendSmsInfo(warehouse,STATES.EMPTY);
+            //sendNotificationService.sendSmsInfo(warehouse,STATES.EMPTY);
         }
 
         warehouseRepository.save(warehouse);

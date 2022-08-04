@@ -6,10 +6,10 @@ import com.trackingsystem.notification.exception.SendMailWithAttachmentException
 import com.trackingsystem.notification.exception.SendSimpleMailException;
 import com.trackingsystem.notification.model.Email;
 import com.trackingsystem.notification.service.EmailService;
+import com.trackingsystem.notification.utils.SenderProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
@@ -31,7 +31,6 @@ public class EmailServiceImpl implements EmailService {
     private final ModelMapper modelMapper;
 
     // it's annotation from factory so not lombok.
-    @Value("${spring.mail.username}") private String sender;
 
     @Override
     public String sendEmail(EmailDTO emailDTO) {
@@ -40,10 +39,10 @@ public class EmailServiceImpl implements EmailService {
         try {
             SimpleMailMessage mailMessage = new SimpleMailMessage();
 
-            log.info("Sender:"+sender);
+            log.info("Sender:"+ SenderProperties.getMailSender());
             log.info("Recipient:"+email.getRecipient());
 
-            mailMessage.setFrom(sender);
+            mailMessage.setFrom(SenderProperties.getMailSender());
             mailMessage.setTo(email.getRecipient());
             mailMessage.setText(email.getMessage());
             mailMessage.setSubject(email.getSubject());
@@ -63,7 +62,7 @@ public class EmailServiceImpl implements EmailService {
         try {
 
             mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
-            mimeMessageHelper.setFrom(sender);
+            mimeMessageHelper.setFrom(SenderProperties.getMailSender());
             mimeMessageHelper.setTo(email.getRecipient());
             mimeMessageHelper.setText(email.getMessage());
             mimeMessageHelper.setSubject(email.getSubject());
@@ -91,7 +90,7 @@ public class EmailServiceImpl implements EmailService {
 
         log.info("Recipient for Warehouse Information:"+recipient);
 
-        mailMessage.setFrom(sender);
+        mailMessage.setFrom(SenderProperties.getMailSender());
         mailMessage.setTo(recipient);
         mailMessage.setText(message);
         mailMessage.setSubject(subject);

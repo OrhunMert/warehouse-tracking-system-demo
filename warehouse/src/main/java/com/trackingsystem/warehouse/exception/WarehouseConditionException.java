@@ -22,8 +22,8 @@ public class  WarehouseConditionException {
             throw new WarehouseBusinessException("Warehouse's weight is not valid to add the Product!!!");
         return true;
     }
-    public static boolean checkConditionToSell(Warehouse warehouse, List<Product> productList) {
-        if(productList.isEmpty())
+    public static boolean checkConditionToSell(Warehouse warehouse, List<Product> productList,String productName) {
+        if(productList.isEmpty() | warehouse.getProductList().indexOf(productName)==-1)
             throw new ProductNotFoundException("Product not found to sell from Warehouse");
         else if(!(productList.get(0).getProductgenre().equals(warehouse.getWarehouseGenre())))
             // you can setup the communication with notification service.(maybe)

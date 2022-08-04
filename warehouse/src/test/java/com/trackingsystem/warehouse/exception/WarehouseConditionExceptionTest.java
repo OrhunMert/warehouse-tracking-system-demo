@@ -52,13 +52,16 @@ public class WarehouseConditionExceptionTest {
         // they will do with map struct
         product.setProductgenre(Genre.VEGATABLE);
         product.setProductweight(20);
+        product.setProductname("Apple");
         productList.add(product);
+        warehouse.getProductList().add("Apple");
         warehouse.setWarehouseGenre(Genre.VEGATABLE);
         warehouse.setWarehouseCapacity(100);
         warehouse.setCurrentStock(80);
+        String productName = "Apple";
 
         //when
-        boolean actual = WarehouseConditionException.checkConditionToSell(warehouse,productList);
+        boolean actual = WarehouseConditionException.checkConditionToSell(warehouse,productList,productName);
 
         //then
         assertTrue(actual);

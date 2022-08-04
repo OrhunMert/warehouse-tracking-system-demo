@@ -4,6 +4,7 @@ import com.trackingsystem.notification.dto.SmsDTO;
 import com.trackingsystem.notification.exception.SmsUrlConnectionException;
 import com.trackingsystem.notification.model.Sms;
 import com.trackingsystem.notification.service.SmsService;
+import com.trackingsystem.notification.utils.SenderProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -32,10 +33,10 @@ public class SmsServiceImpl implements SmsService {
         // You need to download GSM Modem(SMS) and GSM Helper Tool on your android device.
 
         // it will be changed when Json body was added.
-        String username = "orhun";
-        String password = "123";
-        String address = "http://192.168.1.5";
-        String port = "8090";
+        String username = SenderProperties.getAppUsername();
+        String password = SenderProperties.getAppPassword();
+        String address = SenderProperties.getMobileAppAddress();
+        String port = SenderProperties.getMobileAppPort();
 
         return connectMobileDevice(message,phoneNumber,
                 username,password,
@@ -51,10 +52,10 @@ public class SmsServiceImpl implements SmsService {
 
         String message = sms.getMessage();
         String phoneNumber = sms.getPhoneNumber();
-        String username = sms.getUsername();
-        String password = sms.getPassword();
-        String address = sms.getAddress();
-        String port = sms.getPort();
+        String username = SenderProperties.getAppUsername();
+        String password = SenderProperties.getAppPassword();
+        String address = SenderProperties.getMobileAppAddress();
+        String port = SenderProperties.getMobileAppPort();
 
         return connectMobileDevice(message,phoneNumber,
                 username,password,
