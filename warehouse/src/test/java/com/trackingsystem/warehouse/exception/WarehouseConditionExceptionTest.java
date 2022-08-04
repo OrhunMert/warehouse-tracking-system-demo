@@ -1,6 +1,6 @@
 package com.trackingsystem.warehouse.exception;
 
-import com.trackingsystem.warehouse.model.Genre;
+import com.trackingsystem.warehouse.model.enums.Genre;
 import com.trackingsystem.warehouse.model.Product;
 import com.trackingsystem.warehouse.model.Warehouse;
 import org.junit.Before;

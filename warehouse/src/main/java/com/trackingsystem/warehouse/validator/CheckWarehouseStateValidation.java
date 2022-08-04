@@ -1,9 +1,8 @@
 package com.trackingsystem.warehouse.validator;
 
 import java.util.Collection;
-import java.util.List;
 
-public class CheckWarehouseState {
+public class CheckWarehouseStateValidation {
 
     public static boolean isEmptyWarehouse(Integer currentStock, Collection<String> productList){
         if(currentStock == 0 && productList.isEmpty()) return true;

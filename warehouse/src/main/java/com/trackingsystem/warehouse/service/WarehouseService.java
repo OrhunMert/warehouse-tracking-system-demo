@@ -14,9 +14,4 @@ public interface WarehouseService {
     void deleteWarehouse(Long id);
     List<String> buyProduct(Long id,String productName);
     HttpStatus sellProduct(Long id,String productName);
-    String sendEmailInfo(String recipient,
-                         String message,
-                         String subject);
-
-    String sendSmsInfo(String message,String phoneNumber); // it will can change with Json body this method's parameter
 }

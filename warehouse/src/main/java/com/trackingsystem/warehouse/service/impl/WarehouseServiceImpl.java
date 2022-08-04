@@ -2,15 +2,16 @@ package com.trackingsystem.warehouse.service.impl;
 
 import com.trackingsystem.warehouse.dto.UpdateWarehouseDTO;
 import com.trackingsystem.warehouse.dto.WarehouseDTO;
-import com.trackingsystem.warehouse.exception.ProductNotFoundException;
 import com.trackingsystem.warehouse.exception.WarehouseConditionException;
 import com.trackingsystem.warehouse.exception.WarehouseNotFoundException;
 import com.trackingsystem.warehouse.model.Product;
 import com.trackingsystem.warehouse.model.Warehouse;
+import com.trackingsystem.warehouse.model.enums.STATES;
 import com.trackingsystem.warehouse.repository.ProductRepository;
 import com.trackingsystem.warehouse.repository.WarehouseRepository;
+import com.trackingsystem.warehouse.service.SendNotificationService;
 import com.trackingsystem.warehouse.service.WarehouseService;
-import com.trackingsystem.warehouse.validator.CheckWarehouseState;
+import com.trackingsystem.warehouse.validator.CheckWarehouseStateValidation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -29,10 +30,8 @@ public class WarehouseServiceImpl implements WarehouseService {
     private final RestTemplate restTemplate;
     private final WarehouseRepository warehouseRepository;
     private final ProductRepository productRepository;
-    private static HttpStatus httpStatus;
-    private String recipient;
-    private String message;
-    private String subject;
+    private final SendNotificationService sendNotificationService;
+    private static HttpStatus httpStatus; //it will be removed with the code sections below
 
     @Override
     public Warehouse createWarehouse(WarehouseDTO warehouseDTO) {
@@ -68,26 +67,10 @@ public class WarehouseServiceImpl implements WarehouseService {
         WarehouseConditionException.checkHaveOwnerid(httpStatus);
 
         // send email for information about Warehouse's state
-        recipient = restTemplate.getForObject(
-                "http://localhost:8080/users/email/{id}",
-                String.class,
-                warehouse.getOwnerid());
-
-        message = "Your warehouse's capacity is "+warehouse.getWarehouseCapacity()+
-                    "\nWarehouse's current stock is "+warehouse.getCurrentStock()+
-                    "\nWarehouse's total empty area is "+(warehouse.getWarehouseCapacity()-warehouse.getCurrentStock())+
-                    " and Product number is "+warehouse.getProductList().size()+" in Warehouse";
-
-        subject = "About Warehouse Current State Information";
-        sendEmailInfo(recipient,message,subject);
+        sendNotificationService.sendEmailInfo(warehouse, STATES.COMMON);
 
         // send sms for information about Warehouse's state(without sms'json body)
-        String phoneNumber = restTemplate.getForObject(
-                "http://localhost:8080/users/sms/{id}",
-                String.class,
-                warehouse.getOwnerid());
-
-        sendSmsInfo(message,phoneNumber);
+        sendNotificationService.sendSmsInfo(warehouse,STATES.COMMON);
 
         return "Mail and SMS sent to user successfully";
     }
@@ -134,25 +117,14 @@ public class WarehouseServiceImpl implements WarehouseService {
                 productSet.get(0).getProductweight());
 
         // notification to buy product
-        if(CheckWarehouseState.isFullWarehouse(warehouse.getCurrentStock(),
+        if(CheckWarehouseStateValidation.isFullWarehouse(warehouse.getCurrentStock(),
                 warehouse.getWarehouseCapacity())){
 
             // send email to buy operation of Warehouse
-            recipient = restTemplate.getForObject(
-                    "http://localhost:8080/users/email/{id}",
-                    String.class,
-                    warehouse.getOwnerid());
-
-            message = "Your warehouse is full!!!";
-            subject = "Reminder about Warehouse";
-            sendEmailInfo(recipient,message,subject);
+            sendNotificationService.sendEmailInfo(warehouse,STATES.FULL);
 
             // send sms to buy operation of Warehouse(without sms'json body)
-            String phoneNumber = restTemplate.getForObject(
-                    "http://localhost:8080/users/sms/{id}",
-                    String.class,
-                    warehouse.getOwnerid());
-            sendSmsInfo(message,phoneNumber);
+            sendNotificationService.sendSmsInfo(warehouse,STATES.FULL);
         }
 
         warehouseRepository.save(warehouse);
@@ -178,45 +150,19 @@ public class WarehouseServiceImpl implements WarehouseService {
         warehouse.setCurrentStock(warehouse.getCurrentStock() -
                 productSet.get(0).getProductweight());
 
-        if(CheckWarehouseState.isEmptyWarehouse(warehouse.getCurrentStock(),
+        if(CheckWarehouseStateValidation.isEmptyWarehouse(warehouse.getCurrentStock(),
                 warehouse.getProductList())){
 
             // send email to sell operation of Warehouse
-            recipient = restTemplate.getForObject(
-                    "http://localhost:8080/users/email/{id}",
-                    String.class,
-                    warehouse.getOwnerid());
-            message = "Your warehouse is empty!!!";
-            subject = "Reminder about Warehouse";
-            sendEmailInfo(recipient,message,subject);
+            sendNotificationService.sendEmailInfo(warehouse,STATES.EMPTY);
 
             // send sms to sell operation of Warehouse(without sms'json body)
-            String phoneNumber = restTemplate.getForObject(
-                    "http://localhost:8080/users/sms/{id}",
-                    String.class,
-                    warehouse.getOwnerid());
-            sendSmsInfo(message,phoneNumber);
+            sendNotificationService.sendSmsInfo(warehouse,STATES.EMPTY);
         }
 
         warehouseRepository.save(warehouse);
 
         return HttpStatus.OK;
-    }
-
-    @Override
-    public String sendEmailInfo(String recipient, String message, String subject) {
-        return restTemplate.getForObject(
-                "http://localhost:8082/emails/sendemail/info?recipient={recipient}" +
-                        "&message={message}&subject={subject}",
-                String.class,recipient,message,subject);
-    }
-
-    @Override
-    public String sendSmsInfo(String message, String phoneNumber) {
-        return restTemplate.getForObject(
-                "http://localhost:8082/sms/sendsms?message={message}&phoneNumber={phoneNumber}",
-                String.class,
-                message,phoneNumber);
     }
 
 }

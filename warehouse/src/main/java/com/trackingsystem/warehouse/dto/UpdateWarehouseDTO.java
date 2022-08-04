@@ -1,6 +1,6 @@
 package com.trackingsystem.warehouse.dto;
 
-import com.trackingsystem.warehouse.model.Genre;
+import com.trackingsystem.warehouse.model.enums.Genre;
 import lombok.Data;
 
 import javax.persistence.EnumType;

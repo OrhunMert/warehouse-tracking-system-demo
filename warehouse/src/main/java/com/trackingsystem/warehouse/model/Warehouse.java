@@ -1,5 +1,6 @@
 package com.trackingsystem.warehouse.model;
 
+import com.trackingsystem.warehouse.model.enums.Genre;
 import lombok.Getter;
 import lombok.Setter;
 

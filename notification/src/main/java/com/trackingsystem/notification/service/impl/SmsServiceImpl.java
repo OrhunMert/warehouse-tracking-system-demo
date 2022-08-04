@@ -11,13 +11,13 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 @Service
 @Slf4j
@@ -31,6 +31,7 @@ public class SmsServiceImpl implements SmsService {
 
         // You need to download GSM Modem(SMS) and GSM Helper Tool on your android device.
 
+        // it will be changed when Json body was added.
         String username = "orhun";
         String password = "123";
         String address = "http://192.168.1.5";
@@ -72,7 +73,7 @@ public class SmsServiceImpl implements SmsService {
         try {
             URL url = new URL(
                     address+":"+port+"/SendSMS?username="+username+"&password="+password+
-                            "&phone="+phoneNumber+"&message="+ URLEncoder.encode(message,"UTF-8"));
+                            "&phone="+phoneNumber+"&message="+ URLEncoder.encode(message, StandardCharsets.UTF_8));
 
             URLConnection connection = url.openConnection();
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
