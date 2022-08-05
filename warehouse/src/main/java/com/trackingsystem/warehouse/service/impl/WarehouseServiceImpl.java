@@ -1,8 +1,6 @@
 package com.trackingsystem.warehouse.service.impl;
 
-import com.trackingsystem.warehouse.dto.GetNotificationInfoDto;
-import com.trackingsystem.warehouse.dto.UpdateWarehouseDto;
-import com.trackingsystem.warehouse.dto.WarehouseDto;
+import com.trackingsystem.warehouse.dto.*;
 import com.trackingsystem.warehouse.exception.WarehouseConditionException;
 import com.trackingsystem.warehouse.exception.WarehouseNotFoundException;
 import com.trackingsystem.warehouse.model.Product;
@@ -17,13 +15,11 @@ import com.trackingsystem.warehouse.validator.CommunicationNotificationValidatio
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -36,7 +32,7 @@ public class WarehouseServiceImpl implements WarehouseService {
     private final SendNotificationService sendNotificationService;
 
     @Override
-    public Warehouse createWarehouse(WarehouseDto warehouseDTO) {
+    public WarehouseDto createWarehouse(WarehouseDto warehouseDTO) {
       Warehouse warehouse = modelMapper.map(warehouseDTO,Warehouse.class);
 
       WarehouseConditionException.checkHaveOwnerid(warehouse, restTemplate);
@@ -45,10 +41,10 @@ public class WarehouseServiceImpl implements WarehouseService {
 
       warehouseRepository.save(warehouse);
 
-      return warehouse;
+      return modelMapper.map(warehouse,WarehouseDto.class);
     }
     @Override
-    public String getWarehouse(Long id) {
+    public WarehouseDto getWarehouse(Long id) {
         Warehouse warehouse = warehouseRepository
                 .findById(id)
                 .orElseThrow(() -> new WarehouseNotFoundException("Warehouse not found by id to get"));
@@ -64,10 +60,10 @@ public class WarehouseServiceImpl implements WarehouseService {
         // send sms for information about Warehouse's state(without sms'json body)
         sendNotificationService.sendSmsInfo(warehouse,STATES.COMMON,getNotificationInfoDto.getPhoneNumber());
 
-        return "Mail and SMS sent to user successfully";
+        return modelMapper.map(warehouse,WarehouseDto.class);
     }
     @Override
-    public Warehouse updateWarehouse(Long id, UpdateWarehouseDto updateWarehouseDTO) {
+    public UpdateWarehouseDto updateWarehouse(Long id, UpdateWarehouseDto updateWarehouseDTO) {
         Warehouse warehouse = warehouseRepository
                 .findById(id)
                 .orElseThrow(() -> new WarehouseNotFoundException("Warehouse not found by id to update"));
@@ -78,7 +74,7 @@ public class WarehouseServiceImpl implements WarehouseService {
         warehouse.setWarehouseGenre(updateWarehouseDTO.getWarehouseGenre());
         warehouseRepository.save(warehouse);
 
-        return warehouse;
+        return modelMapper.map(warehouse,UpdateWarehouseDto.class);
     }
     @Override
     public void deleteWarehouse(Long id) {
@@ -89,7 +85,7 @@ public class WarehouseServiceImpl implements WarehouseService {
         warehouseRepository.deleteById(id);
     }
     @Override
-    public List<String> buyProduct(Long id, String productName) {
+    public GetWarehouseToBuyDto buyProduct(Long id, String productName) {
         Warehouse warehouse = warehouseRepository
                 .findById(id)
                 .orElseThrow(
@@ -121,10 +117,10 @@ public class WarehouseServiceImpl implements WarehouseService {
 
         warehouseRepository.save(warehouse);
 
-        return warehouse.getProductList();
+        return modelMapper.map(warehouse,GetWarehouseToBuyDto.class);
     }
     @Override
-    public HttpStatus sellProduct(Long id, String productName) {
+    public GetWarehouseToSellDto sellProduct(Long id, String productName) {
         Warehouse warehouse = warehouseRepository
                 .findById(id)
                 .orElseThrow(
@@ -155,7 +151,7 @@ public class WarehouseServiceImpl implements WarehouseService {
 
         warehouseRepository.save(warehouse);
 
-        return HttpStatus.OK;
+        return modelMapper.map(warehouse,GetWarehouseToSellDto.class);
     }
 
 }
