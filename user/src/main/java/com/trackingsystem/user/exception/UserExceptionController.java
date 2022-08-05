@@ -35,5 +35,8 @@ public class UserExceptionController extends ResponseEntityExceptionHandler {
     public ResponseEntity<String> userNotFound(UserNotFoundException userNotFoundException){
         return new ResponseEntity<>(userNotFoundException.getMessage(), HttpStatus.NOT_FOUND);
     }
-
+    @ExceptionHandler(value = {UserConditionException.class})
+    public ResponseEntity<String> userNotValidCondition(UserConditionException userConditionException){
+        return new ResponseEntity<>(userConditionException.getMessage(),HttpStatus.NOT_ACCEPTABLE);
+    }
 }

@@ -1,13 +1,19 @@
 package com.trackingsystem.warehouse.model;
 
+import com.trackingsystem.warehouse.model.enums.Genre;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
+import javax.persistence.Id;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Enumerated;
+import javax.persistence.EnumType;
+import javax.persistence.ElementCollection;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Getter
@@ -29,12 +35,5 @@ public class Warehouse {
 
     @ElementCollection
     private List<String> productList = new ArrayList<>();
-
-    //we will change from set to list
-    /*
-    @OneToMany(cascade = CascadeType.PERSIST)
-    private List<Product> productSet = new ArrayList<>();
-
-     */
 
 }

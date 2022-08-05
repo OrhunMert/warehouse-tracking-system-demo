@@ -34,13 +34,13 @@ public class WarehouseExceptionController extends ResponseEntityExceptionHandler
     public ResponseEntity<String> warehouseNoutFound(WarehouseNotFoundException warehouseNotFoundException){
         return new ResponseEntity<>(warehouseNotFoundException.getMessage(), HttpStatus.NOT_FOUND);
     }
-    @ExceptionHandler(value = {UserNotFoundforWarehouseException.class})
-    public ResponseEntity<String> userNotFoundForWarehouse(UserNotFoundforWarehouseException userNotFoundforWarehouseException){
-        return new ResponseEntity<>(userNotFoundforWarehouseException.getMessage(),HttpStatus.NOT_FOUND);
+    @ExceptionHandler(value = {UserNotFoundException.class})
+    public ResponseEntity<String> userNotFoundForWarehouse(UserNotFoundException userNotFoundException){
+        return new ResponseEntity<>(userNotFoundException.getMessage(),HttpStatus.NOT_FOUND);
     }
-    @ExceptionHandler(value = {ProductNotFoundforWarehouseException.class})
-    public ResponseEntity<String>  productNotFoundforWarehouseException(ProductNotFoundforWarehouseException productNotFoundforWarehouseException){
-        return new ResponseEntity<>(productNotFoundforWarehouseException.getMessage(),HttpStatus.NOT_FOUND);
+    @ExceptionHandler(value = {ProductNotFoundException.class})
+    public ResponseEntity<String>  productNotFoundforWarehouseException(ProductNotFoundException productNotFoundException){
+        return new ResponseEntity<>(productNotFoundException.getMessage(),HttpStatus.NOT_FOUND);
     }
     @ExceptionHandler(value = {WarehouseBusinessException.class})
     public ResponseEntity<String>  WarehouseBusinessException(WarehouseBusinessException warehouseBusinessException){

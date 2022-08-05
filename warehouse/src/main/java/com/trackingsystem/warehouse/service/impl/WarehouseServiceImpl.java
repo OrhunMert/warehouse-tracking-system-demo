@@ -2,14 +2,16 @@ package com.trackingsystem.warehouse.service.impl;
 
 import com.trackingsystem.warehouse.dto.UpdateWarehouseDTO;
 import com.trackingsystem.warehouse.dto.WarehouseDTO;
-import com.trackingsystem.warehouse.exception.UserNotFoundforWarehouseException;
 import com.trackingsystem.warehouse.exception.WarehouseConditionException;
 import com.trackingsystem.warehouse.exception.WarehouseNotFoundException;
 import com.trackingsystem.warehouse.model.Product;
 import com.trackingsystem.warehouse.model.Warehouse;
+import com.trackingsystem.warehouse.model.enums.STATES;
 import com.trackingsystem.warehouse.repository.ProductRepository;
 import com.trackingsystem.warehouse.repository.WarehouseRepository;
+import com.trackingsystem.warehouse.service.SendNotificationService;
 import com.trackingsystem.warehouse.service.WarehouseService;
+import com.trackingsystem.warehouse.validator.CheckWarehouseStateValidation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -28,27 +31,15 @@ public class WarehouseServiceImpl implements WarehouseService {
     private final RestTemplate restTemplate;
     private final WarehouseRepository warehouseRepository;
     private final ProductRepository productRepository;
+    private final SendNotificationService sendNotificationService;
 
     @Override
     public Warehouse createWarehouse(WarehouseDTO warehouseDTO) {
       Warehouse warehouse = modelMapper.map(warehouseDTO,Warehouse.class);
 
-      HttpStatus httpStatus = restTemplate.getForObject(
-              "http://localhost:8080/users/check/{id}"
-              ,HttpStatus.class
-              ,warehouse.getOwnerid());
-
-
-      log.info("Httpstatus Result:"+httpStatus);
-
-      assert httpStatus != null;
-      if(httpStatus.getReasonPhrase().equals(HttpStatus.NOT_FOUND.getReasonPhrase()))
-      {
-          log.info("User not found");
-          throw new UserNotFoundforWarehouseException("Ownerid not found by id in user table to create Warehouse");
-      }
-
-      log.info("User is found");
+      WarehouseConditionException.checkHaveOwnerid(warehouse, restTemplate);
+      WarehouseConditionException.checkCapacityOfWarehouse(warehouse.getWarehouseCapacity(),
+              warehouse.getCurrentStock());
 
       warehouseRepository.save(warehouse);
 
@@ -56,10 +47,20 @@ public class WarehouseServiceImpl implements WarehouseService {
     }
 
     @Override
-    public Warehouse getWarehouse(Long id) {
-        return warehouseRepository
+    public String getWarehouse(Long id) {
+        Warehouse warehouse = warehouseRepository
                 .findById(id)
                 .orElseThrow(() -> new WarehouseNotFoundException("Warehouse not found by id to get"));
+
+        WarehouseConditionException.checkHaveOwnerid(warehouse, restTemplate);
+
+        // send email for information about Warehouse's state
+        sendNotificationService.sendEmailInfo(warehouse, STATES.COMMON);
+
+        // send sms for information about Warehouse's state(without sms'json body)
+        sendNotificationService.sendSmsInfo(warehouse,STATES.COMMON);
+
+        return "Mail and SMS sent to user successfully";
     }
 
     @Override
@@ -87,7 +88,7 @@ public class WarehouseServiceImpl implements WarehouseService {
     }
 
     @Override
-    public List<String> buyProductForWarehouse(Long id, String productName) {
+    public List<String> buyProduct(Long id, String productName) {
         Warehouse warehouse = warehouseRepository
                 .findById(id)
                 .orElseThrow(
@@ -95,13 +96,26 @@ public class WarehouseServiceImpl implements WarehouseService {
 
         List<Product> productSet = productRepository.findByproductname(productName);
 
-        //this.checkConditionToBuy(warehouse,productSet);
         WarehouseConditionException.checkConditionToBuy(warehouse,productSet);
         log.info("productName:"+productSet.get(0).getProductname());
         warehouse.getProductList().add(productSet.get(0).getProductname());
-        warehouse.setCurrentStock(warehouse.getCurrentStock()
-                + productSet.get(0).getProductweight());
-        warehouse.setProductList(warehouse.getProductList());
+        warehouse.setProductList(warehouse.getProductList().stream()
+                .sorted().collect(Collectors.toList()));
+        log.info("productList in Warehouse:{}",warehouse.getProductList());
+        warehouse.setCurrentStock(warehouse.getCurrentStock() +
+                productSet.get(0).getProductweight());
+
+        // notification to buy product
+        if(CheckWarehouseStateValidation.isFullWarehouse(warehouse.getCurrentStock(),
+                warehouse.getWarehouseCapacity())){
+
+            // send email to buy operation of Warehouse
+            sendNotificationService.sendEmailInfo(warehouse,STATES.FULL);
+
+            // send sms to buy operation of Warehouse(without sms'json body)
+            sendNotificationService.sendSmsInfo(warehouse,STATES.FULL);
+        }
+
         warehouseRepository.save(warehouse);
 
         return warehouse.getProductList();
@@ -109,22 +123,32 @@ public class WarehouseServiceImpl implements WarehouseService {
     }
 
     @Override
-    public HttpStatus sellProductForWarehouse(Long id, String productName) {
+    public HttpStatus sellProduct(Long id, String productName) {
         Warehouse warehouse = warehouseRepository
                 .findById(id)
                 .orElseThrow(
-                        ()->new WarehouseNotFoundException("Warehouse not found to buy product"));
+                        ()-> new WarehouseNotFoundException("Warehouse not found to buy product"));
 
         List<Product> productSet = productRepository.findByproductname(productName);
 
-        //this.checkConditionToSell(warehouse,productSet);
-        WarehouseConditionException.checkConditionToSell(warehouse,productSet);
+        WarehouseConditionException.checkConditionToSell(warehouse,productSet,productName);
         int productIndex = warehouse.getProductList().indexOf(productName);
         log.info("Number of input product:"+productIndex);
         warehouse.getProductList().remove(productIndex);
-        warehouse.setCurrentStock(warehouse.getCurrentStock()-
+        warehouse.setProductList(warehouse.getProductList().stream().sorted().collect(Collectors.toList()));
+        warehouse.setCurrentStock(warehouse.getCurrentStock() -
                 productSet.get(0).getProductweight());
-        warehouse.setProductList(warehouse.getProductList());
+
+        if(CheckWarehouseStateValidation.isEmptyWarehouse(warehouse.getCurrentStock(),
+                warehouse.getProductList())){
+
+            // send email to sell operation of Warehouse
+            sendNotificationService.sendEmailInfo(warehouse,STATES.EMPTY);
+
+            // send sms to sell operation of Warehouse(without sms'json body)
+            sendNotificationService.sendSmsInfo(warehouse,STATES.EMPTY);
+        }
+
         warehouseRepository.save(warehouse);
 
         return HttpStatus.OK;

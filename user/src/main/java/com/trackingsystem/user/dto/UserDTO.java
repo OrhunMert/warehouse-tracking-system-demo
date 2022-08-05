@@ -13,5 +13,5 @@ public class UserDTO {
     private Integer password;
     @NotBlank
     private String mail;
-    private Long phoneNumber;
+    private String phoneNumber;
 }

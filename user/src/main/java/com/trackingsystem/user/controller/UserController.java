@@ -29,6 +29,15 @@ public class UserController {
     public ResponseEntity<HttpStatus> checkUserResponse(@PathVariable Long id){
         return ResponseEntity.ok().body(userService.checkUserResponse(id));
     }
+    @GetMapping("/email/{id}")
+    public ResponseEntity<String> getEmailUserResponse(@PathVariable Long id){
+        return ResponseEntity.ok().body(userService.getUserEmailResponse(id));
+    }
+    @GetMapping("/sms/{id}")
+    public ResponseEntity<String> getPhoneNumberUserResponse(@PathVariable Long id){
+        return ResponseEntity.ok().body(userService.getUserPhoneNumberResponse(id));
+    }
+    @GetMapping("")
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable Long id , @RequestBody UserDTO userDTO){
         return ResponseEntity.ok().body(userService.updateUser(id,userDTO));

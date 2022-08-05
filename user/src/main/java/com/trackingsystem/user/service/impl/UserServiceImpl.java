@@ -1,6 +1,7 @@
 package com.trackingsystem.user.service.impl;
 
 import com.trackingsystem.user.dto.UserDTO;
+import com.trackingsystem.user.exception.UserConditionManager;
 import com.trackingsystem.user.exception.UserNotFoundException;
 import com.trackingsystem.user.model.User;
 import com.trackingsystem.user.repository.UserRepository;
@@ -25,6 +26,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public User createUser(UserDTO userDTO) {
         User user = modelMapper.map(userDTO, User.class);
+
+        UserConditionManager.checkUsernameCondition(user.getUsername(),user.getPassword());
+        UserConditionManager.checkEmailCondition(user.getMail());
+        UserConditionManager.checkPhoneNumber(user.getPhoneNumber());
+
         userRepository.save(user);
         return user;
     }
@@ -45,7 +51,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User not found by id to update operation!!!"));
 
-        // how can i use the builder to change this code part.
+        // you will use map struct.
         user.setMail(userDTO.getMail());
         user.setPassword((userDTO.getPassword()));
         user.setPhoneNumber(userDTO.getPhoneNumber());
@@ -72,5 +78,20 @@ public class UserServiceImpl implements UserService {
         if(user.equals(Optional.empty()))
             return HttpStatus.NOT_FOUND;
         return HttpStatus.OK;
+    }
+
+    @Override
+    public String getUserEmailResponse(Long id) {
+        User user = userRepository.findById(id).
+                orElseThrow(()-> new UserNotFoundException("User not found for get message!!!"));
+        return user.getMail();
+    }
+
+    @Override
+    public String getUserPhoneNumberResponse(Long id) {
+
+        User user = userRepository.findById(id).
+                orElseThrow(()-> new UserNotFoundException("User not found for get message!!!"));
+        return user.getPhoneNumber();
     }
 }
