@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class WarehouseDTO {
+public class WarehouseDto {
 
     @NotNull
     private Long ownerid;

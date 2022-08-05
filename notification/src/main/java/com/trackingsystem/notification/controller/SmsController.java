@@ -1,6 +1,6 @@
 package com.trackingsystem.notification.controller;
 
-import com.trackingsystem.notification.dto.SmsDTO;
+import com.trackingsystem.notification.dto.SmsDto;
 import com.trackingsystem.notification.service.SmsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +15,7 @@ public class SmsController {
     private final SmsService smsService;
 
     @PostMapping("/sendAllSMS")
-    public ResponseEntity<String> sendAllSms(@RequestBody SmsDTO smsDTO){
+    public ResponseEntity<String> sendAllSms(@RequestBody SmsDto smsDTO){
         return ResponseEntity.ok().build();
     }
 

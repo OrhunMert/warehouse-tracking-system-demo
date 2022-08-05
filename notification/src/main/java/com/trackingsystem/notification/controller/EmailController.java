@@ -1,6 +1,6 @@
 package com.trackingsystem.notification.controller;
 
-import com.trackingsystem.notification.dto.EmailDTO;
+import com.trackingsystem.notification.dto.EmailDto;
 import com.trackingsystem.notification.service.EmailService;
 import com.trackingsystem.notification.utils.SenderProperties;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,7 @@ public class EmailController {
     private final EmailService emailService;
 
     @PostMapping()
-    public ResponseEntity<String> sendEmail(@RequestBody EmailDTO emailDTO){
+    public ResponseEntity<String> sendEmail(@RequestBody EmailDto emailDTO){
         if(emailDTO.getAttachment().isBlank())
              return ResponseEntity.ok().body(emailService.sendEmail(emailDTO, SenderProperties.getMailSender()));
         else

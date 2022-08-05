@@ -1,8 +1,8 @@
 package com.trackingsystem.warehouse.service.impl;
 
 import com.trackingsystem.warehouse.dto.GetNotificationInfoDto;
-import com.trackingsystem.warehouse.dto.UpdateWarehouseDTO;
-import com.trackingsystem.warehouse.dto.WarehouseDTO;
+import com.trackingsystem.warehouse.dto.UpdateWarehouseDto;
+import com.trackingsystem.warehouse.dto.WarehouseDto;
 import com.trackingsystem.warehouse.exception.WarehouseConditionException;
 import com.trackingsystem.warehouse.exception.WarehouseNotFoundException;
 import com.trackingsystem.warehouse.model.Product;
@@ -36,7 +36,7 @@ public class WarehouseServiceImpl implements WarehouseService {
     private final SendNotificationService sendNotificationService;
 
     @Override
-    public Warehouse createWarehouse(WarehouseDTO warehouseDTO) {
+    public Warehouse createWarehouse(WarehouseDto warehouseDTO) {
       Warehouse warehouse = modelMapper.map(warehouseDTO,Warehouse.class);
 
       WarehouseConditionException.checkHaveOwnerid(warehouse, restTemplate);
@@ -47,7 +47,6 @@ public class WarehouseServiceImpl implements WarehouseService {
 
       return warehouse;
     }
-
     @Override
     public String getWarehouse(Long id) {
         Warehouse warehouse = warehouseRepository
@@ -67,9 +66,8 @@ public class WarehouseServiceImpl implements WarehouseService {
 
         return "Mail and SMS sent to user successfully";
     }
-
     @Override
-    public Warehouse updateWarehouse(Long id, UpdateWarehouseDTO updateWarehouseDTO) {
+    public Warehouse updateWarehouse(Long id, UpdateWarehouseDto updateWarehouseDTO) {
         Warehouse warehouse = warehouseRepository
                 .findById(id)
                 .orElseThrow(() -> new WarehouseNotFoundException("Warehouse not found by id to update"));
@@ -82,7 +80,6 @@ public class WarehouseServiceImpl implements WarehouseService {
 
         return warehouse;
     }
-
     @Override
     public void deleteWarehouse(Long id) {
         warehouseRepository
@@ -91,7 +88,6 @@ public class WarehouseServiceImpl implements WarehouseService {
                         () -> new WarehouseNotFoundException("Warehouse not found by id to delete"));
         warehouseRepository.deleteById(id);
     }
-
     @Override
     public List<String> buyProduct(Long id, String productName) {
         Warehouse warehouse = warehouseRepository
@@ -127,7 +123,6 @@ public class WarehouseServiceImpl implements WarehouseService {
 
         return warehouse.getProductList();
     }
-
     @Override
     public HttpStatus sellProduct(Long id, String productName) {
         Warehouse warehouse = warehouseRepository

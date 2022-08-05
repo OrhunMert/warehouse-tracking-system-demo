@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SmsDTO {
+public class SmsDto {
 
     String message;
     String phoneNumber;

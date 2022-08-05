@@ -1,7 +1,7 @@
 package com.trackingsystem.user.service.impl;
 
 import com.trackingsystem.user.dto.GetUserToNotificationDto;
-import com.trackingsystem.user.dto.UserDTO;
+import com.trackingsystem.user.dto.UserDto;
 import com.trackingsystem.user.exception.UserConditionManager;
 import com.trackingsystem.user.exception.UserNotFoundException;
 import com.trackingsystem.user.model.User;
@@ -23,7 +23,7 @@ public class UserServiceImpl implements UserService {
     private final ModelMapper modelMapper;
     private final UserRepository userRepository;
     @Override
-    public User createUser(UserDTO userDTO) {
+    public User createUser(UserDto userDTO) {
         User user = modelMapper.map(userDTO, User.class);
 
         UserConditionManager.checkUsernameCondition(user.getUsername(),user.getPassword());
@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new UserNotFoundException("User not found by id to get operation!!!"));
     }
     @Override
-    public User updateUser(Long id,UserDTO userDTO) {
+    public User updateUser(Long id, UserDto userDTO) {
 
         log.info("id info for update operation:"+id);
 

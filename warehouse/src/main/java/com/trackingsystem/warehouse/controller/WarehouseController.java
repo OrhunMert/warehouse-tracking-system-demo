@@ -1,7 +1,7 @@
 package com.trackingsystem.warehouse.controller;
 
-import com.trackingsystem.warehouse.dto.UpdateWarehouseDTO;
-import com.trackingsystem.warehouse.dto.WarehouseDTO;
+import com.trackingsystem.warehouse.dto.UpdateWarehouseDto;
+import com.trackingsystem.warehouse.dto.WarehouseDto;
 import com.trackingsystem.warehouse.model.Warehouse;
 import com.trackingsystem.warehouse.service.WarehouseService;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +30,7 @@ public class WarehouseController {
     private final WarehouseService warehouseService;
 
     @PostMapping()
-    ResponseEntity<Warehouse> createWarehouse(@Valid @RequestBody WarehouseDTO warehouseDTO){
+    ResponseEntity<Warehouse> createWarehouse(@Valid @RequestBody WarehouseDto warehouseDTO){
         return ResponseEntity.ok().body(warehouseService.createWarehouse(warehouseDTO));
     }
 
@@ -45,7 +45,7 @@ public class WarehouseController {
     }
     @PutMapping("/{id}")
     ResponseEntity<Warehouse> updateWarehouse(@PathVariable Long id,
-                                              @Valid @RequestBody UpdateWarehouseDTO updateWarehouseDTO){
+                                              @Valid @RequestBody UpdateWarehouseDto updateWarehouseDTO){
         return ResponseEntity.ok().body(warehouseService.updateWarehouse(id,updateWarehouseDTO));
     }
     @DeleteMapping("/{id}")

@@ -1,12 +1,11 @@
 package com.trackingsystem.notification.service.impl;
 
-import com.trackingsystem.notification.dto.EmailDTO;
+import com.trackingsystem.notification.dto.EmailDto;
 import com.trackingsystem.notification.exception.FileNotFoundToSendMailException;
 import com.trackingsystem.notification.exception.SendMailWithAttachmentException;
 import com.trackingsystem.notification.exception.SendSimpleMailException;
 import com.trackingsystem.notification.model.Email;
 import com.trackingsystem.notification.service.EmailService;
-import com.trackingsystem.notification.utils.SenderProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -33,7 +32,7 @@ public class EmailServiceImpl implements EmailService {
     // it's annotation from factory so not lombok.
 
     @Override
-    public String sendEmail(EmailDTO emailDTO, String sender) {
+    public String sendEmail(EmailDto emailDTO, String sender) {
         Email email = modelMapper.map(emailDTO,Email.class);
 
         try {
@@ -53,7 +52,7 @@ public class EmailServiceImpl implements EmailService {
             throw new SendSimpleMailException("Exception while sending mail!!!");
         }
     }
-    public String sendMailWithAttachment(EmailDTO emailDTO,String sender)
+    public String sendMailWithAttachment(EmailDto emailDTO, String sender)
     {
         Email email = modelMapper.map(emailDTO,Email.class);
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();

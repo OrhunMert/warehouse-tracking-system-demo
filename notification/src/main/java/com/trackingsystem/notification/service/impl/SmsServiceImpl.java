@@ -1,6 +1,6 @@
 package com.trackingsystem.notification.service.impl;
 
-import com.trackingsystem.notification.dto.SmsDTO;
+import com.trackingsystem.notification.dto.SmsDto;
 import com.trackingsystem.notification.exception.SmsUrlConnectionException;
 import com.trackingsystem.notification.model.Sms;
 import com.trackingsystem.notification.service.SmsService;
@@ -44,7 +44,7 @@ public class SmsServiceImpl implements SmsService {
     }
 
     @Override
-    public String sendAllSms(SmsDTO smsDTO) {
+    public String sendAllSms(SmsDto smsDTO) {
 
         // You need to download GSM Modem(SMS) and GSM Helper Tool on your android device.
 
