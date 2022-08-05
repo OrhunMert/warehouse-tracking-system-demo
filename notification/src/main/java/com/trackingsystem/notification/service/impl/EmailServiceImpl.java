@@ -28,9 +28,7 @@ public class EmailServiceImpl implements EmailService {
 
     private final JavaMailSender javaMailSender;
     private final ModelMapper modelMapper;
-
     // it's annotation from factory so not lombok.
-
     @Override
     public EmailDto sendEmail(EmailDto emailDTO, String sender) {
         Email email = modelMapper.map(emailDTO,Email.class);
