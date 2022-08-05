@@ -1,12 +1,13 @@
 package com.trackingsystem.notification.service;
 
+import com.trackingsystem.notification.dto.GetSmsDto;
 import com.trackingsystem.notification.dto.SmsDto;
 
 public interface SmsService {
 
-    String sendSms(String message,String phoneNumber);
-    String sendAllSms(SmsDto smsDTO);
-    String connectMobileDevice(String message,
+    GetSmsDto sendSms(String message, String phoneNumber);
+    GetSmsDto sendAllSms(SmsDto smsDTO);
+    GetSmsDto connectMobileDevice(String message,
                                String phoneNumber,
                                String username,
                                String password,

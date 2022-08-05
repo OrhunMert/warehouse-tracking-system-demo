@@ -1,5 +1,6 @@
 package com.trackingsystem.notification.service.impl;
 
+import com.trackingsystem.notification.dto.GetSmsDto;
 import com.trackingsystem.notification.dto.SmsDto;
 import com.trackingsystem.notification.exception.SmsUrlConnectionException;
 import com.trackingsystem.notification.model.Sms;
@@ -26,9 +27,8 @@ import java.nio.charset.StandardCharsets;
 public class SmsServiceImpl implements SmsService {
 
     private final ModelMapper modelMapper;
-
     @Override
-    public String sendSms(String message, String phoneNumber) {
+    public GetSmsDto sendSms(String message, String phoneNumber) {
 
         // You need to download GSM Modem(SMS) and GSM Helper Tool on your android device.
 
@@ -42,12 +42,10 @@ public class SmsServiceImpl implements SmsService {
                 username,password,
                 address,port);
     }
-
     @Override
-    public String sendAllSms(SmsDto smsDTO) {
+    public GetSmsDto sendAllSms(SmsDto smsDTO) {
 
         // You need to download GSM Modem(SMS) and GSM Helper Tool on your android device.
-
         Sms sms = modelMapper.map(smsDTO, Sms.class);
 
         String message = sms.getMessage();
@@ -61,10 +59,9 @@ public class SmsServiceImpl implements SmsService {
                 username,password,
                 address,port);
     }
-
     @SneakyThrows
     @Override
-    public String connectMobileDevice(String message,
+    public GetSmsDto connectMobileDevice(String message,
                                       String phoneNumber,
                                       String username, String password,
                                       String address, String port) {
@@ -86,6 +83,9 @@ public class SmsServiceImpl implements SmsService {
         } catch (MalformedURLException | UnsupportedEncodingException e) {
             throw new SmsUrlConnectionException("Error while sending sms from url!!!");
         }
-        return responseSms;
+        GetSmsDto getSmsDto = new GetSmsDto();
+        getSmsDto.setMessage(message);
+        getSmsDto.setPhoneNumber(phoneNumber);
+        return getSmsDto;
     }
 }
