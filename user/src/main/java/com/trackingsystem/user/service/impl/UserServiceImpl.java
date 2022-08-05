@@ -1,5 +1,6 @@
 package com.trackingsystem.user.service.impl;
 
+import com.trackingsystem.user.dto.GetUserToNotificationDto;
 import com.trackingsystem.user.dto.UserDTO;
 import com.trackingsystem.user.exception.UserConditionManager;
 import com.trackingsystem.user.exception.UserNotFoundException;
@@ -21,8 +22,6 @@ public class UserServiceImpl implements UserService {
 
     private final ModelMapper modelMapper;
     private final UserRepository userRepository;
-
-
     @Override
     public User createUser(UserDTO userDTO) {
         User user = modelMapper.map(userDTO, User.class);
@@ -34,15 +33,12 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
         return user;
     }
-
     @Override
     public User getUser(Long id) {
         // we will update in orElseThrow after add to exception and validation handle.
         return userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User not found by id to get operation!!!"));
-
     }
-
     @Override
     public User updateUser(Long id,UserDTO userDTO) {
 
@@ -61,7 +57,6 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
         return user;
     }
-
     @Override
     public void deleteUser(Long id) {
 
@@ -70,7 +65,6 @@ public class UserServiceImpl implements UserService {
 
         userRepository.deleteById(id);
     }
-
     @Override
     public HttpStatus checkUserResponse(Long id) {
         Optional<User> user = userRepository.findById(id);
@@ -79,19 +73,13 @@ public class UserServiceImpl implements UserService {
             return HttpStatus.NOT_FOUND;
         return HttpStatus.OK;
     }
-
     @Override
-    public String getUserEmailResponse(Long id) {
+    public GetUserToNotificationDto getUserToNotification(Long id) {
         User user = userRepository.findById(id).
-                orElseThrow(()-> new UserNotFoundException("User not found for get message!!!"));
-        return user.getMail();
-    }
+                orElseThrow(()-> new UserNotFoundException("User not found for notification service!!!"));
+        GetUserToNotificationDto getUserToNotificationDto = modelMapper.map(user,GetUserToNotificationDto.class);
+        log.info("Get user information to notification:{}",getUserToNotificationDto);
 
-    @Override
-    public String getUserPhoneNumberResponse(Long id) {
-
-        User user = userRepository.findById(id).
-                orElseThrow(()-> new UserNotFoundException("User not found for get message!!!"));
-        return user.getPhoneNumber();
+        return getUserToNotificationDto;
     }
 }

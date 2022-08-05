@@ -20,16 +20,9 @@ public class SendNotificiationServiceImpl implements SendNotificationService {
 
     @SneakyThrows
     @Override
-    public String sendEmailInfo(Warehouse warehouse, STATES states) {
+    public String sendEmailInfo(Warehouse warehouse, STATES states, String recipient) {
 
         EmailNotification emailNotification;
-
-        String recipient = restTemplate.getForObject(
-                "http://localhost:" + CommunicationProperties.getUserLocalHostPort() +
-                        "/users/email/{id}",
-                String.class,
-                warehouse.getOwnerid());
-
         emailNotification = CheckMessageInfoValidation.checkMessageState(states,warehouse);
         emailNotification.setRecipient(recipient);
 
@@ -44,16 +37,9 @@ public class SendNotificiationServiceImpl implements SendNotificationService {
     }
 
     @Override
-    public String sendSmsInfo(Warehouse warehouse, STATES states) {
+    public String sendSmsInfo(Warehouse warehouse, STATES states, String phoneNumber) {
 
         SmsNotification smsNotification;
-
-        String phoneNumber = restTemplate.getForObject(
-                "http://localhost:"+CommunicationProperties.getUserLocalHostPort()+
-                        "/users/sms/{id}",
-                String.class,
-                warehouse.getOwnerid());
-
         smsNotification = CheckMessageInfoValidation.checkSmsState(states,warehouse);
         smsNotification.setPhoneNumber(phoneNumber);
 

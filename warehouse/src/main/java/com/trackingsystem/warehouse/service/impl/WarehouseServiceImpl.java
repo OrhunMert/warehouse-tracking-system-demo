@@ -1,5 +1,6 @@
 package com.trackingsystem.warehouse.service.impl;
 
+import com.trackingsystem.warehouse.dto.GetNotificationInfoDto;
 import com.trackingsystem.warehouse.dto.UpdateWarehouseDTO;
 import com.trackingsystem.warehouse.dto.WarehouseDTO;
 import com.trackingsystem.warehouse.exception.WarehouseConditionException;
@@ -12,6 +13,7 @@ import com.trackingsystem.warehouse.repository.WarehouseRepository;
 import com.trackingsystem.warehouse.service.SendNotificationService;
 import com.trackingsystem.warehouse.service.WarehouseService;
 import com.trackingsystem.warehouse.validator.CheckWarehouseStateValidation;
+import com.trackingsystem.warehouse.validator.CommunicationNotificationValidation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -53,12 +55,15 @@ public class WarehouseServiceImpl implements WarehouseService {
                 .orElseThrow(() -> new WarehouseNotFoundException("Warehouse not found by id to get"));
 
         WarehouseConditionException.checkHaveOwnerid(warehouse, restTemplate);
+        // Communication with user service.
+        GetNotificationInfoDto getNotificationInfoDto =
+                CommunicationNotificationValidation.communicationFromWarehouseToUser(warehouse.getOwnerid());
 
         // send email for information about Warehouse's state
-        sendNotificationService.sendEmailInfo(warehouse, STATES.COMMON);
+        sendNotificationService.sendEmailInfo(warehouse, STATES.COMMON,getNotificationInfoDto.getMail());
 
         // send sms for information about Warehouse's state(without sms'json body)
-        sendNotificationService.sendSmsInfo(warehouse,STATES.COMMON);
+        sendNotificationService.sendSmsInfo(warehouse,STATES.COMMON,getNotificationInfoDto.getPhoneNumber());
 
         return "Mail and SMS sent to user successfully";
     }
@@ -104,22 +109,23 @@ public class WarehouseServiceImpl implements WarehouseService {
         log.info("productList in Warehouse:{}",warehouse.getProductList());
         warehouse.setCurrentStock(warehouse.getCurrentStock() +
                 productSet.get(0).getProductweight());
-
         // notification to buy product
         if(CheckWarehouseStateValidation.isFullWarehouse(warehouse.getCurrentStock(),
                 warehouse.getWarehouseCapacity())){
+            // Communication with user service.
+            GetNotificationInfoDto getNotificationInfoDto =
+                    CommunicationNotificationValidation.communicationFromWarehouseToUser(warehouse.getOwnerid());
 
             // send email to buy operation of Warehouse
-            sendNotificationService.sendEmailInfo(warehouse,STATES.FULL);
+            sendNotificationService.sendEmailInfo(warehouse,STATES.FULL,getNotificationInfoDto.getMail());
 
             // send sms to buy operation of Warehouse(without sms'json body)
-            sendNotificationService.sendSmsInfo(warehouse,STATES.FULL);
+            sendNotificationService.sendSmsInfo(warehouse,STATES.FULL,getNotificationInfoDto.getPhoneNumber());
         }
 
         warehouseRepository.save(warehouse);
 
         return warehouse.getProductList();
-
     }
 
     @Override
@@ -141,12 +147,15 @@ public class WarehouseServiceImpl implements WarehouseService {
 
         if(CheckWarehouseStateValidation.isEmptyWarehouse(warehouse.getCurrentStock(),
                 warehouse.getProductList())){
+            // Communication with user service.
+            GetNotificationInfoDto getNotificationInfoDto =
+                    CommunicationNotificationValidation.communicationFromWarehouseToUser(warehouse.getOwnerid());
 
             // send email to sell operation of Warehouse
-            sendNotificationService.sendEmailInfo(warehouse,STATES.EMPTY);
+            sendNotificationService.sendEmailInfo(warehouse,STATES.EMPTY,getNotificationInfoDto.getMail());
 
             // send sms to sell operation of Warehouse(without sms'json body)
-            sendNotificationService.sendSmsInfo(warehouse,STATES.EMPTY);
+            sendNotificationService.sendSmsInfo(warehouse,STATES.EMPTY,getNotificationInfoDto.getPhoneNumber());
         }
 
         warehouseRepository.save(warehouse);
