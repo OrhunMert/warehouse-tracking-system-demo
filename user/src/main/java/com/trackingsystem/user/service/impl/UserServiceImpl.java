@@ -10,10 +10,7 @@ import com.trackingsystem.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -23,27 +20,25 @@ public class UserServiceImpl implements UserService {
     private final ModelMapper modelMapper;
     private final UserRepository userRepository;
     @Override
-    public User createUser(UserDto userDTO) {
+    public UserDto createUser(UserDto userDTO) {
         User user = modelMapper.map(userDTO, User.class);
-
         UserConditionManager.checkUsernameCondition(user.getUsername(),user.getPassword());
         UserConditionManager.checkEmailCondition(user.getMail());
         UserConditionManager.checkPhoneNumber(user.getPhoneNumber());
 
         userRepository.save(user);
-        return user;
+
+        return userDTO;
     }
     @Override
-    public User getUser(Long id) {
+    public UserDto getUser(Long id) {
         // we will update in orElseThrow after add to exception and validation handle.
-        return userRepository.findById(id)
+        User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User not found by id to get operation!!!"));
+        return modelMapper.map(user, UserDto.class);
     }
     @Override
-    public User updateUser(Long id, UserDto userDTO) {
-
-        log.info("id info for update operation:"+id);
-
+    public UserDto updateUser(Long id, UserDto userDTO) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User not found by id to update operation!!!"));
 
@@ -52,10 +47,8 @@ public class UserServiceImpl implements UserService {
         user.setPassword((userDTO.getPassword()));
         user.setPhoneNumber(userDTO.getPhoneNumber());
 
-        log.info("User Data to update User:{}",user);
-
         userRepository.save(user);
-        return user;
+        return modelMapper.map(user, UserDto.class);
     }
     @Override
     public void deleteUser(Long id) {
@@ -64,14 +57,6 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new UserNotFoundException("User not found by id to delete operation!!!"));
 
         userRepository.deleteById(id);
-    }
-    @Override
-    public HttpStatus checkUserResponse(Long id) {
-        Optional<User> user = userRepository.findById(id);
-        log.info("check user:"+user);
-        if(user.equals(Optional.empty()))
-            return HttpStatus.NOT_FOUND;
-        return HttpStatus.OK;
     }
     @Override
     public GetUserToNotificationDto getUserToNotification(Long id) {

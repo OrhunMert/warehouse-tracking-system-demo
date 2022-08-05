@@ -1,9 +1,9 @@
 package com.trackingsystem.warehouse.exception;
 
+import com.trackingsystem.warehouse.dto.GetNotificationInfoDto;
 import com.trackingsystem.warehouse.model.Product;
 import com.trackingsystem.warehouse.model.Warehouse;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
@@ -23,7 +23,7 @@ public class  WarehouseConditionException {
         return true;
     }
     public static boolean checkConditionToSell(Warehouse warehouse, List<Product> productList,String productName) {
-        if(productList.isEmpty() | warehouse.getProductList().indexOf(productName)==-1)
+        if(productList.isEmpty() | !warehouse.getProductList().contains(productName))
             throw new ProductNotFoundException("Product not found to sell from Warehouse");
         else if(!(productList.get(0).getProductgenre().equals(warehouse.getWarehouseGenre())))
             // you can setup the communication with notification service.(maybe)
@@ -33,12 +33,12 @@ public class  WarehouseConditionException {
 
     public static boolean checkHaveOwnerid(Warehouse warehouse, RestTemplate restTemplate){
 
-        HttpStatus httpStatus = restTemplate.getForObject(
-                "http://localhost:8080/users/check/{id}"
-                ,HttpStatus.class
-                ,warehouse.getOwnerid());
+        GetNotificationInfoDto getNotificationInfoDto = restTemplate.getForObject(
+                "http://localhost:8080/users/{id}",
+                GetNotificationInfoDto.class,
+                warehouse.getOwnerid());
 
-        if(httpStatus.getReasonPhrase().equals(HttpStatus.NOT_FOUND.getReasonPhrase())){
+        if(getNotificationInfoDto == null){
             log.info("User not found");
             throw new UserNotFoundException("Ownerid not found by id in user table to create Warehouse");
         }
