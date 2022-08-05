@@ -32,7 +32,7 @@ public class EmailServiceImpl implements EmailService {
     // it's annotation from factory so not lombok.
 
     @Override
-    public String sendEmail(EmailDto emailDTO, String sender) {
+    public EmailDto sendEmail(EmailDto emailDTO, String sender) {
         Email email = modelMapper.map(emailDTO,Email.class);
 
         try {
@@ -47,19 +47,20 @@ public class EmailServiceImpl implements EmailService {
             mailMessage.setSubject(email.getSubject());
 
             javaMailSender.send(mailMessage);
-            return "Mail Sent Successfully!!!";
+            return modelMapper.map(email,EmailDto.class);
         } catch (MailException e) {
             throw new SendSimpleMailException("Exception while sending mail!!!");
         }
     }
-    public String sendMailWithAttachment(EmailDto emailDTO, String sender)
+    public EmailDto sendMailWithAttachment(EmailDto emailDTO, String sender)
     {
+        if(sender == null)
+            sender = "orhunombhuawei7@gmail.com";
         Email email = modelMapper.map(emailDTO,Email.class);
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper mimeMessageHelper;
 
         try {
-
             mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
             mimeMessageHelper.setFrom(sender);
             mimeMessageHelper.setTo(email.getRecipient());
@@ -77,14 +78,14 @@ public class EmailServiceImpl implements EmailService {
             mimeMessageHelper.addAttachment(Objects.requireNonNull(file.getFilename()), file);
 
             javaMailSender.send(mimeMessage);
-            return "Mail sent Successfully with Attachment!!!";
+            return modelMapper.map(email,EmailDto.class);
         }
         catch (MailException | MessagingException e) {
             throw new SendMailWithAttachmentException("Exception while sending mail with attachment!!!");
         }
     }
     @Override
-    public String sendEmailForInfo(String recipient, String message, String subject,String sender) {
+    public SimpleMailMessage sendEmailForInfo(String recipient, String message, String subject,String sender) {
         SimpleMailMessage mailMessage = new SimpleMailMessage();
 
         log.info("Recipient for Warehouse Information:"+recipient);
@@ -95,6 +96,6 @@ public class EmailServiceImpl implements EmailService {
         mailMessage.setSubject(subject);
 
         javaMailSender.send(mailMessage);
-        return "Mail Sent Successfully about User's Warehouse!!!";
+        return mailMessage;
     }
 }
