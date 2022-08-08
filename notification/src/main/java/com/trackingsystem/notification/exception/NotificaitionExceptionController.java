@@ -8,16 +8,16 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class NotificaitionExceptionController {
 
-    @ExceptionHandler(value = {SendSimpleMailException.class})
-    public ResponseEntity<String> sendSimpleMailException(SendSimpleMailException sendSimpleMailException){
+    @ExceptionHandler(value = {SimpleMailException.class})
+    public ResponseEntity<String> sendSimpleMailException(SimpleMailException sendSimpleMailException){
         return new ResponseEntity<>(sendSimpleMailException.getMessage(), HttpStatus.NETWORK_AUTHENTICATION_REQUIRED);
     }
-    @ExceptionHandler(value = {SendMailWithAttachmentException.class})
-    public ResponseEntity<String> sendMailWithAttachmentException(SendMailWithAttachmentException sendMailWithAttachmentException){
+    @ExceptionHandler(value = {MailAttachmentException.class})
+    public ResponseEntity<String> sendMailWithAttachmentException(MailAttachmentException sendMailWithAttachmentException){
         return new ResponseEntity<>(sendMailWithAttachmentException.getMessage(), HttpStatus.NETWORK_AUTHENTICATION_REQUIRED);
     }
-    @ExceptionHandler(value = {SendEmailInformationException.class})
-    public ResponseEntity<String> sendEmailForInfoException(SendEmailInformationException sendEmailForInfoException){
+    @ExceptionHandler(value = {EmailInformationException.class})
+    public ResponseEntity<String> sendEmailForInfoException(EmailInformationException sendEmailForInfoException){
         return new ResponseEntity<>(sendEmailForInfoException.getMessage(), HttpStatus.NETWORK_AUTHENTICATION_REQUIRED);
     }
     @ExceptionHandler(value = {FileNotFoundException.class})
@@ -31,6 +31,10 @@ public class NotificaitionExceptionController {
     @ExceptionHandler(value = {SenderNullException.class})
     public ResponseEntity<String> getSenderException(SenderNullException senderNullException){
         return new ResponseEntity<>(senderNullException.getMessage(),HttpStatus.NOT_ACCEPTABLE);
+    }
+    @ExceptionHandler(value = {SmsPropertiesNullException.class})
+    public ResponseEntity<String> getSmsPropertiesException(SmsPropertiesNullException smsPropertiesNullException){
+        return new ResponseEntity<>(smsPropertiesNullException.getMessage(),HttpStatus.NOT_FOUND);
     }
 
 

@@ -3,8 +3,8 @@ package com.trackingsystem.notification.service.impl;
 import com.trackingsystem.notification.dto.AttachmentEmailDto;
 import com.trackingsystem.notification.dto.EmailDto;
 import com.trackingsystem.notification.exception.FileNotFoundException;
-import com.trackingsystem.notification.exception.SendMailWithAttachmentException;
-import com.trackingsystem.notification.exception.SendSimpleMailException;
+import com.trackingsystem.notification.exception.MailAttachmentException;
+import com.trackingsystem.notification.exception.SimpleMailException;
 import com.trackingsystem.notification.exception.SenderNullException;
 import com.trackingsystem.notification.model.Email;
 import com.trackingsystem.notification.service.EmailService;
@@ -49,7 +49,7 @@ public class EmailServiceImpl implements EmailService {
             javaMailSender.send(mailMessage);
             return modelMapper.map(email,EmailDto.class);
         } catch (MailException e) {
-            throw new SendSimpleMailException("Exception while sending mail!!!");
+            throw new SimpleMailException("Exception while sending mail!!!");
         }
     }
     public AttachmentEmailDto sendMailWithAttachment(AttachmentEmailDto attachmentEmailDto, String sender) {
@@ -81,7 +81,7 @@ public class EmailServiceImpl implements EmailService {
             return modelMapper.map(email,AttachmentEmailDto.class);
         }
         catch (MailException | MessagingException e) {
-            throw new SendMailWithAttachmentException("Exception while sending mail with attachment!!!");
+            throw new MailAttachmentException("Exception while sending mail with attachment!!!");
         }
     }
     @Override

@@ -2,10 +2,12 @@ package com.trackingsystem.notification.service.impl;
 
 import com.trackingsystem.notification.dto.SmsInformationDto;
 import com.trackingsystem.notification.dto.SmsDto;
+import com.trackingsystem.notification.exception.SmsPropertiesNullException;
 import com.trackingsystem.notification.exception.SmsUrlConnectionException;
 import com.trackingsystem.notification.model.Sms;
 import com.trackingsystem.notification.service.SmsService;
 import com.trackingsystem.notification.utils.SenderProperties;
+import com.trackingsystem.notification.validator.SmsPropertiesValidation;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -29,9 +31,10 @@ public class SmsServiceImpl implements SmsService {
     private final ModelMapper modelMapper;
     @Override
     public SmsInformationDto sendSms(String message, String phoneNumber) {
-
         // You need to download GSM Modem(SMS) and GSM Helper Tool on your android device.
 
+        if(SmsPropertiesValidation.checkSmsProperties())
+            throw new SmsPropertiesNullException("Properties is not valid to send sms!!!");
         // it will be changed when Json body was added.
         String username = SenderProperties.getAppUsername();
         String password = SenderProperties.getAppPassword();

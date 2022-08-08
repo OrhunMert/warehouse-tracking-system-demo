@@ -2,8 +2,9 @@ package com.trackingsystem.notification.exception;
 
 import org.springframework.mail.MailSendException;
 
-public class SendEmailInformationException extends MailSendException {
-    public SendEmailInformationException(String message) {
+public class SimpleMailException extends MailSendException {
+
+    public SimpleMailException(String message){
         super(message);
     }
 }
