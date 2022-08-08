@@ -8,7 +8,7 @@ import javax.persistence.Enumerated;
 import javax.validation.constraints.NotBlank;
 
 @Data
-public class UpdateWarehouseDto {
+public class UpdatedWarehouseDto {
 
     @NotBlank
     private String warehouseName;

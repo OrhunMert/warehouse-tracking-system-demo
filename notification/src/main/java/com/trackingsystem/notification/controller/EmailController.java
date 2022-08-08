@@ -14,9 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/emails")
 @RequiredArgsConstructor
 public class EmailController {
-
     private final EmailService emailService;
-
     @PostMapping()
     public ResponseEntity<EmailDto> sendEmail(@RequestBody EmailDto emailDTO){
         return ResponseEntity.ok().body(emailService.sendEmail(emailDTO,SenderProperties.getMailSender()));

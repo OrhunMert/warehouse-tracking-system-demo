@@ -1,6 +1,6 @@
 package com.trackingsystem.notification.service.impl;
 
-import com.trackingsystem.notification.dto.GetSmsDto;
+import com.trackingsystem.notification.dto.SmsInformationDto;
 import com.trackingsystem.notification.dto.SmsDto;
 import com.trackingsystem.notification.exception.SmsUrlConnectionException;
 import com.trackingsystem.notification.model.Sms;
@@ -28,7 +28,7 @@ public class SmsServiceImpl implements SmsService {
 
     private final ModelMapper modelMapper;
     @Override
-    public GetSmsDto sendSms(String message, String phoneNumber) {
+    public SmsInformationDto sendSms(String message, String phoneNumber) {
 
         // You need to download GSM Modem(SMS) and GSM Helper Tool on your android device.
 
@@ -43,7 +43,7 @@ public class SmsServiceImpl implements SmsService {
                 address,port);
     }
     @Override
-    public GetSmsDto sendAllSms(SmsDto smsDTO) {
+    public SmsInformationDto sendAllSms(SmsDto smsDTO) {
 
         // You need to download GSM Modem(SMS) and GSM Helper Tool on your android device.
         Sms sms = modelMapper.map(smsDTO, Sms.class);
@@ -61,10 +61,10 @@ public class SmsServiceImpl implements SmsService {
     }
     @SneakyThrows
     @Override
-    public GetSmsDto connectMobileDevice(String message,
-                                      String phoneNumber,
-                                      String username, String password,
-                                      String address, String port) {
+    public SmsInformationDto connectMobileDevice(String message,
+                                                 String phoneNumber,
+                                                 String username, String password,
+                                                 String address, String port) {
 
         String responseSms;
 
@@ -83,9 +83,9 @@ public class SmsServiceImpl implements SmsService {
         } catch (MalformedURLException | UnsupportedEncodingException e) {
             throw new SmsUrlConnectionException("Error while sending sms from url!!!");
         }
-        GetSmsDto getSmsDto = new GetSmsDto();
-        getSmsDto.setMessage(message);
-        getSmsDto.setPhoneNumber(phoneNumber);
-        return getSmsDto;
+        SmsInformationDto smsInformationDto = new SmsInformationDto();
+        smsInformationDto.setMessage(message);
+        smsInformationDto.setPhoneNumber(phoneNumber);
+        return smsInformationDto;
     }
 }

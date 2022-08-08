@@ -4,7 +4,7 @@ import com.trackingsystem.warehouse.model.notification.EmailNotification;
 import com.trackingsystem.warehouse.model.Warehouse;
 import com.trackingsystem.warehouse.model.enums.STATES;
 import com.trackingsystem.warehouse.model.notification.SmsNotification;
-import com.trackingsystem.warehouse.service.SendNotificationService;
+import com.trackingsystem.warehouse.service.NotificationService;
 import com.trackingsystem.warehouse.utils.CommunicationProperties;
 import com.trackingsystem.warehouse.validator.CheckMessageInfoValidation;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +14,7 @@ import org.springframework.web.client.RestTemplate;
 
 @Service
 @RequiredArgsConstructor
-public class SendNotificiationServiceImpl implements SendNotificationService {
+public class NotificiationServiceImpl implements NotificationService {
 
     private final RestTemplate restTemplate;
 

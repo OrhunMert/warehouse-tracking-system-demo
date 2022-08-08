@@ -1,6 +1,6 @@
 package com.trackingsystem.user.service.impl;
 
-import com.trackingsystem.user.dto.GetUserToNotificationDto;
+import com.trackingsystem.user.dto.NotificationDto;
 import com.trackingsystem.user.dto.UserDto;
 import com.trackingsystem.user.exception.UserConditionManager;
 import com.trackingsystem.user.exception.UserNotFoundException;
@@ -59,10 +59,10 @@ public class UserServiceImpl implements UserService {
         userRepository.deleteById(id);
     }
     @Override
-    public GetUserToNotificationDto getUserToNotification(Long id) {
+    public NotificationDto getUserToNotification(Long id) {
         User user = userRepository.findById(id).
                 orElseThrow(()-> new UserNotFoundException("User not found for notification service!!!"));
-        GetUserToNotificationDto getUserToNotificationDto = modelMapper.map(user,GetUserToNotificationDto.class);
+        NotificationDto getUserToNotificationDto = modelMapper.map(user, NotificationDto.class);
         log.info("Get user information to notification:{}",getUserToNotificationDto);
 
         return getUserToNotificationDto;

@@ -3,7 +3,7 @@ package com.trackingsystem.warehouse.dto;
 import lombok.Data;
 
 @Data
-public class GetNotificationInfoDto {
+public class NotificationInfoDto {
     String mail;
     String phoneNumber;
 }

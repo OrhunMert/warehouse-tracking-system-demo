@@ -27,7 +27,6 @@ import java.util.Objects;
 @RequiredArgsConstructor
 @Slf4j
 public class EmailServiceImpl implements EmailService {
-
     private final JavaMailSender javaMailSender;
     private final ModelMapper modelMapper;
     @Override

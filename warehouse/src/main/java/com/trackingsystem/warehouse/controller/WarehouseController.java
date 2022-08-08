@@ -1,8 +1,7 @@
 package com.trackingsystem.warehouse.controller;
 
-import com.trackingsystem.warehouse.dto.GetWarehouseToBuyDto;
-import com.trackingsystem.warehouse.dto.GetWarehouseToSellDto;
-import com.trackingsystem.warehouse.dto.UpdateWarehouseDto;
+import com.trackingsystem.warehouse.dto.WarehouseOperationDto;
+import com.trackingsystem.warehouse.dto.UpdatedWarehouseDto;
 import com.trackingsystem.warehouse.dto.WarehouseDto;
 import com.trackingsystem.warehouse.service.WarehouseService;
 import lombok.RequiredArgsConstructor;
@@ -31,8 +30,8 @@ public class WarehouseController {
     }
 
     @PostMapping("/buy")
-    ResponseEntity<GetWarehouseToBuyDto> buyProductForWarehouse(@RequestParam Long id,
-                                                                @RequestParam String productName){
+    ResponseEntity<WarehouseOperationDto> buyProductForWarehouse(@RequestParam Long id,
+                                                                 @RequestParam String productName){
         return ResponseEntity.ok().body(warehouseService.buyProduct(id,productName));
     }
     @GetMapping("/{id}")
@@ -40,8 +39,8 @@ public class WarehouseController {
         return ResponseEntity.ok().body(warehouseService.getWarehouse(id));
     }
     @PutMapping("/{id}")
-    ResponseEntity<UpdateWarehouseDto> updateWarehouse(@PathVariable Long id,
-                                              @Valid @RequestBody UpdateWarehouseDto updateWarehouseDTO){
+    ResponseEntity<UpdatedWarehouseDto> updateWarehouse(@PathVariable Long id,
+                                                        @Valid @RequestBody UpdatedWarehouseDto updateWarehouseDTO){
         return ResponseEntity.ok().body(warehouseService.updateWarehouse(id,updateWarehouseDTO));
     }
     @DeleteMapping("/{id}")
@@ -50,8 +49,8 @@ public class WarehouseController {
         return ResponseEntity.ok().build();
     }
     @DeleteMapping("/sell")
-    ResponseEntity<GetWarehouseToSellDto> sellProductForWarehouse(@RequestParam Long id,
-                                                                  @RequestParam String productName){
+    ResponseEntity<WarehouseOperationDto> sellProductForWarehouse(@RequestParam Long id,
+                                                      @RequestParam String productName){
         return ResponseEntity.ok().body(warehouseService.sellProduct(id,productName));
     }
 

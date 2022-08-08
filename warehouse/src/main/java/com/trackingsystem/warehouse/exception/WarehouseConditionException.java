@@ -1,6 +1,6 @@
 package com.trackingsystem.warehouse.exception;
 
-import com.trackingsystem.warehouse.dto.GetNotificationInfoDto;
+import com.trackingsystem.warehouse.dto.NotificationInfoDto;
 import com.trackingsystem.warehouse.model.Product;
 import com.trackingsystem.warehouse.model.Warehouse;
 import lombok.extern.slf4j.Slf4j;
@@ -33,9 +33,9 @@ public class  WarehouseConditionException {
 
     public static boolean checkHaveOwnerid(Warehouse warehouse, RestTemplate restTemplate){
 
-        GetNotificationInfoDto getNotificationInfoDto = restTemplate.getForObject(
+        NotificationInfoDto getNotificationInfoDto = restTemplate.getForObject(
                 "http://localhost:8080/users/{id}",
-                GetNotificationInfoDto.class,
+                NotificationInfoDto.class,
                 warehouse.getOwnerid());
 
         if(getNotificationInfoDto == null){

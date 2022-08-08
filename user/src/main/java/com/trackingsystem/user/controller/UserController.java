@@ -1,6 +1,6 @@
 package com.trackingsystem.user.controller;
 
-import com.trackingsystem.user.dto.GetUserToNotificationDto;
+import com.trackingsystem.user.dto.NotificationDto;
 import com.trackingsystem.user.dto.UserDto;
 import com.trackingsystem.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +26,7 @@ public class UserController {
         return ResponseEntity.ok().body(userService.getUser(id));
     }
     @GetMapping("/notification/{id}")
-    public ResponseEntity<GetUserToNotificationDto> getUserToNotification(@PathVariable Long id){
+    public ResponseEntity<NotificationDto> getUserToNotification(@PathVariable Long id){
         return ResponseEntity.ok().body(userService.getUserToNotification(id));
     }
     @PutMapping("/{id}")

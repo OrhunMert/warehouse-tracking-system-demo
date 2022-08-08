@@ -8,7 +8,7 @@ import com.trackingsystem.warehouse.model.Warehouse;
 import com.trackingsystem.warehouse.model.enums.STATES;
 import com.trackingsystem.warehouse.repository.ProductRepository;
 import com.trackingsystem.warehouse.repository.WarehouseRepository;
-import com.trackingsystem.warehouse.service.SendNotificationService;
+import com.trackingsystem.warehouse.service.NotificationService;
 import com.trackingsystem.warehouse.service.WarehouseService;
 import com.trackingsystem.warehouse.validator.CheckWarehouseStateValidation;
 import com.trackingsystem.warehouse.validator.CommunicationNotificationValidation;
@@ -29,7 +29,7 @@ public class WarehouseServiceImpl implements WarehouseService {
     private final RestTemplate restTemplate;
     private final WarehouseRepository warehouseRepository;
     private final ProductRepository productRepository;
-    private final SendNotificationService sendNotificationService;
+    private final NotificationService sendNotificationService;
 
     @Override
     public WarehouseDto createWarehouse(WarehouseDto warehouseDTO) {
@@ -51,7 +51,7 @@ public class WarehouseServiceImpl implements WarehouseService {
 
         WarehouseConditionException.checkHaveOwnerid(warehouse, restTemplate);
         // Communication with user service.
-        GetNotificationInfoDto getNotificationInfoDto =
+        NotificationInfoDto getNotificationInfoDto =
                 CommunicationNotificationValidation.communicationFromWarehouseToUser(warehouse.getOwnerid());
 
         // send email for information about Warehouse's state
@@ -63,7 +63,7 @@ public class WarehouseServiceImpl implements WarehouseService {
         return modelMapper.map(warehouse,WarehouseDto.class);
     }
     @Override
-    public UpdateWarehouseDto updateWarehouse(Long id, UpdateWarehouseDto updateWarehouseDTO) {
+    public UpdatedWarehouseDto updateWarehouse(Long id, UpdatedWarehouseDto updateWarehouseDTO) {
         Warehouse warehouse = warehouseRepository
                 .findById(id)
                 .orElseThrow(() -> new WarehouseNotFoundException("Warehouse not found by id to update"));
@@ -74,7 +74,7 @@ public class WarehouseServiceImpl implements WarehouseService {
         warehouse.setWarehouseGenre(updateWarehouseDTO.getWarehouseGenre());
         warehouseRepository.save(warehouse);
 
-        return modelMapper.map(warehouse,UpdateWarehouseDto.class);
+        return modelMapper.map(warehouse, UpdatedWarehouseDto.class);
     }
     @Override
     public void deleteWarehouse(Long id) {
@@ -85,7 +85,7 @@ public class WarehouseServiceImpl implements WarehouseService {
         warehouseRepository.deleteById(id);
     }
     @Override
-    public GetWarehouseToBuyDto buyProduct(Long id, String productName) {
+    public WarehouseOperationDto buyProduct(Long id, String productName) {
         Warehouse warehouse = warehouseRepository
                 .findById(id)
                 .orElseThrow(
@@ -105,7 +105,7 @@ public class WarehouseServiceImpl implements WarehouseService {
         if(CheckWarehouseStateValidation.isFullWarehouse(warehouse.getCurrentStock(),
                 warehouse.getWarehouseCapacity())){
             // Communication with user service.
-            GetNotificationInfoDto getNotificationInfoDto =
+            NotificationInfoDto getNotificationInfoDto =
                     CommunicationNotificationValidation.communicationFromWarehouseToUser(warehouse.getOwnerid());
 
             // send email to buy operation of Warehouse
@@ -117,10 +117,10 @@ public class WarehouseServiceImpl implements WarehouseService {
 
         warehouseRepository.save(warehouse);
 
-        return modelMapper.map(warehouse,GetWarehouseToBuyDto.class);
+        return modelMapper.map(warehouse, WarehouseOperationDto.class);
     }
     @Override
-    public GetWarehouseToSellDto sellProduct(Long id, String productName) {
+    public WarehouseOperationDto sellProduct(Long id, String productName) {
         Warehouse warehouse = warehouseRepository
                 .findById(id)
                 .orElseThrow(
@@ -139,7 +139,7 @@ public class WarehouseServiceImpl implements WarehouseService {
         if(CheckWarehouseStateValidation.isEmptyWarehouse(warehouse.getCurrentStock(),
                 warehouse.getProductList())){
             // Communication with user service.
-            GetNotificationInfoDto getNotificationInfoDto =
+            NotificationInfoDto getNotificationInfoDto =
                     CommunicationNotificationValidation.communicationFromWarehouseToUser(warehouse.getOwnerid());
 
             // send email to sell operation of Warehouse
@@ -151,7 +151,7 @@ public class WarehouseServiceImpl implements WarehouseService {
 
         warehouseRepository.save(warehouse);
 
-        return modelMapper.map(warehouse,GetWarehouseToSellDto.class);
+        return modelMapper.map(warehouse,WarehouseOperationDto.class);
     }
 
 }

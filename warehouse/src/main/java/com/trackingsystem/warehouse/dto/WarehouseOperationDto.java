@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class GetWarehouseToSellDto {
+public class WarehouseOperationDto {
 
     private String warehouseName;
     private Integer warehouseCapacity;
