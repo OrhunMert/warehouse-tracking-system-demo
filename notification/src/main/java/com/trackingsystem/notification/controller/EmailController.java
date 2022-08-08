@@ -1,5 +1,6 @@
 package com.trackingsystem.notification.controller;
 
+import com.trackingsystem.notification.dto.AttachmentEmailDto;
 import com.trackingsystem.notification.dto.EmailDto;
 import com.trackingsystem.notification.service.EmailService;
 import com.trackingsystem.notification.utils.SenderProperties;
@@ -18,10 +19,12 @@ public class EmailController {
 
     @PostMapping()
     public ResponseEntity<EmailDto> sendEmail(@RequestBody EmailDto emailDTO){
-        if(emailDTO.getAttachment().isBlank())
-             return ResponseEntity.ok().body(emailService.sendEmail(emailDTO, SenderProperties.getMailSender()));
-        else
-            return ResponseEntity.ok().body(emailService.sendMailWithAttachment(emailDTO, SenderProperties.getMailSender()));
+        return ResponseEntity.ok().body(emailService.sendEmail(emailDTO,SenderProperties.getMailSender()));
+    }
+    @PostMapping("/attachment")
+    public ResponseEntity<AttachmentEmailDto> sendEmailAttachment(@RequestBody AttachmentEmailDto attachmentEmailDto){
+        return ResponseEntity.ok().body(emailService.sendMailWithAttachment(attachmentEmailDto,
+                SenderProperties.getMailSender()));
     }
     @GetMapping("/sendemail/info")
     public ResponseEntity<SimpleMailMessage> sendEmailForInfo(@RequestParam String recipient,

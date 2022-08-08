@@ -1,11 +1,13 @@
 package com.trackingsystem.notification.service.impl;
 
+import com.trackingsystem.notification.dto.AttachmentEmailDto;
 import com.trackingsystem.notification.dto.EmailDto;
 import com.trackingsystem.notification.exception.FileNotFoundToSendMailException;
 import com.trackingsystem.notification.exception.SendMailWithAttachmentException;
 import com.trackingsystem.notification.exception.SendSimpleMailException;
 import com.trackingsystem.notification.model.Email;
 import com.trackingsystem.notification.service.EmailService;
+import com.trackingsystem.notification.utils.SenderProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -28,11 +30,9 @@ public class EmailServiceImpl implements EmailService {
 
     private final JavaMailSender javaMailSender;
     private final ModelMapper modelMapper;
-    // it's annotation from factory so not lombok.
     @Override
-    public EmailDto sendEmail(EmailDto emailDTO, String sender) {
+    public EmailDto sendEmail(EmailDto emailDTO,String sender) {
         Email email = modelMapper.map(emailDTO,Email.class);
-
         try {
             SimpleMailMessage mailMessage = new SimpleMailMessage();
 
@@ -50,11 +50,9 @@ public class EmailServiceImpl implements EmailService {
             throw new SendSimpleMailException("Exception while sending mail!!!");
         }
     }
-    public EmailDto sendMailWithAttachment(EmailDto emailDTO, String sender)
+    public AttachmentEmailDto sendMailWithAttachment(AttachmentEmailDto attachmentEmailDto, String sender)
     {
-        if(sender == null)
-            sender = "orhunombhuawei7@gmail.com";
-        Email email = modelMapper.map(emailDTO,Email.class);
+        Email email = modelMapper.map(attachmentEmailDto,Email.class);
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper mimeMessageHelper;
 
@@ -76,7 +74,7 @@ public class EmailServiceImpl implements EmailService {
             mimeMessageHelper.addAttachment(Objects.requireNonNull(file.getFilename()), file);
 
             javaMailSender.send(mimeMessage);
-            return modelMapper.map(email,EmailDto.class);
+            return modelMapper.map(email,AttachmentEmailDto.class);
         }
         catch (MailException | MessagingException e) {
             throw new SendMailWithAttachmentException("Exception while sending mail with attachment!!!");
@@ -85,9 +83,7 @@ public class EmailServiceImpl implements EmailService {
     @Override
     public SimpleMailMessage sendEmailForInfo(String recipient, String message, String subject,String sender) {
         SimpleMailMessage mailMessage = new SimpleMailMessage();
-
         log.info("Recipient for Warehouse Information:"+recipient);
-
         mailMessage.setFrom(sender);
         mailMessage.setTo(recipient);
         mailMessage.setText(message);

@@ -1,5 +1,6 @@
 package com.trackingsystem.user.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
@@ -13,5 +14,6 @@ public class UserDto {
     private Integer password;
     @NotBlank
     private String mail;
+    @JsonProperty("phone_number")
     private String phoneNumber;
 }
