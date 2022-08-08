@@ -2,12 +2,12 @@ package com.trackingsystem.notification.service.impl;
 
 import com.trackingsystem.notification.dto.AttachmentEmailDto;
 import com.trackingsystem.notification.dto.EmailDto;
-import com.trackingsystem.notification.exception.FileNotFoundToSendMailException;
+import com.trackingsystem.notification.exception.FileNotFoundException;
 import com.trackingsystem.notification.exception.SendMailWithAttachmentException;
 import com.trackingsystem.notification.exception.SendSimpleMailException;
+import com.trackingsystem.notification.exception.SenderNullException;
 import com.trackingsystem.notification.model.Email;
 import com.trackingsystem.notification.service.EmailService;
-import com.trackingsystem.notification.utils.SenderProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -31,6 +31,9 @@ public class EmailServiceImpl implements EmailService {
     private final ModelMapper modelMapper;
     @Override
     public EmailDto sendEmail(EmailDto emailDTO,String sender) {
+        if(sender == null)
+            throw new SenderNullException("Sender shouldn't be null!!!");
+
         Email email = modelMapper.map(emailDTO,Email.class);
         try {
             SimpleMailMessage mailMessage = new SimpleMailMessage();
@@ -49,8 +52,10 @@ public class EmailServiceImpl implements EmailService {
             throw new SendSimpleMailException("Exception while sending mail!!!");
         }
     }
-    public AttachmentEmailDto sendMailWithAttachment(AttachmentEmailDto attachmentEmailDto, String sender)
-    {
+    public AttachmentEmailDto sendMailWithAttachment(AttachmentEmailDto attachmentEmailDto, String sender) {
+        if(sender == null)
+            throw new SenderNullException("Sender shouldn't be null!!!");
+
         Email email = modelMapper.map(attachmentEmailDto,Email.class);
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper mimeMessageHelper;
@@ -67,7 +72,7 @@ public class EmailServiceImpl implements EmailService {
                     new File(email.getAttachment()));
 
             if(!(file.exists()))
-                throw new FileNotFoundToSendMailException(
+                throw new FileNotFoundException(
                         "File is not found while sending mail with Attachment!!!");
 
             mimeMessageHelper.addAttachment(Objects.requireNonNull(file.getFilename()), file);
@@ -81,6 +86,9 @@ public class EmailServiceImpl implements EmailService {
     }
     @Override
     public SimpleMailMessage sendEmailForInfo(String recipient, String message, String subject,String sender) {
+        if(sender == null)
+            throw new SenderNullException("Sender shouldn't be null!!!");
+
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         log.info("Recipient for Warehouse Information:"+recipient);
         mailMessage.setFrom(sender);
