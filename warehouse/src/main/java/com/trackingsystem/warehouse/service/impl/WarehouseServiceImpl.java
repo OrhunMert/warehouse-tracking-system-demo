@@ -53,12 +53,11 @@ public class WarehouseServiceImpl implements WarehouseService {
         // Communication with user service.
         NotificationInfoDto getNotificationInfoDto =
                 CommunicationNotificationValidation.communicationFromWarehouseToUser(warehouse.getOwnerid());
-
         // send email for information about Warehouse's state
         sendNotificationService.sendEmailInfo(warehouse, STATES.COMMON,getNotificationInfoDto.getMail());
 
         // send sms for information about Warehouse's state(without sms'json body)
-        sendNotificationService.sendSmsInfo(warehouse,STATES.COMMON,getNotificationInfoDto.getPhoneNumber());
+        //sendNotificationService.sendSmsInfo(warehouse,STATES.COMMON,getNotificationInfoDto.getPhoneNumber());
 
         return modelMapper.map(warehouse,WarehouseDto.class);
     }
@@ -112,7 +111,7 @@ public class WarehouseServiceImpl implements WarehouseService {
             sendNotificationService.sendEmailInfo(warehouse,STATES.FULL,getNotificationInfoDto.getMail());
 
             // send sms to buy operation of Warehouse(without sms'json body)
-            sendNotificationService.sendSmsInfo(warehouse,STATES.FULL,getNotificationInfoDto.getPhoneNumber());
+            //sendNotificationService.sendSmsInfo(warehouse,STATES.FULL,getNotificationInfoDto.getPhoneNumber());
         }
 
         warehouseRepository.save(warehouse);
@@ -146,12 +145,11 @@ public class WarehouseServiceImpl implements WarehouseService {
             sendNotificationService.sendEmailInfo(warehouse,STATES.EMPTY,getNotificationInfoDto.getMail());
 
             // send sms to sell operation of Warehouse(without sms'json body)
-            sendNotificationService.sendSmsInfo(warehouse,STATES.EMPTY,getNotificationInfoDto.getPhoneNumber());
+            //sendNotificationService.sendSmsInfo(warehouse,STATES.EMPTY,getNotificationInfoDto.getPhoneNumber());
         }
 
         warehouseRepository.save(warehouse);
 
         return modelMapper.map(warehouse,WarehouseOperationDto.class);
     }
-
 }

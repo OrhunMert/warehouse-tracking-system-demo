@@ -39,4 +39,9 @@ public class UserExceptionController extends ResponseEntityExceptionHandler {
     public ResponseEntity<String> userNotValidCondition(UserConditionException userConditionException){
         return new ResponseEntity<>(userConditionException.getMessage(),HttpStatus.NOT_ACCEPTABLE);
     }
+    @ExceptionHandler(value = {RegexNotValidException.class})
+    public ResponseEntity<String> regexNotValidException(RegexNotValidException regexNotValidException){
+        return new ResponseEntity<>(regexNotValidException.getMessage(),HttpStatus.NOT_ACCEPTABLE);
+    }
+
 }

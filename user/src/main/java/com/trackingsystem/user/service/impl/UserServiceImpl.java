@@ -2,11 +2,13 @@ package com.trackingsystem.user.service.impl;
 
 import com.trackingsystem.user.dto.NotificationDto;
 import com.trackingsystem.user.dto.UserDto;
+import com.trackingsystem.user.exception.RegexNotValidException;
 import com.trackingsystem.user.exception.UserConditionManager;
 import com.trackingsystem.user.exception.UserNotFoundException;
 import com.trackingsystem.user.model.User;
 import com.trackingsystem.user.repository.UserRepository;
 import com.trackingsystem.user.service.UserService;
+import com.trackingsystem.user.validator.RegexParametersValidation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -23,8 +25,12 @@ public class UserServiceImpl implements UserService {
     public UserDto createUser(UserDto userDTO) {
         User user = modelMapper.map(userDTO, User.class);
         UserConditionManager.checkUsernameCondition(user.getUsername(),user.getPassword());
-        UserConditionManager.checkEmailCondition(user.getMail());
-        UserConditionManager.checkPhoneNumber(user.getPhoneNumber());
+        if(!(RegexParametersValidation.checkEmailValid(
+                user.getMail())))
+            throw new RegexNotValidException("Email is not valid for send the email to user!!!");
+        else if(!(RegexParametersValidation.checkPhoneValid(
+                user.getPhoneNumber())))
+            throw new RegexNotValidException("Phone Number is not valid for send the sms to user!!!");
 
         userRepository.save(user);
 
