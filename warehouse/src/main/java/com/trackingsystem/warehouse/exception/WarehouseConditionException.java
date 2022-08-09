@@ -3,14 +3,14 @@ package com.trackingsystem.warehouse.exception;
 import com.trackingsystem.warehouse.dto.NotificationInfoDto;
 import com.trackingsystem.warehouse.model.Product;
 import com.trackingsystem.warehouse.model.Warehouse;
+
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
-
 @Slf4j
 public class  WarehouseConditionException {
-
     public static boolean checkConditionToBuy(Warehouse warehouse, List<Product> productList) {
         if(productList.isEmpty())
             throw new ProductNotFoundException("Product not found to add to Warehouse");
@@ -30,7 +30,6 @@ public class  WarehouseConditionException {
             throw new WarehouseBusinessException("Warehouse's genre is not valid to sell the Product from Warehouse!!!");
         return true;
     }
-
     public static boolean checkHaveOwnerid(Warehouse warehouse, RestTemplate restTemplate){
 
         NotificationInfoDto getNotificationInfoDto = restTemplate.getForObject(

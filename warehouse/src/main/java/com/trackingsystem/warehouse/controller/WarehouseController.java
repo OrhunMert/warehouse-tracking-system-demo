@@ -4,9 +4,13 @@ import com.trackingsystem.warehouse.dto.WarehouseOperationDto;
 import com.trackingsystem.warehouse.dto.UpdatedWarehouseDto;
 import com.trackingsystem.warehouse.dto.WarehouseDto;
 import com.trackingsystem.warehouse.service.WarehouseService;
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.http.ResponseEntity;
+
 import org.springframework.stereotype.Controller;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,14 +25,11 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 @RequestMapping("/warehouses")
 public class WarehouseController {
-
     private final WarehouseService warehouseService;
-
     @PostMapping()
     ResponseEntity<WarehouseDto> createWarehouse(@Valid @RequestBody WarehouseDto warehouseDTO){
         return ResponseEntity.ok().body(warehouseService.createWarehouse(warehouseDTO));
     }
-
     @PostMapping("/buy")
     ResponseEntity<WarehouseOperationDto> buyProductForWarehouse(@RequestParam Long id,
                                                                  @RequestParam String productName){
@@ -53,5 +54,4 @@ public class WarehouseController {
                                                       @RequestParam String productName){
         return ResponseEntity.ok().body(warehouseService.sellProduct(id,productName));
     }
-
 }

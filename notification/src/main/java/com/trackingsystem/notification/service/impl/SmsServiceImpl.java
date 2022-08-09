@@ -8,34 +8,35 @@ import com.trackingsystem.notification.model.Sms;
 import com.trackingsystem.notification.service.SmsService;
 import com.trackingsystem.notification.utils.SenderProperties;
 import com.trackingsystem.notification.validator.SmsPropertiesValidation;
+
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+
 import org.modelmapper.ModelMapper;
+
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 
+import java.nio.charset.StandardCharsets;
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class SmsServiceImpl implements SmsService {
-
     private final ModelMapper modelMapper;
     @Override
     public SmsInformationDto sendSms(String message, String phoneNumber) {
         // You need to download GSM Modem(SMS) and GSM Helper Tool on your android device.
-
         if(SmsPropertiesValidation.checkSmsProperties())
             throw new SmsPropertiesNullException("Properties is not valid to send sms!!!");
-        // it will be changed when Json body was added.
         String username = SenderProperties.getAppUsername();
         String password = SenderProperties.getAppPassword();
         String address = SenderProperties.getMobileAppAddress();
@@ -47,10 +48,8 @@ public class SmsServiceImpl implements SmsService {
     }
     @Override
     public SmsInformationDto sendAllSms(SmsDto smsDTO) {
-
         // You need to download GSM Modem(SMS) and GSM Helper Tool on your android device.
         Sms sms = modelMapper.map(smsDTO, Sms.class);
-
         String message = sms.getMessage();
         String phoneNumber = sms.getPhoneNumber();
         String username = SenderProperties.getAppUsername();
@@ -68,9 +67,7 @@ public class SmsServiceImpl implements SmsService {
                                                  String phoneNumber,
                                                  String username, String password,
                                                  String address, String port) {
-
         String responseSms;
-
         try {
             URL url = new URL(
                     address+":"+port+"/SendSMS?username="+username+"&password="+password+
@@ -89,6 +86,7 @@ public class SmsServiceImpl implements SmsService {
         SmsInformationDto smsInformationDto = new SmsInformationDto();
         smsInformationDto.setMessage(message);
         smsInformationDto.setPhoneNumber(phoneNumber);
+
         return smsInformationDto;
     }
 }

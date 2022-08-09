@@ -4,12 +4,13 @@ import com.trackingsystem.notification.dto.AttachmentEmailDto;
 import com.trackingsystem.notification.dto.EmailDto;
 import com.trackingsystem.notification.service.EmailService;
 import com.trackingsystem.notification.utils.SenderProperties;
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
 @Controller
 @RequestMapping("/emails")
 @RequiredArgsConstructor
@@ -28,7 +29,6 @@ public class EmailController {
     public ResponseEntity<SimpleMailMessage> sendEmailForInfo(@RequestParam String recipient,
                                                               @RequestParam String message,
                                                               @RequestParam String subject) {
-
         return ResponseEntity.ok().body(emailService.sendEmailForInfo(recipient, message, subject,
                 SenderProperties.getMailSender()));
     }

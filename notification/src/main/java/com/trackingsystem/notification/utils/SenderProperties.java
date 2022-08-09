@@ -1,7 +1,6 @@
 package com.trackingsystem.notification.utils;
 
 import org.springframework.stereotype.Component;
-
 @Component
 public class SenderProperties {
     private final static String mailSender = "orhunombhuawei7@gmail.com";

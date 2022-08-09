@@ -12,9 +12,12 @@ import com.trackingsystem.warehouse.service.NotificationService;
 import com.trackingsystem.warehouse.service.WarehouseService;
 import com.trackingsystem.warehouse.validator.CheckWarehouseStateValidation;
 import com.trackingsystem.warehouse.validator.CommunicationNotificationValidation;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 import org.modelmapper.ModelMapper;
+
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -24,13 +27,11 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 public class WarehouseServiceImpl implements WarehouseService {
-
     private final ModelMapper modelMapper;
     private final RestTemplate restTemplate;
     private final WarehouseRepository warehouseRepository;
     private final ProductRepository productRepository;
     private final NotificationService sendNotificationService;
-
     @Override
     public WarehouseDto createWarehouse(WarehouseDto warehouseDTO) {
       Warehouse warehouse = modelMapper.map(warehouseDTO,Warehouse.class);
@@ -40,7 +41,6 @@ public class WarehouseServiceImpl implements WarehouseService {
               warehouse.getCurrentStock());
 
       warehouseRepository.save(warehouse);
-
       return modelMapper.map(warehouse,WarehouseDto.class);
     }
     @Override
@@ -57,7 +57,7 @@ public class WarehouseServiceImpl implements WarehouseService {
         sendNotificationService.sendEmailInfo(warehouse, STATES.COMMON,getNotificationInfoDto.getMail());
 
         // send sms for information about Warehouse's state(without sms'json body)
-        //sendNotificationService.sendSmsInfo(warehouse,STATES.COMMON,getNotificationInfoDto.getPhoneNumber());
+        sendNotificationService.sendSmsInfo(warehouse,STATES.COMMON,getNotificationInfoDto.getPhoneNumber());
 
         return modelMapper.map(warehouse,WarehouseDto.class);
     }
@@ -71,8 +71,8 @@ public class WarehouseServiceImpl implements WarehouseService {
         warehouse.setWarehouseCapacity(updateWarehouseDTO.getWarehouseCapacity());
         warehouse.setCurrentStock(updateWarehouseDTO.getCurrentStock());
         warehouse.setWarehouseGenre(updateWarehouseDTO.getWarehouseGenre());
-        warehouseRepository.save(warehouse);
 
+        warehouseRepository.save(warehouse);
         return modelMapper.map(warehouse, UpdatedWarehouseDto.class);
     }
     @Override
@@ -111,11 +111,10 @@ public class WarehouseServiceImpl implements WarehouseService {
             sendNotificationService.sendEmailInfo(warehouse,STATES.FULL,getNotificationInfoDto.getMail());
 
             // send sms to buy operation of Warehouse(without sms'json body)
-            //sendNotificationService.sendSmsInfo(warehouse,STATES.FULL,getNotificationInfoDto.getPhoneNumber());
+            sendNotificationService.sendSmsInfo(warehouse,STATES.FULL,getNotificationInfoDto.getPhoneNumber());
         }
 
         warehouseRepository.save(warehouse);
-
         return modelMapper.map(warehouse, WarehouseOperationDto.class);
     }
     @Override
@@ -145,11 +144,10 @@ public class WarehouseServiceImpl implements WarehouseService {
             sendNotificationService.sendEmailInfo(warehouse,STATES.EMPTY,getNotificationInfoDto.getMail());
 
             // send sms to sell operation of Warehouse(without sms'json body)
-            //sendNotificationService.sendSmsInfo(warehouse,STATES.EMPTY,getNotificationInfoDto.getPhoneNumber());
+            sendNotificationService.sendSmsInfo(warehouse,STATES.EMPTY,getNotificationInfoDto.getPhoneNumber());
         }
 
         warehouseRepository.save(warehouse);
-
         return modelMapper.map(warehouse,WarehouseOperationDto.class);
     }
 }

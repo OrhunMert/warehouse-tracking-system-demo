@@ -8,10 +8,14 @@ import com.trackingsystem.notification.exception.SimpleMailException;
 import com.trackingsystem.notification.exception.SenderNullException;
 import com.trackingsystem.notification.model.Email;
 import com.trackingsystem.notification.service.EmailService;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 import org.modelmapper.ModelMapper;
+
 import org.springframework.core.io.FileSystemResource;
+
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -20,9 +24,9 @@ import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+
 import java.io.File;
 import java.util.Objects;
-
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -33,14 +37,11 @@ public class EmailServiceImpl implements EmailService {
     public EmailDto sendEmail(EmailDto emailDTO,String sender) {
         if(sender == null)
             throw new SenderNullException("Sender shouldn't be null!!!");
-
         Email email = modelMapper.map(emailDTO,Email.class);
         try {
             SimpleMailMessage mailMessage = new SimpleMailMessage();
-
             log.info("Sender:"+ sender);
             log.info("Recipient:"+email.getRecipient());
-
             mailMessage.setFrom(sender);
             mailMessage.setTo(email.getRecipient());
             mailMessage.setText(email.getMessage());

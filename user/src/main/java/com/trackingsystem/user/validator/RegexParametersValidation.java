@@ -6,7 +6,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class RegexParametersValidation {
-
     public static boolean checkEmailValid(String email){
         Pattern pattern = Pattern.compile(RegexParameters.getEmailRegex());
         Matcher matcher = pattern.matcher(email);
@@ -17,5 +16,4 @@ public class RegexParametersValidation {
         Matcher matcher = pattern.matcher(phoneNumber);
         return matcher.matches();
     }
-
 }

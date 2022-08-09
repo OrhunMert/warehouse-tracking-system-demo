@@ -2,12 +2,11 @@ package com.trackingsystem.notification.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-
 @ControllerAdvice
 public class NotificaitionExceptionController {
-
     @ExceptionHandler(value = {SimpleMailException.class})
     public ResponseEntity<String> sendSimpleMailException(SimpleMailException sendSimpleMailException){
         return new ResponseEntity<>(sendSimpleMailException.getMessage(), HttpStatus.NETWORK_AUTHENTICATION_REQUIRED);
@@ -36,6 +35,4 @@ public class NotificaitionExceptionController {
     public ResponseEntity<String> getSmsPropertiesException(SmsPropertiesNullException smsPropertiesNullException){
         return new ResponseEntity<>(smsPropertiesNullException.getMessage(),HttpStatus.NOT_FOUND);
     }
-
-
 }

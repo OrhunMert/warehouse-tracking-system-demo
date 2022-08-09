@@ -8,5 +8,4 @@ public interface UserService {
     UserDto updateUser(Long id, UserDto userDTO);
     void deleteUser(Long id);
     NotificationDto getUserToNotification(Long id);
-
 }

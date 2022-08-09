@@ -10,11 +10,9 @@ import javax.persistence.*;
 @Setter
 @Table(name = "user",schema = "trackingsystemuser")
 public class User {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;
-
     private String username;
     private Integer password;
     private String mail;
