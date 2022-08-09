@@ -1,9 +1,6 @@
 package com.trackingsystem.notification.validator;
 
 import com.trackingsystem.notification.utils.SenderProperties;
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 public class SmsPropertiesValidation {
     public static boolean checkSmsProperties(){
         if(SenderProperties.getAppPassword() == null | SenderProperties.getAppPassword().isBlank())
