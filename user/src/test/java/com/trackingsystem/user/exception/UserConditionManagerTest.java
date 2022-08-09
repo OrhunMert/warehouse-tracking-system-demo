@@ -14,22 +14,4 @@ public class UserConditionManagerTest {
         //then
         assertTrue(actual);
     }
-    @Test
-    public void when_loginEmail_expect_checkEmailCondition(){
-        //given
-        String email = "orhun.bozkurt@huawei.com";
-        //when
-        boolean actual = UserConditionManager.checkEmailCondition(email);
-        //then
-        assertTrue(actual);
-    }
-    @Test
-    public void when_loginPhoneNumber_expect_checkPhoneNumberCondition(){
-        //given
-        String phoneNumber = "05459780876";
-        //when
-        boolean actual = UserConditionManager.checkPhoneNumber(phoneNumber);
-        //then
-        assertTrue(actual);
-    }
 }
