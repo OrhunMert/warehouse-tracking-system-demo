@@ -4,9 +4,7 @@ import com.trackingsystem.warehouse.model.notification.EmailNotification;
 import com.trackingsystem.warehouse.model.Warehouse;
 import com.trackingsystem.warehouse.model.enums.STATES;
 import com.trackingsystem.warehouse.model.notification.SmsNotification;
-
 public class CheckMessageInfoValidation {
-
     public static EmailNotification checkMessageState(STATES states, Warehouse warehouse){
 
        EmailNotification emailNotification = new EmailNotification();
@@ -26,10 +24,8 @@ public class CheckMessageInfoValidation {
             emailNotification.setMessage("Your warehouse is empty!!!");
             emailNotification.setSubject("Reminder about Warehouse");
         }
-
         return emailNotification;
     }
-
     public static SmsNotification checkSmsState(STATES states, Warehouse warehouse){
 
         SmsNotification smsNotification = new SmsNotification();
@@ -46,9 +42,6 @@ public class CheckMessageInfoValidation {
         else if(states.equals(STATES.EMPTY)){
             smsNotification.setMessage("Your warehouse is empty!!!");
         }
-
         return smsNotification;
     }
-
-
 }

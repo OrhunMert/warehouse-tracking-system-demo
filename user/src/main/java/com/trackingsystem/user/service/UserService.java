@@ -1,20 +1,11 @@
 package com.trackingsystem.user.service;
 
-import com.trackingsystem.user.dto.UserDTO;
-import com.trackingsystem.user.model.User;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-
-
+import com.trackingsystem.user.dto.NotificationDto;
+import com.trackingsystem.user.dto.UserDto;
 public interface UserService {
-
-    User createUser(UserDTO userDTO);
-    User getUser(Long id);
-    User updateUser(Long id,UserDTO userDTO);
+    UserDto createUser(UserDto userDTO);
+    UserDto getUser(Long id);
+    UserDto updateUser(Long id, UserDto userDTO);
     void deleteUser(Long id);
-    HttpStatus checkUserResponse(Long id);
-    String getUserEmailResponse(Long id);
-    String getUserPhoneNumberResponse(Long id);
-
-
+    NotificationDto getUserToNotification(Long id);
 }
