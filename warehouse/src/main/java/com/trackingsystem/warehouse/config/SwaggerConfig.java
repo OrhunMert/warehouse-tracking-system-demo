@@ -20,7 +20,7 @@ public class SwaggerConfig extends WebMvcConfigurerAdapter {
     public Docket getWarehouseApi(){
         return new Docket(DocumentationType.SWAGGER_2).
                 select().
-                apis(RequestHandlerSelectors.any()).
+                apis(RequestHandlerSelectors.basePackage("com.trackingsystem.warehouse.controller")).
                 build();
     }
     @Override
