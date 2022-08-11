@@ -1,5 +1,6 @@
 package com.trackingsystem.warehouse.service.impl;
 
+import com.trackingsystem.warehouse.exception.WarehouseBusinessException;
 import com.trackingsystem.warehouse.model.notification.EmailNotification;
 import com.trackingsystem.warehouse.model.Warehouse;
 import com.trackingsystem.warehouse.model.enums.STATES;
@@ -20,31 +21,31 @@ public class NotificiationServiceImpl implements NotificationService {
     private final RestTemplate restTemplate;
     @SneakyThrows
     @Override
-    public String sendEmailInfo(Warehouse warehouse, STATES states, String recipient) {
+    public void sendEmailInfo(Warehouse warehouse, STATES states, String recipient) {
 
         EmailNotification emailNotification;
         emailNotification = CheckMessageInfoValidation.checkMessageState(states,warehouse);
         emailNotification.setRecipient(recipient);
-
-        return restTemplate.getForObject(
-                "http://localhost:"+CommunicationProperties.getNotificationLocalHostPort()+
-                        "/emails/sendemail/info?recipient={recipient}" +
-                        "&message={message}&subject={subject}",
-                String.class,
-                emailNotification.getRecipient(), emailNotification.getMessage(),
-                emailNotification.getSubject());
+        try {
+             restTemplate.getForObject("http://localhost:" + CommunicationProperties.getNotificationLocalHostPort() + "/emails/sendemail/info?recipient={recipient}" + "&message={message}&subject={subject}", String.class, emailNotification.getRecipient(), emailNotification.getMessage(), emailNotification.getSubject());
+        }catch(Exception e){
+            throw new WarehouseBusinessException("Email didn't send to user!!!");
+        }
     }
     @Override
-    public String sendSmsInfo(Warehouse warehouse, STATES states, String phoneNumber) {
+    public void sendSmsInfo(Warehouse warehouse, STATES states, String phoneNumber) {
 
         SmsNotification smsNotification;
         smsNotification = CheckMessageInfoValidation.checkSmsState(states,warehouse);
         smsNotification.setPhoneNumber(phoneNumber);
-
-        return restTemplate.getForObject(
-                "http://localhost:"+CommunicationProperties.getNotificationLocalHostPort()+
-                        "/sms/sendsms?message={message}&phoneNumber={phoneNumber}",
-                String.class,
-                smsNotification.getMessage(),smsNotification.getPhoneNumber());
+        try{
+            restTemplate.getForObject(
+                    "http://localhost:"+CommunicationProperties.getNotificationLocalHostPort()+
+                            "/sms/sendsms?message={message}&phoneNumber={phoneNumber}",
+                    String.class,
+                    smsNotification.getMessage(),smsNotification.getPhoneNumber());
+        }catch(Exception e){
+            throw new WarehouseBusinessException("Sms didn't send to user!!!");
+        }
     }
 }
