@@ -147,3 +147,22 @@ You can follow the link how to create account and implementation in your project
 - http://localhost:8082/emails/sendemail/info --> Mapping type is GET. we send the email a simple message to user for warehouse state. We use to send email in warehouse service.
 
 #### 2.2 SMS Controller
+
+In the projects usually use the RabbitMQ, Kafka, Free Rest Api for SMS Operations. I prefer a Android App on the mobile device to send sms. There are two android app from Play Store that should download your mobile device. 
+
+https://play.google.com/store/apps/details?id=com.gsmmodem
+https://github.com/sadiqodho/GSM-Helper-Tool/blob/master/download-app/latest-helper-tool-app.apk
+
+After the you downloaded the android apps your mobile device, you need to define user, port and address for spring boot and your mobile device. 
+
+![Screenshot](https://user-images.githubusercontent.com/70032540/184116537-a7b1f1a5-c1d7-4d3c-a56b-5c3013e25d24.PNG)
+
+We send the Sms like email operations to user about warehouse. So when user wants to get information about warehouse state, when warehouse was empty, when warehouse was full. 
+
+SMS Controller has two Restful Apis to send SMS. 
+
+- http://localhost:8082/sms/sendsms --> Mapping Type is GET. we send the a simple sms to user. We use to send sms in warehouse service. 
+- http://localhost:8082/sms/sendAllSMS --> Mapping Type is GET. we send the a simple sms to user. We don't use to send sms in warehouse service.
+
+
+
