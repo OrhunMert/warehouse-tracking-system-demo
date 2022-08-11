@@ -31,15 +31,14 @@ public class  WarehouseConditionException {
         return true;
     }
     public static boolean checkHaveOwnerid(Warehouse warehouse, RestTemplate restTemplate){
-
-        NotificationInfoDto getNotificationInfoDto = restTemplate.getForObject(
-                "http://localhost:8080/users/{id}",
-                NotificationInfoDto.class,
-                warehouse.getOwnerid());
-
-        if(getNotificationInfoDto == null){
-            log.info("User not found");
-            throw new UserNotFoundException("Ownerid not found by id in user table to create Warehouse");
+        try{
+            restTemplate.getForObject(
+                    "http://localhost:8080/users/{id}",
+                    NotificationInfoDto.class,
+                    warehouse.getOwnerid());
+        }
+        catch (Exception e){
+            throw new UserNotFoundException("User not found to get owner id!!!");
         }
         log.info("User is found");
         return true;
