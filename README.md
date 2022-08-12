@@ -30,6 +30,97 @@ I used to Microservice Artitechture for this project. I developt User, Warehouse
 
 ![image](https://user-images.githubusercontent.com/70032540/184323363-70cd3817-c93d-41f9-a66a-bc47917e3502.png)
 
+- http://localhost:8080/users
+
+****Mapping Type: POST
+
+In the user service, we create the user.
+
+```sh
+{
+    "username":String,
+    "password":Integer,
+    "mail":String,
+    "phone_number":String
+}
+```
+
+Also we check the validation for email, phone number and password. We have conditions of Turkey for phone number's validation. Passoword length should be upper than 3
+If The conditions is not met, we will throw a exception about it. 
+
+```sh
+"Email or phone number is not valid to create User!!!"
+```
+
+- http://localhost:8080/users/{id}
+
+**** Mapping Type: GET
+
+You can get information by id about users. We send to response without user id. 
+
+```sh
+{
+  "username": String,
+  "password": Integer,
+  "mail": String,
+  "phone_number": String
+}
+```
+
+When user is not found, we throw error message as response to server.
+
+```sh
+"User is not found by id!!!"
+```
+- http://localhost:8080/users/{id}
+
+****Mapping Type: PUT
+
+User can update to your information. But Update operation is not valid for all information of user. 
+
+```sh
+{
+  "mail": String,
+  "password": Integer,
+  "phone_number":String,
+  "username": String
+}
+```
+
+when update is completed succesfully, we send the response to user.
+
+```sh
+{
+  "mail": String,
+  "password": Integer,
+  "phone_number":String,
+  "username": String
+}
+```
+
+- http://localhost:8080/users/{id}
+
+****Mapping Type: DELETE
+
+User can delete yourself. if user is not found while user is deleting yourself, we send error message to server as response. 
+
+```sh
+"User is not found by id! to delete!!!"
+```
+
+- http://localhost:8080/users/notification/{id}
+
+****Mapping Type: GET
+
+We use the this end-point to send operations in the warehouse. We take the phone number and email information of users with this end-point. When user is found, we send the phone number and email information of user as response to server.
+
+```sh
+{
+  "mail": String,
+  "phoneNumber": String
+}
+```
+
 ## 2. Notification Service
 
 ![image](https://user-images.githubusercontent.com/70032540/184323478-7bbba83e-da1f-4313-9771-2800b72eb402.png)
