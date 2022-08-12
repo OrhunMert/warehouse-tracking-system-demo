@@ -6,7 +6,7 @@
 
 User have a warehouse. If user want to buy a new warehouse, user can it. Our goal is send to email or sms to user according to warehouse state. When User want to take the notificaiton for warehouse state, we send email and sms to user. While user is buying product or selling product from warehouse, if warehouse is empty or full we will send to information about warehouse state. 
 
-![image](https://user-images.githubusercontent.com/70032540/183908391-fd2a4ff5-7fc7-4d45-8aa8-d366651cb77a.png)
+![Picture1](https://user-images.githubusercontent.com/70032540/184322744-82ae3ea0-76bc-459b-a2ce-22472211c13f.png)
 
 I used to Microservice Artitechture for this project. I developt User, Warehouse and Notification Services in Intellij Idea.
 
@@ -20,104 +20,19 @@ I used to Microservice Artitechture for this project. I developt User, Warehouse
 
 # Databases
 
+![Picture2](https://user-images.githubusercontent.com/70032540/184322951-ad3c4b35-66fa-4c65-9fb2-309b7e256d51.png)
+
 # Microservices
 
 ![image](https://user-images.githubusercontent.com/70032540/183912028-3d89a4df-9b6f-4088-95e9-f95bdb809e88.png)
 
 ## 1. User Service
 
-- http://localhost:8080/users
-
-****Mapping Type: POST
-
-In the user service, we create the user.
-
-```sh
-{
-    "username":String,
-    "password":Integer,
-    "mail":String,
-    "phone_number":String
-}
-```
-
-Also we check the validation for email, phone number and password. We have conditions of Turkey for phone number's validation. Passoword length should be upper than 3
-If The conditions is not met, we will throw a exception about it. 
-
-```sh
-"Email or phone number is not valid to create User!!!"
-```
-
-- http://localhost:8080/users/{id}
-
-**** Mapping Type: GET
-
-You can get information by id about users. We send to response without user id. 
-
-```sh
-{
-  "username": String,
-  "password": Integer,
-  "mail": String,
-  "phone_number": String
-}
-```
-
-When user is not found, we throw error message as response to server.
-
-```sh
-"User is not found by id!!!"
-```
-- http://localhost:8080/users/{id}
-
-****Mapping Type: PUT
-
-User can update to your information. But Update operation is not valid for all information of user. 
-
-```sh
-{
-  "mail": String,
-  "password": Integer,
-  "phone_number":String,
-  "username": String
-}
-```
-
-when update is completed succesfully, we send the response to user.
-
-```sh
-{
-  "mail": String,
-  "password": Integer,
-  "phone_number":String,
-  "username": String
-}
-```
-
-- http://localhost:8080/users/{id}
-
-****Mapping Type: DELETE
-
-User can delete yourself. if user is not found while user is deleting yourself, we send error message to server as response. 
-
-```sh
-"User is not found by id! to delete!!!"
-```
-
-- http://localhost:8080/users/notification/{id}
-
-****Mapping Type: GET
-
-We use the this end-point to send operations in the warehouse. We take the phone number and email information of users with this end-point. When user is found, we send the phone number and email information of user as response to server.
-
-```sh
-{
-  "mail": String,
-  "phoneNumber": String
-}
-```
+![image](https://user-images.githubusercontent.com/70032540/184323363-70cd3817-c93d-41f9-a66a-bc47917e3502.png)
 
 ## 2. Notification Service
+
+![image](https://user-images.githubusercontent.com/70032540/184323478-7bbba83e-da1f-4313-9771-2800b72eb402.png)
 
 We send the sms or email to user about warehouse state in notification service. There are three state for the warehouse to send. First we send the snms and email to to user when user want to get notification about warehouse. Second after the buying operation if warehouse is being full. Third after the selling operation if warehouse is being empty. We check the this conditions in warehouse service. Warehouse service request api of notification service for the send sms and email to user. Notification service has two controller. First controller is for the email operations, other controller is for the sms operations. 
 
@@ -175,6 +90,8 @@ The warehouse service provides all the logic of the project. We developed commun
 Warehouse Service checks the warehouse states. is Warehouse Empty? is Warehouse Full? What is the Warehouse Genre? After that questions Warehouse service actualizes requested operations of users. 
 
 ### Restful Apis
+
+![image](https://user-images.githubusercontent.com/70032540/184323573-d212bdaa-c19e-4efa-a052-f555c07e402f.png)
 
 - http://localhost:8081/warehouses/ --> Mapping type is POST.
 - http://localhost:8081/warehouses/buy --> Mapping type is POST. It takes id and productName as RequestParams. This end-point is for the buy operation to warehouse of user. After the bought product from warehouse if warehouse was full, It sends the sms and email to user.
