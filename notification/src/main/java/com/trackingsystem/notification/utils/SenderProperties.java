@@ -8,6 +8,8 @@ public class SenderProperties {
     private final static String mobileAppPort = "8090";
     private final static String appUsername = "orhun";
     private final static String appPassword = "123";
+    private final static String EMAIL_REGEX = "^(.+)@(.+).com";
+    private final static String PHONE_REGEX = "05([0-9])([0-9])([0-9])([0-9])[0-9][0-9][0-9]([0-9]([0-9]))";
     public static String getMailSender() {
         return mailSender;
     }
@@ -23,4 +25,6 @@ public class SenderProperties {
     public static String getAppPassword() {
         return appPassword;
     }
+    public static String getEmailRegex() {return EMAIL_REGEX;}
+    public static String getPhoneRegex() {return PHONE_REGEX;}
 }

@@ -1,10 +1,9 @@
 package com.trackingsystem.notification.service.impl;
 
 import com.trackingsystem.notification.dto.SmsInformationDto;
-import com.trackingsystem.notification.dto.SmsDto;
+
 import com.trackingsystem.notification.exception.SmsPropertiesNullException;
 import com.trackingsystem.notification.exception.SmsUrlConnectionException;
-import com.trackingsystem.notification.model.Sms;
 import com.trackingsystem.notification.service.SmsService;
 import com.trackingsystem.notification.utils.SenderProperties;
 import com.trackingsystem.notification.validator.SmsPropertiesValidation;
@@ -12,8 +11,6 @@ import com.trackingsystem.notification.validator.SmsPropertiesValidation;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-
-import org.modelmapper.ModelMapper;
 
 import org.springframework.stereotype.Service;
 
@@ -31,27 +28,13 @@ import java.nio.charset.StandardCharsets;
 @Slf4j
 @RequiredArgsConstructor
 public class SmsServiceImpl implements SmsService {
-    private final ModelMapper modelMapper;
     @Override
     public SmsInformationDto sendSms(String message, String phoneNumber) {
         // You need to download GSM Modem(SMS) and GSM Helper Tool on your android device.
         if(SmsPropertiesValidation.checkSmsProperties())
             throw new SmsPropertiesNullException("Properties is not valid to send sms!!!");
-        String username = SenderProperties.getAppUsername();
-        String password = SenderProperties.getAppPassword();
-        String address = SenderProperties.getMobileAppAddress();
-        String port = SenderProperties.getMobileAppPort();
-
-        return connectMobileDevice(message,phoneNumber,
-                username,password,
-                address,port);
-    }
-    @Override
-    public SmsInformationDto sendAllSms(SmsDto smsDTO) {
-        // You need to download GSM Modem(SMS) and GSM Helper Tool on your android device.
-        Sms sms = modelMapper.map(smsDTO, Sms.class);
-        String message = sms.getMessage();
-        String phoneNumber = sms.getPhoneNumber();
+        else if(!(SmsPropertiesValidation.checkPhoneValid(phoneNumber)))
+            throw new SmsPropertiesNullException("Phone Number is not valid for send the sms to user!!!");
         String username = SenderProperties.getAppUsername();
         String password = SenderProperties.getAppPassword();
         String address = SenderProperties.getMobileAppAddress();

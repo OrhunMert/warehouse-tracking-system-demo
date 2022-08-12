@@ -28,7 +28,11 @@ public class NotificiationServiceImpl implements NotificationService {
         emailNotification = CheckMessageInfoValidation.checkMessageState(states,warehouse);
         emailNotification.setRecipient(recipient);
         try {
-             restTemplate.getForObject("http://localhost:" + CommunicationProperties.getNotificationLocalHostPort() + "/emails/sendemail/info?recipient={recipient}" + "&message={message}&subject={subject}", String.class, emailNotification.getRecipient(), emailNotification.getMessage(), emailNotification.getSubject());
+             restTemplate.getForObject("http://localhost:" + CommunicationProperties.getNotificationLocalHostPort() +
+                     "/emails/sendemail/info?recipient={recipient}" +
+                     "&message={message}&subject={subject}",
+                     String.class,
+                     emailNotification.getRecipient(), emailNotification.getMessage(), emailNotification.getSubject());
         }catch(Exception e){
             throw new WarehouseBusinessException("Email didn't send to user!!!");
         }

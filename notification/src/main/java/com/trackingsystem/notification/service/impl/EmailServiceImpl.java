@@ -9,6 +9,7 @@ import com.trackingsystem.notification.exception.SenderNullException;
 import com.trackingsystem.notification.model.Email;
 import com.trackingsystem.notification.service.EmailService;
 
+import com.trackingsystem.notification.validator.EmailPropertiesValidation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -38,6 +39,8 @@ public class EmailServiceImpl implements EmailService {
         if(sender == null)
             throw new SenderNullException("Sender shouldn't be null!!!");
         Email email = modelMapper.map(emailDTO,Email.class);
+        if(!(EmailPropertiesValidation.checkEmailValid(email.getRecipient())))
+            throw new SenderNullException("Email is not valid to send!!!");
         try {
             SimpleMailMessage mailMessage = new SimpleMailMessage();
             log.info("Sender:"+ sender);
@@ -56,11 +59,12 @@ public class EmailServiceImpl implements EmailService {
     public AttachmentEmailDto sendMailWithAttachment(AttachmentEmailDto attachmentEmailDto, String sender) {
         if(sender == null)
             throw new SenderNullException("Sender shouldn't be null!!!");
-
         Email email = modelMapper.map(attachmentEmailDto,Email.class);
+        if(!(EmailPropertiesValidation.checkEmailValid(email.getRecipient())))
+            throw new SenderNullException("Email is not valid to send!!!");
+
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper mimeMessageHelper;
-
         try {
             mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
             mimeMessageHelper.setFrom(sender);
@@ -89,14 +93,14 @@ public class EmailServiceImpl implements EmailService {
     public SimpleMailMessage sendEmailForInfo(String recipient, String message, String subject,String sender) {
         if(sender == null)
             throw new SenderNullException("Sender shouldn't be null!!!");
-
+        if(!(EmailPropertiesValidation.checkEmailValid(recipient)))
+            throw new SenderNullException("Email is not valid to send!!!");
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         log.info("Recipient for Warehouse Information:"+recipient);
         mailMessage.setFrom(sender);
         mailMessage.setTo(recipient);
         mailMessage.setText(message);
         mailMessage.setSubject(subject);
-
         javaMailSender.send(mailMessage);
         return mailMessage;
     }
