@@ -173,6 +173,23 @@ SMS Controller has two Restful Apis to send SMS.
 - http://localhost:8082/sms/sendsms --> Mapping Type is GET. we send the a simple sms to user. We use to send sms in warehouse service. 
 - http://localhost:8082/sms/sendAllSMS --> Mapping Type is GET. we send the a simple sms to user. We don't use to send sms in warehouse service.
 
+### STATES
+
+### 1
+
+![image](https://user-images.githubusercontent.com/70032540/184334300-cc0a9675-8236-430c-b08f-18cecde8df16.png)
+
+### 2
+
+![image](https://user-images.githubusercontent.com/70032540/184334336-45ef2019-ee4f-40a9-b174-6b704cf7eea1.png)
+
+### 3
+
+![image](https://user-images.githubusercontent.com/70032540/184334381-abfae5fb-cc74-4920-be1c-5f88aac51718.png)
+
+
+
+
 ## 3. Warehouse Service
 
 ![Warehouse Notification Logic](https://user-images.githubusercontent.com/70032540/184121813-93daf88a-c6bf-4629-9abd-b62552945e03.jpg)
