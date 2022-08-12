@@ -71,6 +71,8 @@ public class WarehouseServiceImpl implements WarehouseService {
                 .findById(id)
                 .orElseThrow(() -> new WarehouseNotFoundException("Warehouse not found by id to update"));
 
+        WarehouseConditionException.checkCapacityOfWarehouse(updateWarehouseDTO.getWarehouseCapacity(),
+                updateWarehouseDTO.getCurrentStock());
         warehouse.setWarehouseName(updateWarehouseDTO.getWarehouseName());
         warehouse.setWarehouseCapacity(updateWarehouseDTO.getWarehouseCapacity());
         warehouse.setCurrentStock(updateWarehouseDTO.getCurrentStock());
