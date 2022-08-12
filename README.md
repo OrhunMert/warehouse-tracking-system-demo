@@ -6,7 +6,7 @@
 
 User have a warehouse. If user want to buy a new warehouse, user can it. Our goal is send to email or sms to user according to warehouse state. When User want to take the notificaiton for warehouse state, we send email and sms to user. While user is buying product or selling product from warehouse, if warehouse is empty or full we will send to information about warehouse state. 
 
-![image](https://user-images.githubusercontent.com/70032540/183908391-fd2a4ff5-7fc7-4d45-8aa8-d366651cb77a.png)
+![Picture1](https://user-images.githubusercontent.com/70032540/184322744-82ae3ea0-76bc-459b-a2ce-22472211c13f.png)
 
 I used to Microservice Artitechture for this project. I developt User, Warehouse and Notification Services in Intellij Idea.
 
@@ -20,11 +20,15 @@ I used to Microservice Artitechture for this project. I developt User, Warehouse
 
 # Databases
 
+![Picture2](https://user-images.githubusercontent.com/70032540/184322951-ad3c4b35-66fa-4c65-9fb2-309b7e256d51.png)
+
 # Microservices
 
 ![image](https://user-images.githubusercontent.com/70032540/183912028-3d89a4df-9b6f-4088-95e9-f95bdb809e88.png)
 
 ## 1. User Service
+
+![image](https://user-images.githubusercontent.com/70032540/184323363-70cd3817-c93d-41f9-a66a-bc47917e3502.png)
 
 - http://localhost:8080/users
 
@@ -119,6 +123,8 @@ We use the this end-point to send operations in the warehouse. We take the phone
 
 ## 2. Notification Service
 
+![image](https://user-images.githubusercontent.com/70032540/184323478-7bbba83e-da1f-4313-9771-2800b72eb402.png)
+
 We send the sms or email to user about warehouse state in notification service. There are three state for the warehouse to send. First we send the snms and email to to user when user want to get notification about warehouse. Second after the buying operation if warehouse is being full. Third after the selling operation if warehouse is being empty. We check the this conditions in warehouse service. Warehouse service request api of notification service for the send sms and email to user. Notification service has two controller. First controller is for the email operations, other controller is for the sms operations. 
 
 ### 2.1 Email Controller
@@ -167,6 +173,23 @@ SMS Controller has two Restful Apis to send SMS.
 - http://localhost:8082/sms/sendsms --> Mapping Type is GET. we send the a simple sms to user. We use to send sms in warehouse service. 
 - http://localhost:8082/sms/sendAllSMS --> Mapping Type is GET. we send the a simple sms to user. We don't use to send sms in warehouse service.
 
+### STATES
+
+### 1
+
+![image](https://user-images.githubusercontent.com/70032540/184334300-cc0a9675-8236-430c-b08f-18cecde8df16.png)
+
+### 2
+
+![image](https://user-images.githubusercontent.com/70032540/184334336-45ef2019-ee4f-40a9-b174-6b704cf7eea1.png)
+
+### 3
+
+![image](https://user-images.githubusercontent.com/70032540/184334381-abfae5fb-cc74-4920-be1c-5f88aac51718.png)
+
+
+
+
 ## 3. Warehouse Service
 
 ![Warehouse Notification Logic](https://user-images.githubusercontent.com/70032540/184121813-93daf88a-c6bf-4629-9abd-b62552945e03.jpg)
@@ -175,6 +198,8 @@ The warehouse service provides all the logic of the project. We developed commun
 Warehouse Service checks the warehouse states. is Warehouse Empty? is Warehouse Full? What is the Warehouse Genre? After that questions Warehouse service actualizes requested operations of users. 
 
 ### Restful Apis
+
+![image](https://user-images.githubusercontent.com/70032540/184323573-d212bdaa-c19e-4efa-a052-f555c07e402f.png)
 
 - http://localhost:8081/warehouses/ --> Mapping type is POST.
 - http://localhost:8081/warehouses/buy --> Mapping type is POST. It takes id and productName as RequestParams. This end-point is for the buy operation to warehouse of user. After the bought product from warehouse if warehouse was full, It sends the sms and email to user.

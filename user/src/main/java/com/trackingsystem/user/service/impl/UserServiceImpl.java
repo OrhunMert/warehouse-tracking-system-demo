@@ -48,6 +48,13 @@ public class UserServiceImpl implements UserService {
     public UserDto updateUser(Long id, UserDto userDTO) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User not found by id to update operation!!!"));
+        UserConditionManager.checkUsernameCondition(userDTO.getUsername(),userDTO.getPassword());
+        if(!(RegexParametersValidation.checkEmailValid(
+                userDTO.getMail())))
+            throw new RegexNotValidException("Email is not valid for send the email to user!!!");
+        else if(!(RegexParametersValidation.checkPhoneValid(
+                userDTO.getPhoneNumber())))
+            throw new RegexNotValidException("Phone Number is not valid for send the sms to user!!!");
         user.setMail(userDTO.getMail());
         user.setPassword((userDTO.getPassword()));
         user.setPhoneNumber(userDTO.getPhoneNumber());
