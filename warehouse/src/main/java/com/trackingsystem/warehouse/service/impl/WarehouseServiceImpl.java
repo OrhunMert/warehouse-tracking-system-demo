@@ -27,15 +27,22 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class WarehouseServiceImpl implements WarehouseService {
+
     private final ModelMapper modelMapper;
+
     private final RestTemplate restTemplate;
+
     private final WarehouseRepository warehouseRepository;
+
     private final ProductRepository productRepository;
+
     private final NotificationService sendNotificationService;
+
     @Override
     public WarehouseDto createWarehouse(WarehouseDto warehouseDTO) {
       Warehouse warehouse = modelMapper.map(warehouseDTO,Warehouse.class);
@@ -47,6 +54,7 @@ public class WarehouseServiceImpl implements WarehouseService {
       warehouseRepository.save(warehouse);
       return modelMapper.map(warehouse,WarehouseDto.class);
     }
+
     @Override
     public WarehouseDto getWarehouse(Long id) {
         Warehouse warehouse = warehouseRepository
@@ -65,6 +73,7 @@ public class WarehouseServiceImpl implements WarehouseService {
 
         return modelMapper.map(warehouse,WarehouseDto.class);
     }
+
     @Override
     public UpdatedWarehouseDto updateWarehouse(Long id, UpdatedWarehouseDto updateWarehouseDTO) {
         Warehouse warehouse = warehouseRepository
@@ -81,6 +90,7 @@ public class WarehouseServiceImpl implements WarehouseService {
         warehouseRepository.save(warehouse);
         return modelMapper.map(warehouse, UpdatedWarehouseDto.class);
     }
+
     @Override
     public void deleteWarehouse(Long id) {
         warehouseRepository
@@ -89,6 +99,7 @@ public class WarehouseServiceImpl implements WarehouseService {
                         () -> new WarehouseNotFoundException("Warehouse not found by id to delete"));
         warehouseRepository.deleteById(id);
     }
+
     @Override
     public WarehouseOperationDto buyProduct(Long id, String productName) {
         Warehouse warehouse = warehouseRepository
@@ -123,6 +134,7 @@ public class WarehouseServiceImpl implements WarehouseService {
         warehouseRepository.save(warehouse);
         return modelMapper.map(warehouse, WarehouseOperationDto.class);
     }
+
     @Override
     public WarehouseOperationDto sellProduct(Long id, String productName) {
         Warehouse warehouse = warehouseRepository

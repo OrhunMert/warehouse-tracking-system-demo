@@ -19,18 +19,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.GetMapping;
+
 @RestController
 @RequestMapping("/emails")
 @RequiredArgsConstructor
 @Api(value = "Email Api")
 public class EmailController {
+
     private final EmailService emailService;
+
     @PostMapping()
     @ApiOperation(value = "send a simple email to user. It doesn't use to by Warehouse Service for send the notification. " +
             " Recipient should be valid.")
     public ResponseEntity<EmailDto> sendEmail(@RequestBody EmailDto emailDTO){
         return ResponseEntity.ok().body(emailService.sendEmail(emailDTO,SenderProperties.getMailSender()));
     }
+
     @PostMapping("/attachment")
     @ApiOperation(value = "send email with attachment. It doesn't use to by Warehouse Service for send the email." +
             " Recipient should be valid.")
@@ -38,6 +42,7 @@ public class EmailController {
         return ResponseEntity.ok().body(emailService.sendMailWithAttachment(attachmentEmailDto,
                 SenderProperties.getMailSender()));
     }
+
     @GetMapping("/sendemail/info")
     @ApiOperation(value = "send email for information to users. It uses to by Warehouse Service to send the email." +
             " Recipient should be valid.")

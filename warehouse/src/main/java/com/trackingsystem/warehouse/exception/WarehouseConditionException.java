@@ -9,8 +9,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
+
 @Slf4j
 public class  WarehouseConditionException {
+
     public static boolean checkConditionToBuy(Warehouse warehouse, List<Product> productList) {
         if(productList.isEmpty())
             throw new ProductNotFoundException("Product not found to add to Warehouse");
@@ -22,6 +24,7 @@ public class  WarehouseConditionException {
             throw new WarehouseBusinessException("Warehouse's weight is not valid to add the Product!!!");
         return true;
     }
+
     public static boolean checkConditionToSell(Warehouse warehouse, List<Product> productList,String productName) {
         if(productList.isEmpty() | !warehouse.getProductList().contains(productName))
             throw new ProductNotFoundException("Product not found to sell from Warehouse");
@@ -30,6 +33,7 @@ public class  WarehouseConditionException {
             throw new WarehouseBusinessException("Warehouse's genre is not valid to sell the Product from Warehouse!!!");
         return true;
     }
+
     public static boolean checkHaveOwnerid(Warehouse warehouse, RestTemplate restTemplate){
         try{
             restTemplate.getForObject(
@@ -43,6 +47,7 @@ public class  WarehouseConditionException {
         log.info("User is found");
         return true;
     }
+
     public static boolean checkCapacityOfWarehouse(Integer warehouseCapacity,Integer currentStock){
         if(warehouseCapacity.equals(0))
             throw new WarehouseBusinessException("Warehouse' capacity shouldn't be equals 0");

@@ -17,6 +17,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 @Slf4j
 public class UserExceptionController extends ResponseEntityExceptionHandler {
+
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
                                                                   HttpHeaders headers,
@@ -28,14 +29,17 @@ public class UserExceptionController extends ResponseEntityExceptionHandler {
         log.info("Validation Error Result:{}",ex.getBindingResult().toString());
         return new ResponseEntity<>(userNotValidException.getDetails(), HttpStatus.BAD_REQUEST);
     }
+
     @ExceptionHandler(value = {UserNotFoundException.class})
     public ResponseEntity<String> userNotFound(UserNotFoundException userNotFoundException){
         return new ResponseEntity<>(userNotFoundException.getMessage(), HttpStatus.NOT_FOUND);
     }
+
     @ExceptionHandler(value = {UserConditionException.class})
     public ResponseEntity<String> userNotValidCondition(UserConditionException userConditionException){
         return new ResponseEntity<>(userConditionException.getMessage(),HttpStatus.NOT_ACCEPTABLE);
     }
+
     @ExceptionHandler(value = {RegexNotValidException.class})
     public ResponseEntity<String> regexNotValidException(RegexNotValidException regexNotValidException){
         return new ResponseEntity<>(regexNotValidException.getMessage(),HttpStatus.NOT_ACCEPTABLE);

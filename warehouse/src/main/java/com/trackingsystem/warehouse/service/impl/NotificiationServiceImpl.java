@@ -16,10 +16,13 @@ import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 
 import org.springframework.web.client.RestTemplate;
+
 @Service
 @RequiredArgsConstructor
 public class NotificiationServiceImpl implements NotificationService {
+
     private final RestTemplate restTemplate;
+
     @SneakyThrows
     @Override
     public void sendEmailInfo(Warehouse warehouse, States states, String recipient) {
@@ -37,6 +40,7 @@ public class NotificiationServiceImpl implements NotificationService {
             throw new WarehouseBusinessException("Email didn't send to user!!!");
         }
     }
+
     @Override
     public void sendSmsInfo(Warehouse warehouse, States states, String phoneNumber) {
 

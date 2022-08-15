@@ -4,7 +4,9 @@ import com.trackingsystem.warehouse.model.notification.EmailNotification;
 import com.trackingsystem.warehouse.model.Warehouse;
 import com.trackingsystem.warehouse.model.enums.States;
 import com.trackingsystem.warehouse.model.notification.SmsNotification;
+
 public class CheckMessageInfoValidation {
+
     public static EmailNotification checkMessageState(States states, Warehouse warehouse){
 
        EmailNotification emailNotification = new EmailNotification();
@@ -26,6 +28,7 @@ public class CheckMessageInfoValidation {
         }
         return emailNotification;
     }
+
     public static SmsNotification checkSmsState(States states, Warehouse warehouse){
 
         SmsNotification smsNotification = new SmsNotification();

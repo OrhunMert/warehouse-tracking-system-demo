@@ -28,14 +28,19 @@ import javax.mail.internet.MimeMessage;
 
 import java.io.File;
 import java.util.Objects;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class EmailServiceImpl implements EmailService {
+
     private final JavaMailSender javaMailSender;
+
     private final ModelMapper modelMapper;
+
     @Override
     public EmailDto sendEmail(EmailDto emailDTO,String sender) {
+
         if(sender == null)
             throw new SenderNullException("Sender shouldn't be null!!!");
         Email email = modelMapper.map(emailDTO,Email.class);
@@ -56,7 +61,9 @@ public class EmailServiceImpl implements EmailService {
             throw new SimpleMailException("Exception while sending mail!!!");
         }
     }
+
     public AttachmentEmailDto sendMailWithAttachment(AttachmentEmailDto attachmentEmailDto, String sender) {
+
         if(sender == null)
             throw new SenderNullException("Sender shouldn't be null!!!");
         Email email = modelMapper.map(attachmentEmailDto,Email.class);
@@ -89,8 +96,10 @@ public class EmailServiceImpl implements EmailService {
             throw new MailAttachmentException("Exception while sending mail with attachment!!!");
         }
     }
+
     @Override
     public SimpleMailMessage sendEmailForInfo(String recipient, String message, String subject,String sender) {
+
         if(sender == null)
             throw new SenderNullException("Sender shouldn't be null!!!");
         if(!(EmailPropertiesValidation.checkEmailValid(recipient)))
