@@ -10,6 +10,7 @@ import com.trackingsystem.user.exception.UserNotFoundException;
 import com.trackingsystem.user.model.User;
 import com.trackingsystem.user.repository.UserRepository;
 import com.trackingsystem.user.service.UserService;
+import com.trackingsystem.user.utils.RegexParameters;
 import com.trackingsystem.user.validator.RegexParametersValidation;
 
 import lombok.RequiredArgsConstructor;

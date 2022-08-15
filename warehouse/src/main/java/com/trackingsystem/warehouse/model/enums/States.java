@@ -1,4 +1,4 @@
 package com.trackingsystem.warehouse.model.enums;
-public enum STATES {
+public enum States {
     EMPTY,FULL,COMMON
 }

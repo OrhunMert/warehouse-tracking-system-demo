@@ -1,6 +1,6 @@
 package com.trackingsystem.notification.utils;
 
-public class SenderProperties {
+public enum SenderProperties {;
     private final static String mailSender = "orhunombhuawei7@gmail.com";
     private final static String mobileAppAddress = "http://192.168.1.5";
     private final static String mobileAppPort = "8090";

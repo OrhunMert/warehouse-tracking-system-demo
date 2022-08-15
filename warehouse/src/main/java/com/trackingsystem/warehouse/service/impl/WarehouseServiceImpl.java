@@ -6,7 +6,7 @@ import com.trackingsystem.warehouse.exception.WarehouseNotFoundException;
 
 import com.trackingsystem.warehouse.model.Product;
 import com.trackingsystem.warehouse.model.Warehouse;
-import com.trackingsystem.warehouse.model.enums.STATES;
+import com.trackingsystem.warehouse.model.enums.States;
 
 import com.trackingsystem.warehouse.repository.ProductRepository;
 import com.trackingsystem.warehouse.repository.WarehouseRepository;
@@ -58,10 +58,10 @@ public class WarehouseServiceImpl implements WarehouseService {
         NotificationInfoDto getNotificationInfoDto =
                 CommunicationNotificationValidation.communicationFromWarehouseToUser(warehouse.getOwnerid());
         // send email for information about Warehouse's state
-        sendNotificationService.sendEmailInfo(warehouse, STATES.COMMON,getNotificationInfoDto.getMail());
+        sendNotificationService.sendEmailInfo(warehouse, States.COMMON,getNotificationInfoDto.getMail());
 
         // send sms for information about Warehouse's state(without sms'json body)
-        sendNotificationService.sendSmsInfo(warehouse,STATES.COMMON,getNotificationInfoDto.getPhoneNumber());
+        sendNotificationService.sendSmsInfo(warehouse, States.COMMON,getNotificationInfoDto.getPhoneNumber());
 
         return modelMapper.map(warehouse,WarehouseDto.class);
     }
@@ -114,10 +114,10 @@ public class WarehouseServiceImpl implements WarehouseService {
                     CommunicationNotificationValidation.communicationFromWarehouseToUser(warehouse.getOwnerid());
 
             // send email to buy operation of Warehouse
-            sendNotificationService.sendEmailInfo(warehouse,STATES.FULL,getNotificationInfoDto.getMail());
+            sendNotificationService.sendEmailInfo(warehouse, States.FULL,getNotificationInfoDto.getMail());
 
             // send sms to buy operation of Warehouse(without sms'json body)
-            sendNotificationService.sendSmsInfo(warehouse,STATES.FULL,getNotificationInfoDto.getPhoneNumber());
+            sendNotificationService.sendSmsInfo(warehouse, States.FULL,getNotificationInfoDto.getPhoneNumber());
         }
 
         warehouseRepository.save(warehouse);
@@ -147,10 +147,10 @@ public class WarehouseServiceImpl implements WarehouseService {
                     CommunicationNotificationValidation.communicationFromWarehouseToUser(warehouse.getOwnerid());
 
             // send email to sell operation of Warehouse
-            sendNotificationService.sendEmailInfo(warehouse,STATES.EMPTY,getNotificationInfoDto.getMail());
+            sendNotificationService.sendEmailInfo(warehouse, States.EMPTY,getNotificationInfoDto.getMail());
 
             // send sms to sell operation of Warehouse(without sms'json body)
-            sendNotificationService.sendSmsInfo(warehouse,STATES.EMPTY,getNotificationInfoDto.getPhoneNumber());
+            sendNotificationService.sendSmsInfo(warehouse, States.EMPTY,getNotificationInfoDto.getPhoneNumber());
         }
 
         warehouseRepository.save(warehouse);

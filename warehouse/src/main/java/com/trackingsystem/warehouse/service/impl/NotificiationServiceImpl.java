@@ -4,7 +4,7 @@ import com.trackingsystem.warehouse.exception.WarehouseBusinessException;
 
 import com.trackingsystem.warehouse.model.notification.EmailNotification;
 import com.trackingsystem.warehouse.model.Warehouse;
-import com.trackingsystem.warehouse.model.enums.STATES;
+import com.trackingsystem.warehouse.model.enums.States;
 import com.trackingsystem.warehouse.model.notification.SmsNotification;
 import com.trackingsystem.warehouse.service.NotificationService;
 import com.trackingsystem.warehouse.utils.CommunicationProperties;
@@ -22,7 +22,7 @@ public class NotificiationServiceImpl implements NotificationService {
     private final RestTemplate restTemplate;
     @SneakyThrows
     @Override
-    public void sendEmailInfo(Warehouse warehouse, STATES states, String recipient) {
+    public void sendEmailInfo(Warehouse warehouse, States states, String recipient) {
 
         EmailNotification emailNotification;
         emailNotification = CheckMessageInfoValidation.checkMessageState(states,warehouse);
@@ -38,7 +38,7 @@ public class NotificiationServiceImpl implements NotificationService {
         }
     }
     @Override
-    public void sendSmsInfo(Warehouse warehouse, STATES states, String phoneNumber) {
+    public void sendSmsInfo(Warehouse warehouse, States states, String phoneNumber) {
 
         SmsNotification smsNotification;
         smsNotification = CheckMessageInfoValidation.checkSmsState(states,warehouse);
