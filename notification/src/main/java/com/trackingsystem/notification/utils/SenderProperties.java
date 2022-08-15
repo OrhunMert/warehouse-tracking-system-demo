@@ -1,7 +1,5 @@
 package com.trackingsystem.notification.utils;
 
-import org.springframework.stereotype.Component;
-@Component
 public class SenderProperties {
     private final static String mailSender = "orhunombhuawei7@gmail.com";
     private final static String mobileAppAddress = "http://192.168.1.5";
