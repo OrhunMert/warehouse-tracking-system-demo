@@ -13,11 +13,16 @@ import java.util.List;
 
 @Data
 public class WarehouseOperationDto {
+
     private String warehouseName;
+
     private Integer warehouseCapacity;
+
     private Integer currentStock;
+
     @Enumerated(EnumType.STRING)
     private Genre warehouseGenre;
+
     @ElementCollection
     private List<String> productList = new ArrayList<>();
 }

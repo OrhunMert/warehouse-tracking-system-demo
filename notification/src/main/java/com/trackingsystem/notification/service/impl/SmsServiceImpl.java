@@ -24,12 +24,15 @@ import java.net.URLConnection;
 import java.net.URLEncoder;
 
 import java.nio.charset.StandardCharsets;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class SmsServiceImpl implements SmsService {
+
     @Override
     public SmsInformationDto sendSms(String message, String phoneNumber) {
+
         // You need to download GSM Modem(SMS) and GSM Helper Tool on your android device.
         if(SmsPropertiesValidation.checkSmsProperties())
             throw new SmsPropertiesNullException("Properties is not valid to send sms!!!");
@@ -44,12 +47,12 @@ public class SmsServiceImpl implements SmsService {
                 username,password,
                 address,port);
     }
+
     @SneakyThrows
     @Override
-    public SmsInformationDto connectMobileDevice(String message,
-                                                 String phoneNumber,
-                                                 String username, String password,
+    public SmsInformationDto connectMobileDevice(String message, String phoneNumber, String username, String password,
                                                  String address, String port) {
+
         String responseSms;
         try {
             URL url = new URL(

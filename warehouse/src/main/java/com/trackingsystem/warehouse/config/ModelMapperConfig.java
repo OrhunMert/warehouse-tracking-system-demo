@@ -8,10 +8,12 @@ import org.springframework.web.client.RestTemplate;
 
 @Configuration
 public class ModelMapperConfig {
+
     @Bean
     public ModelMapper modelMapper() {
         return new ModelMapper();
     }
+
     @Bean
     public RestTemplate restTemplate(){
         return new RestTemplate();

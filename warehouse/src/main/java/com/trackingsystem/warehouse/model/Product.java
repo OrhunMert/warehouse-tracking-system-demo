@@ -21,14 +21,19 @@ import javax.validation.constraints.NotNull;
 @Setter
 @Table(name = "product",schema="trackingsystemwarehouse")
 public class Product {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
     @NotNull
     @Enumerated(EnumType.STRING)
     private Genre productgenre;
+
     @NotBlank
     private String productname;
+
     private Integer productprice = 0;
+
     private Integer productweight = 0;
 }

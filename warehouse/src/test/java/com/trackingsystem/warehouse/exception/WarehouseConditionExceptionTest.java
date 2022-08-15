@@ -11,19 +11,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertTrue;
+
 public class WarehouseConditionExceptionTest {
 
     private Warehouse warehouse;
+
     private Product product;
+
     private List<Product> productList;
+
     @Before
     public void setUp()  {
+
         warehouse = new Warehouse();
         product = new Product();
         productList = new ArrayList<>();
     }
+
     @Test
     public void when_buyProduct_excpet_checkConditionToBuy(){
+
         //given
         product.setProductgenre(Genre.FRUIT);
         product.setProductweight(10);
@@ -36,8 +43,10 @@ public class WarehouseConditionExceptionTest {
         //then
         assertTrue(actual);
     }
+
     @Test
     public void when_sellProduct_except_checkConditionToSell(){
+
         //given
         product.setProductgenre(Genre.VEGATABLE);
         product.setProductweight(20);
@@ -53,8 +62,10 @@ public class WarehouseConditionExceptionTest {
         //then
         assertTrue(actual);
     }
+
     @Test
     public void when_createWarehouse_except_checkOwnerId(){
+
         //given
         Warehouse warehouse = new Warehouse();
         RestTemplate restTemplate = new RestTemplate();
@@ -65,8 +76,10 @@ public class WarehouseConditionExceptionTest {
         //then
         assertTrue(actual);
     }
+
     @Test
     public void when_createWarehouse_except_checkCapacity(){
+
         //given
         Integer warehouseCapacity = 100;
         Integer currentStock = 0;

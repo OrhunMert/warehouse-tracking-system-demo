@@ -22,15 +22,22 @@ import java.util.List;
 @Setter
 @Table(name = "warehouse",schema = "trackingsystemwarehouse")
 public class Warehouse {
+
     @Id
     @GeneratedValue(strategy =  GenerationType.AUTO)
     private Long id;
+
     private Long ownerid;
+
     private String warehouseName;
+
     private Integer warehouseCapacity=100;
+
     private Integer currentStock=0;
+
     @Enumerated(EnumType.STRING)
     private Genre warehouseGenre;
+
     @ElementCollection
     private List<String> productList = new ArrayList<>();
 }

@@ -18,14 +18,19 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 
 import org.springframework.stereotype.Service;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class UserServiceImpl implements UserService {
+
     private final ModelMapper modelMapper;
+
     private final UserRepository userRepository;
+
     @Override
     public UserDto createUser(UserDto userDTO) {
+
         User user = modelMapper.map(userDTO, User.class);
         UserConditionManager.checkUsernameCondition(user.getUsername(),user.getPassword());
         if(!(RegexParametersValidation.checkEmailValid(
@@ -37,15 +42,19 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
         return userDTO;
     }
+
     @Override
     public UserDto getUser(Long id) {
+
         // we will update in orElseThrow after add to exception and validation handle.
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User not found by id to get operation!!!"));
         return modelMapper.map(user, UserDto.class);
     }
+
     @Override
     public UserDto updateUser(Long id, UserDto userDTO) {
+
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User not found by id to update operation!!!"));
         UserConditionManager.checkUsernameCondition(userDTO.getUsername(),userDTO.getPassword());
@@ -61,14 +70,18 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
         return modelMapper.map(user, UserDto.class);
     }
+
     @Override
     public void deleteUser(Long id) {
+
         userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User not found by id to delete operation!!!"));
         userRepository.deleteById(id);
     }
+
     @Override
     public NotificationDto getUserToNotification(Long id) {
+
         User user = userRepository.findById(id).
                 orElseThrow(()-> new UserNotFoundException("User not found for notification service!!!"));
         NotificationDto getUserToNotificationDto = modelMapper.map(user, NotificationDto.class);
