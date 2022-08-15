@@ -162,7 +162,8 @@ https://github.com/sadiqodho/GSM-Helper-Tool/blob/master/download-app/latest-hel
 
 After the you downloaded the android apps your mobile device, you need to define user, port and address for spring boot and your mobile device. 
 
-![Screenshot](https://user-images.githubusercontent.com/70032540/184116537-a7b1f1a5-c1d7-4d3c-a56b-5c3013e25d24.PNG)
+![image](https://user-images.githubusercontent.com/70032540/184589899-1df6538e-7bbc-4a9d-a96e-87566168dccb.png)
+
 
 We send the Sms like email operations to user about warehouse. So when user wants to get information about warehouse state, when warehouse was empty, when warehouse was full. 
 
