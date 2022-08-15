@@ -11,7 +11,5 @@ public interface EmailService {
 
     AttachmentEmailDto sendMailWithAttachment(AttachmentEmailDto attachmentEmailDto, String sender);
 
-    SimpleMailMessage sendEmailForInfo(String recipient,
-                                       String message,
-                                       String subject, String sender);
+    SimpleMailMessage sendEmailForInfo(String recipient, String message, String subject, String sender);
 }

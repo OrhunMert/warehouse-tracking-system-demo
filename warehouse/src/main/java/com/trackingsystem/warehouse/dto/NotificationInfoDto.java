@@ -6,5 +6,6 @@ import lombok.Data;
 public class NotificationInfoDto {
 
     String mail;
+
     String phoneNumber;
 }

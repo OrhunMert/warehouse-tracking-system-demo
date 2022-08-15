@@ -54,8 +54,7 @@ public class WarehouseController {
 
     @PutMapping("/{id}")
     @ApiOperation(value = "Update information of warehouse")
-    ResponseEntity<UpdatedWarehouseDto> updateWarehouse(@PathVariable Long id,
-                                                        @Valid @RequestBody UpdatedWarehouseDto updateWarehouseDTO){
+    ResponseEntity<UpdatedWarehouseDto> updateWarehouse(@PathVariable Long id, @Valid @RequestBody UpdatedWarehouseDto updateWarehouseDTO){
         return ResponseEntity.ok().body(warehouseService.updateWarehouse(id,updateWarehouseDTO));
     }
 
@@ -69,8 +68,7 @@ public class WarehouseController {
     @DeleteMapping("/sell")
     @ApiOperation(value = "selling operation for warehouse. You should remove the same product's genre with warehouse's genre."+
             " if warehouse is being empty While user is selling the product, System sends to notification as email and sms to user.")
-    ResponseEntity<WarehouseOperationDto> sellProductForWarehouse(@RequestParam Long id,
-                                                      @RequestParam String productName){
+    ResponseEntity<WarehouseOperationDto> sellProductForWarehouse(@RequestParam Long id, @RequestParam String productName){
         return ResponseEntity.ok().body(warehouseService.sellProduct(id,productName));
     }
 }

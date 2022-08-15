@@ -8,6 +8,7 @@ public class SmsPropertiesValidationTest {
 
     @Test
     public void when_sendSms_expect_HaveSmsProperties(){
+
         //given
         //when
         boolean actual = SmsPropertiesValidation.checkSmsProperties();

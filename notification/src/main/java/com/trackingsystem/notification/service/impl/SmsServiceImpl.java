@@ -50,9 +50,7 @@ public class SmsServiceImpl implements SmsService {
 
     @SneakyThrows
     @Override
-    public SmsInformationDto connectMobileDevice(String message,
-                                                 String phoneNumber,
-                                                 String username, String password,
+    public SmsInformationDto connectMobileDevice(String message, String phoneNumber, String username, String password,
                                                  String address, String port) {
 
         String responseSms;

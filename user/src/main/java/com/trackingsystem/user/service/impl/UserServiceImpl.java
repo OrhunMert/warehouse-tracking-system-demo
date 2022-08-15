@@ -10,7 +10,6 @@ import com.trackingsystem.user.exception.UserNotFoundException;
 import com.trackingsystem.user.model.User;
 import com.trackingsystem.user.repository.UserRepository;
 import com.trackingsystem.user.service.UserService;
-import com.trackingsystem.user.utils.RegexParameters;
 import com.trackingsystem.user.validator.RegexParametersValidation;
 
 import lombok.RequiredArgsConstructor;
@@ -31,6 +30,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto createUser(UserDto userDTO) {
+
         User user = modelMapper.map(userDTO, User.class);
         UserConditionManager.checkUsernameCondition(user.getUsername(),user.getPassword());
         if(!(RegexParametersValidation.checkEmailValid(
@@ -45,6 +45,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto getUser(Long id) {
+
         // we will update in orElseThrow after add to exception and validation handle.
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User not found by id to get operation!!!"));
@@ -53,6 +54,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto updateUser(Long id, UserDto userDTO) {
+
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User not found by id to update operation!!!"));
         UserConditionManager.checkUsernameCondition(userDTO.getUsername(),userDTO.getPassword());
@@ -71,6 +73,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteUser(Long id) {
+
         userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User not found by id to delete operation!!!"));
         userRepository.deleteById(id);
@@ -78,6 +81,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public NotificationDto getUserToNotification(Long id) {
+
         User user = userRepository.findById(id).
                 orElseThrow(()-> new UserNotFoundException("User not found for notification service!!!"));
         NotificationDto getUserToNotificationDto = modelMapper.map(user, NotificationDto.class);

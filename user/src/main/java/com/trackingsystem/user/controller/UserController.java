@@ -50,7 +50,7 @@ public class UserController {
 
     @PutMapping("/{id}")
     @ApiOperation(value = "Update User's information. Email, phone number, password and username")
-    public ResponseEntity<UserDto> updateUser(@PathVariable Long id , @RequestBody UserDto userDTO){
+    public ResponseEntity<UserDto> updateUser(@PathVariable Long id, @RequestBody UserDto userDTO){
         return ResponseEntity.ok().body(userService.updateUser(id,userDTO));
     }
 

@@ -45,6 +45,7 @@ public class WarehouseServiceImpl implements WarehouseService {
 
     @Override
     public WarehouseDto createWarehouse(WarehouseDto warehouseDTO) {
+
       Warehouse warehouse = modelMapper.map(warehouseDTO,Warehouse.class);
 
       WarehouseConditionException.checkHaveOwnerid(warehouse, restTemplate);
@@ -57,6 +58,7 @@ public class WarehouseServiceImpl implements WarehouseService {
 
     @Override
     public WarehouseDto getWarehouse(Long id) {
+
         Warehouse warehouse = warehouseRepository
                 .findById(id)
                 .orElseThrow(() -> new WarehouseNotFoundException("Warehouse not found by id to get"));
@@ -76,6 +78,7 @@ public class WarehouseServiceImpl implements WarehouseService {
 
     @Override
     public UpdatedWarehouseDto updateWarehouse(Long id, UpdatedWarehouseDto updateWarehouseDTO) {
+
         Warehouse warehouse = warehouseRepository
                 .findById(id)
                 .orElseThrow(() -> new WarehouseNotFoundException("Warehouse not found by id to update"));
@@ -86,7 +89,6 @@ public class WarehouseServiceImpl implements WarehouseService {
         warehouse.setWarehouseCapacity(updateWarehouseDTO.getWarehouseCapacity());
         warehouse.setCurrentStock(updateWarehouseDTO.getCurrentStock());
         warehouse.setWarehouseGenre(updateWarehouseDTO.getWarehouseGenre());
-
         warehouseRepository.save(warehouse);
         return modelMapper.map(warehouse, UpdatedWarehouseDto.class);
     }
@@ -102,6 +104,7 @@ public class WarehouseServiceImpl implements WarehouseService {
 
     @Override
     public WarehouseOperationDto buyProduct(Long id, String productName) {
+
         Warehouse warehouse = warehouseRepository
                 .findById(id)
                 .orElseThrow(
@@ -130,13 +133,13 @@ public class WarehouseServiceImpl implements WarehouseService {
             // send sms to buy operation of Warehouse(without sms'json body)
             sendNotificationService.sendSmsInfo(warehouse, States.FULL,getNotificationInfoDto.getPhoneNumber());
         }
-
         warehouseRepository.save(warehouse);
         return modelMapper.map(warehouse, WarehouseOperationDto.class);
     }
 
     @Override
     public WarehouseOperationDto sellProduct(Long id, String productName) {
+
         Warehouse warehouse = warehouseRepository
                 .findById(id)
                 .orElseThrow(
@@ -164,7 +167,6 @@ public class WarehouseServiceImpl implements WarehouseService {
             // send sms to sell operation of Warehouse(without sms'json body)
             sendNotificationService.sendSmsInfo(warehouse, States.EMPTY,getNotificationInfoDto.getPhoneNumber());
         }
-
         warehouseRepository.save(warehouse);
         return modelMapper.map(warehouse,WarehouseOperationDto.class);
     }

@@ -46,9 +46,7 @@ public class EmailController {
     @GetMapping("/sendemail/info")
     @ApiOperation(value = "send email for information to users. It uses to by Warehouse Service to send the email." +
             " Recipient should be valid.")
-    public ResponseEntity<SimpleMailMessage> sendEmailForInfo(@RequestParam String recipient,
-                                                              @RequestParam String message,
-                                                              @RequestParam String subject) {
+    public ResponseEntity<SimpleMailMessage> sendEmailForInfo(@RequestParam String recipient, @RequestParam String message, @RequestParam String subject) {
         return ResponseEntity.ok().body(emailService.sendEmailForInfo(recipient, message, subject,
                 SenderProperties.getMailSender()));
     }

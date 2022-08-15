@@ -6,10 +6,6 @@ public interface SmsService {
 
     SmsInformationDto sendSms(String message, String phoneNumber);
 
-    SmsInformationDto connectMobileDevice(String message,
-                                          String phoneNumber,
-                                          String username,
-                                          String password,
-                                          String address,
-                                          String port);
+    SmsInformationDto connectMobileDevice(String message, String phoneNumber, String username, String password,
+                                          String address, String port);
 }

@@ -11,12 +11,15 @@ import static org.junit.Assert.assertTrue;
 public class WarehouseServiceImplTest {
 
     private List<String> productList;
+
     @Before
     public void setUp()  {
         productList = new ArrayList<>();
     }
+
     @Test
     public void when_BuyProduct_expect_IsFull(){
+
         //given
         Integer currentStock = 100;
         Integer warehouseCapacity = 100;
@@ -25,8 +28,10 @@ public class WarehouseServiceImplTest {
         //then
         assertTrue(actual);
     }
+
     @Test
     public void when_sellProduct_expect_IsEmpty(){
+
         //given
         Integer currentStock = 0;
         //when
