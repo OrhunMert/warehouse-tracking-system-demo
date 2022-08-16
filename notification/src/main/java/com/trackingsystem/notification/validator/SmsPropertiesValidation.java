@@ -9,13 +9,13 @@ public class SmsPropertiesValidation {
 
     public static boolean checkSmsProperties(){
 
-        if(SenderProperties.getAppPassword() == null | SenderProperties.getAppPassword().isBlank())
+        if(SenderProperties.getAppPassword() == null || SenderProperties.getAppPassword().isBlank())
             return true;
-        else if(SenderProperties.getAppUsername() == null | SenderProperties.getAppUsername().isBlank())
+        else if(SenderProperties.getAppUsername() == null || SenderProperties.getAppUsername().isBlank())
             return true;
-        else if(SenderProperties.getMobileAppAddress() == null | SenderProperties.getMobileAppAddress().isBlank())
+        else if(SenderProperties.getMobileAppAddress() == null || SenderProperties.getMobileAppAddress().isBlank())
             return true;
-        else if(SenderProperties.getMobileAppPort() == null | SenderProperties.getMobileAppPort().isBlank())
+        else if(SenderProperties.getMobileAppPort() == null || SenderProperties.getMobileAppPort().isBlank())
             return true;
         return false;
     }

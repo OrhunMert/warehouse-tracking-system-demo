@@ -26,7 +26,7 @@ public class  WarehouseConditionException {
     }
 
     public static boolean checkConditionToSell(Warehouse warehouse, List<Product> productList,String productName) {
-        if(productList.isEmpty() | !warehouse.getProductList().contains(productName))
+        if(productList.isEmpty() || !warehouse.getProductList().contains(productName))
             throw new ProductNotFoundException("Product not found to sell from Warehouse");
         else if(!(productList.get(0).getProductgenre().equals(warehouse.getWarehouseGenre())))
             // you can setup the communication with notification service.(maybe)
