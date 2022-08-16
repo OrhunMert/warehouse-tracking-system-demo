@@ -39,7 +39,7 @@ public class EmailServiceImpl implements EmailService {
     private final ModelMapper modelMapper;
 
     @Override
-    public EmailDto sendEmail(EmailDto emailDTO,String sender) {
+    public EmailDto sendEmail(EmailDto emailDTO, String sender) {
 
         if(sender == null)
             throw new SenderNullException("Sender shouldn't be null!!!");
@@ -98,7 +98,7 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public SimpleMailMessage sendEmailForInfo(String recipient, String message, String subject,String sender) {
+    public SimpleMailMessage sendEmailForInfo(String recipient, String message, String subject, String sender) {
 
         if(sender == null)
             throw new SenderNullException("Sender shouldn't be null!!!");
