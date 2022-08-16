@@ -7,7 +7,7 @@ import org.springframework.mail.SimpleMailMessage;
 
 public interface EmailService {
 
-    EmailDto sendEmail(EmailDto emailDTO,String sender);
+    EmailDto sendEmail(EmailDto emailDTO, String sender);
 
     AttachmentEmailDto sendMailWithAttachment(AttachmentEmailDto attachmentEmailDto, String sender);
 
